@@ -8,7 +8,7 @@ export default async function handler(req, res) {
 
   // Check if user exists
   const user = await getUserByEmail(email);
-  if (!user) return res.status(404).json({ message: 'User not found' });
+  if (!user) return res.status(404).json({ message: 'Không tìm thấy tài khoản người dùng' });
 
   // Generate reset token
   const resetToken = crypto.randomBytes(32).toString('hex');
@@ -23,7 +23,7 @@ export default async function handler(req, res) {
   // Send reset email
   await resend.emails.send({
     from: 'noreply@oneclickweb.id.vn',
-    to: 'lamgiabao1039@gmail.com',
+    to: email,
     subject: 'Password Reset Request',
     html: `<p>Click the link below to reset your password:</p><a href="${resetLink}">${resetLink}</a>`
   });

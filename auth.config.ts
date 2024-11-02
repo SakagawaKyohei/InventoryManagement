@@ -11,8 +11,9 @@ export const authConfig = {
       const isOnLoginPage = nextUrl.pathname.startsWith('/login');
       const isOnForgotPassword = nextUrl.pathname.startsWith('/forgot-password');
       const isOnResetPassword = nextUrl.pathname.startsWith('/reset-password');
+      const isOnSignUp = nextUrl.pathname.startsWith('/sign-up');
   
-      if (isOnForgotPassword || isOnResetPassword) {
+      if (isOnForgotPassword || isOnResetPassword||isOnSignUp) {
         return true; 
       }
   

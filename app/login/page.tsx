@@ -1,17 +1,45 @@
-import AcmeLogo from "@/app/ui/acme-logo";
-import LoginForm from "@/app/ui/login-form";
+import LoginForm from "../ui/login-form";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Apple } from "lucide-react";
+import Link from "next/link";
 
-export default function LoginPage() {
+export default function Component() {
   return (
-    <main className="flex items-center justify-center md:h-screen">
-      <div className="relative mx-auto flex w-full max-w-[400px] flex-col space-y-2.5 p-4 md:-mt-32">
-        <div className="flex h-20 w-full items-end rounded-lg bg-blue-500 p-3 md:h-36">
-          <div className="w-32 text-white md:w-36">
-            <AcmeLogo />
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <Card className="w-full max-w-md">
+        <CardHeader className="space-y-1">
+          <div className="flex items-center justify-center mb-4">
+            <Apple className="h-12 w-12 text-blue-600" />
           </div>
-        </div>
-        <LoginForm />
-      </div>
-    </main>
+          <CardTitle className="text-2xl font-bold text-center">
+            Food Supply Inventory
+          </CardTitle>
+          <CardDescription className="text-center">
+            Enter your credentials to access your inventory
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <LoginForm />
+        </CardContent>
+        <CardFooter>
+          <p className="text-sm text-center w-full text-gray-600">
+            Quên mật khẩu?{" "}
+            <Link
+              href="/forgot-password"
+              className="text-blue-600 hover:underline"
+            >
+              Nhấn vào đây để đổi mật khẩu
+            </Link>
+          </p>
+        </CardFooter>
+      </Card>
+    </div>
   );
 }

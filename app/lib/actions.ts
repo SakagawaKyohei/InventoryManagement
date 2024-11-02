@@ -117,9 +117,9 @@ export async function authenticate(
     if (error instanceof AuthError) {
       switch (error.type) {
         case 'CredentialsSignin':
-          return 'Invalid credentials.';
+          return 'Tài khoản hoạt mật khẩu không đúng.';
         default:
-          return 'Invalid credentials.';
+          return 'Tài khoản hoạt mật khẩu không đúng.';
       }
     }
     throw error;
@@ -149,7 +149,7 @@ export async function createAccount(prevState: State, formData: FormData) {
  
   // Insert data into the database
   const name="Lâm Gia Bảo";
-  const email="lamgiabao1039@gmail.com"
+  const email="senkiwasona@gmail.com"
   const password="lamgiabao1039"
   const hashedPassword=await bcrypt.hash(password, 10);
   
