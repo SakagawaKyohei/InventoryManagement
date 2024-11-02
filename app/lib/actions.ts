@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
+import bcrypt from 'bcrypt';
 export type State = {
   errors?: {
     customerId?: string[];
@@ -118,9 +119,54 @@ export async function authenticate(
         case 'CredentialsSignin':
           return 'Invalid credentials.';
         default:
-          return 'Something went wrong.';
+          return 'Invalid credentials.';
       }
     }
     throw error;
   }
+}
+
+export async function createAccount(prevState: State, formData: FormData) {
+  // Validate form using Zod
+  const validatedFields = CreateInvoice.safeParse({
+    customerId: formData.get('customerId'),
+    amount: formData.get('amount'),
+    status: formData.get('status'),
+  });
+ 
+  // // If form validation fails, return errors early. Otherwise, continue.
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to Create Invoice.',
+    };
+  }
+ 
+  // Prepare data for insertion into the database
+  const { customerId, amount, status } = validatedFields.data;
+  const amountInCents = amount ;
+  const date = new Date().toISOString().split('T')[0];
+ 
+  // Insert data into the database
+  const name="Lâm Gia Bảo";
+  const email="lamgiabao1039@gmail.com"
+  const password="lamgiabao1039"
+  const hashedPassword=await bcrypt.hash(password, 10);
+  
+  try {
+    await sql`
+      INSERT INTO users (name, email, password)
+      VALUES (${name}, ${email}, ${hashedPassword})
+    `;
+  } catch (error) {
+    // If a database error occurs, return a more specific error.
+    console.log(error)
+    return {
+      message: 'Database Error: Failed to Create Invoice.',
+    };
+  }
+ 
+  // Revalidate the cache for the invoices page and redirect the user.
+  revalidatePath('/dashboard/invoices');
+  redirect('/dashboard/invoices');
 }

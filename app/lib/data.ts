@@ -219,3 +219,66 @@ export async function fetchFilteredCustomers(query: string) {
     throw new Error('Failed to fetch customer table.');
   }
 }
+
+
+//forgot password
+// Lấy người dùng theo email
+export async function getUserByEmail(email: string) {
+  try {
+    const data = await sql`
+      SELECT id, email, password
+      FROM users
+      WHERE email = ${email}
+    `;
+
+    return data.rows[0]; // Trả về đối tượng người dùng hoặc undefined
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch user by email.');
+  }
+}
+
+// Lưu mã thông báo đặt lại và thời gian hết hạn
+export async function saveResetToken(userId: number, token: string, expiry: number) {
+  try {
+    await sql`
+      INSERT INTO reset_tokens (user_id, token, expiry)
+      VALUES (${userId}, ${token}, ${expiry})
+    `;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to save reset token.');
+  }
+}
+
+// Lấy mã thông báo đặt lại theo mã
+export async function getResetToken(token: string) {
+  try {
+    const data = await sql`
+      SELECT user_id, expiry
+      FROM reset_tokens
+      WHERE token = ${token}
+    `;
+
+    return data.rows[0]; // Trả về đối tượng thông tin mã thông báo hoặc undefined
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch reset token.');
+  }
+}
+
+// Cập nhật mật khẩu của người dùng
+export async function updatePassword(userId: string, password: string) {
+  console.log("abc")
+  const userIds: any = "5c4a8b76-45a6-41a9-beac-25a09713b12d";
+  try {
+    await sql`
+      UPDATE users
+      SET password = ${password}
+      WHERE id = ${userIds}
+    `;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to update password.');
+  }
+}
