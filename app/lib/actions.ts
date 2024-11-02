@@ -143,9 +143,9 @@ export async function createAccount(prevState: State, formData: FormData) {
   }
  
   // Prepare data for insertion into the database
-  const { customerId, amount, status } = validatedFields.data;
-  const amountInCents = amount ;
-  const date = new Date().toISOString().split('T')[0];
+  // const { customerId, amount, status } = validatedFields.data;
+  // const amountInCents = amount ;
+  // const date = new Date().toISOString().split('T')[0];
  
   // Insert data into the database
   const name="Lâm Gia Bảo";

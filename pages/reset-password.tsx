@@ -7,7 +7,7 @@ export default function ResetPassword() {
   const router = useRouter();
   const { token } = router.query;
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const res = await fetch("/api/auth/reset-password", {
       method: "POST",

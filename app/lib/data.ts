@@ -8,6 +8,7 @@ import {
   Revenue,
 } from './definitions';
 import { formatCurrency } from './utils';
+import { UUID } from 'crypto';
 
 
 
@@ -270,7 +271,8 @@ export async function getResetToken(token: string) {
 // Cập nhật mật khẩu của người dùng
 export async function updatePassword(userId: string, password: string) {
   console.log("abc")
-  const userIds: any = "5c4a8b76-45a6-41a9-beac-25a09713b12d";
+  const userIds: UUID = "5c4a8b76-45a6-41a9-beac-25a09713b12d";
+  //type ko biet import dung ko, test sau
   try {
     await sql`
       UPDATE users

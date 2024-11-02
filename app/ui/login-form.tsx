@@ -16,7 +16,7 @@ export default function LoginForm() {
     undefined
   );
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
 
   return (
     <form action={formAction} className="space-y-3">
