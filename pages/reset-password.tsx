@@ -25,7 +25,7 @@ export default function ResetPassword() {
   const { token } = router.query;
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       setError("Xác nhận mật khẩu không đúng.");
