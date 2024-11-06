@@ -2,11 +2,29 @@
 // It describes the shape of the data, and what data type each property should accept.
 // For simplicity of teaching, we're manually defining these types.
 // However, these types are generated automatically if you're using an ORM such as Prisma.
-export type User = {
+export type Users = {
   id: string;
   name: string;
   email: string;
   password: string;
+  status: string;
+  role: string;
+  bank:string;
+  stk: string;
+  ngaysinh:string;
+  sdt:string;
+  cccd:string;
+  diachi:string;
+};
+
+export type Product = {
+  id: string;
+  buy_price:number;
+  sell_price:number;
+  company:string;
+  date:string;
+  img_product:string
+  description:string
 };
 
 export type Customer = {
@@ -15,7 +33,61 @@ export type Customer = {
   email: string;
   image_url: string;
 };
+export type DonDatHang = {
+  id: string;
+  id_nguoi_van_chuyen: string;
+  company: string;
+  sdt: string;
+  start_time:string;
+  done_time: string;
+  han_su_dung:string;
+  kho_xuat_hang: string;
+  dia_chi_kho:string;
+  product:Product[];
+  total:number;
+};
+export type DonXuatHang = {
+  id: string;
+  ma_doi_tac: string;
+  id_nguoi_van_chuyen: string;
+  start_time: string;
+  done_time: string;
+  product:string;
+  total:number;
+  status: string
+};
 
+export type DoiTac = {
+  id: string;
+  name: string;
+  email: string;
+  sdt: string;
+  dia_chi:string
+  ao_nuoi: AoNuoi
+};
+
+export type AoNuoi= {
+  // id: string;
+  // name: string;
+  // email: string;
+  // sdt: string;
+  // dia_chi:string
+  // ao_nuoi:
+};
+
+export type TonKho = {
+  ma_don_hang:string;
+  ma_hang:string;
+  han_su_dung:string;
+  ngay_nhap:string;
+  so_luong:number;
+};
+
+export type Logging = {
+  user_id:string;
+  time:string;
+  action:string;
+};
 export type Invoice = {
   id: string;
   customer_id: string;

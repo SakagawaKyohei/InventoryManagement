@@ -1,185 +1,180 @@
 "use client";
+
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Apple, Loader2 } from "lucide-react";
-import Link from "next/link";
+import { Users } from "../lib/definitions";
+import { redirect } from "next/navigation";
+import bcrypt from "bcryptjs";
 
 export default function SignUp() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState({
+  // Initialize user state with default values
+  const [user, setUser] = useState<Users>({
+    id: "",
     name: "",
     email: "",
     password: "",
-    confirmPassword: "",
+    status: "active", // Default is active
+    role: "admin", // Default is admin
+    bank: "",
+    stk: "",
+    ngaysinh: "",
+    sdt: "",
+    cccd: "",
+    diachi: "",
   });
-  const [errors, setErrors] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
+
+  const [error, setError] = useState<string>("");
+  const [success, setSuccess] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({ ...prev, [name]: "" }));
+    setUser((prevUser) => ({
+      ...prevUser,
+      [name]: value,
+    }));
   };
 
-  const validateForm = () => {
-    let isValid = true;
-    const newErrors = { ...errors };
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
-      isValid = false;
+    // Hash the password before sending the user data
+    const hashedPassword = await bcrypt.hash(user.password, 10);
+    const password = user.password;
+
+    // Create a new user object with the hashed password
+    const userWithHashedPassword = {
+      ...user,
+      password: hashedPassword,
+    };
+
+    // Send the user data to the backend
+    const res = await fetch("/api/auth/add-user", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user: userWithHashedPassword, password }),
+    });
+
+    if (res.ok) {
+      alert("Password reset successful");
+      redirect("/dashboard");
+    } else {
+      const data = await res.json();
+      setError(data.message || "Lỗi tạo tài khoản");
     }
-
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-      isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Email is invalid";
-      isValid = false;
-    }
-
-    if (formData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters";
-      isValid = false;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match";
-      isValid = false;
-    }
-
-    setErrors(newErrors);
-    return isValid;
-  };
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!validateForm()) return;
-
-    setIsLoading(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsLoading(false);
-    // Handle sign up logic here
-    console.log("Sign up data:", formData);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <div className="flex items-center justify-center mb-4">
-            <Apple className="h-12 w-12 text-blue-600" />
-          </div>
-          <CardTitle className="text-2xl font-bold text-center">
-            Tạo tài khoản
-          </CardTitle>
-          <CardDescription className="text-center">
-            Đăng ký tài khoản
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit}>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Full Name</Label>
-                <Input
-                  id="name"
-                  name="name"
-                  placeholder="John Doe"
-                  required
-                  value={formData.name}
-                  onChange={handleChange}
-                />
-                {errors.name && (
-                  <p className="text-sm text-red-500">{errors.name}</p>
-                )}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="john@example.com"
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-                {errors.email && (
-                  <p className="text-sm text-red-500">{errors.email}</p>
-                )}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  value={formData.password}
-                  onChange={handleChange}
-                />
-                {errors.password && (
-                  <p className="text-sm text-red-500">{errors.password}</p>
-                )}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm Password</Label>
-                <Input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  required
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                />
-                {errors.confirmPassword && (
-                  <p className="text-sm text-red-500">
-                    {errors.confirmPassword}
-                  </p>
-                )}
-              </div>
-            </div>
-            <Button
-              className="w-full mt-6 bg-blue-600 hover:bg-blue-700"
-              type="submit"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Creating Account...
-                </>
-              ) : (
-                "Đăng ký"
-              )}
-            </Button>
-          </form>
-        </CardContent>
-        <CardFooter>
-          <p className="text-sm text-center w-full text-gray-600">
-            Đã có tài khoản?{" "}
-            <Link href="/login" className="text-blue-600 hover:underline">
-              Đăng nhập
-            </Link>
-          </p>
-        </CardFooter>
-      </Card>
+    <div className="register-container">
+      <h2>Đăng ký người dùng</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="name">Họ và tên:</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={user.name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={user.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="password">Mật khẩu:</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            value={user.password}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="ngaysinh">Ngày sinh:</label>
+          <input
+            type="date"
+            id="ngaysinh"
+            name="ngaysinh"
+            value={user.ngaysinh}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="sdt">Số điện thoại:</label>
+          <input
+            type="tel"
+            id="sdt"
+            name="sdt"
+            value={user.sdt}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="cccd">Số CCCD:</label>
+          <input
+            type="text"
+            id="cccd"
+            name="cccd"
+            value={user.cccd}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="diachi">Địa chỉ:</label>
+          <input
+            type="text"
+            id="diachi"
+            name="diachi"
+            value={user.diachi}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="bank">Ngân hàng:</label>
+          <input
+            type="text"
+            id="bank"
+            name="bank"
+            value={user.bank}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="stk">Số tài khoản:</label>
+          <input
+            type="text"
+            id="stk"
+            name="stk"
+            value={user.stk}
+            onChange={handleChange}
+          />
+        </div>
+
+        {/* Error or success message */}
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        {success && <p style={{ color: "green" }}>{success}</p>}
+
+        <button type="submit">Đăng ký</button>
+      </form>
     </div>
   );
 }

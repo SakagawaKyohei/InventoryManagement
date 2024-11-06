@@ -239,19 +239,6 @@ export async function getUserByEmail(email: string) {
   }
 }
 
-// Lưu mã thông báo đặt lại và thời gian hết hạn
-export async function saveResetToken(userId: number, token: string, expiry: number) {
-  try {
-    await sql`
-      INSERT INTO reset_tokens (user_id, token, expiry)
-      VALUES (${userId}, ${token}, ${expiry})
-    `;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to save reset token.');
-  }
-}
-
 // Lấy mã thông báo đặt lại theo mã
 export async function getResetToken(token: string) {
   try {
@@ -268,19 +255,4 @@ export async function getResetToken(token: string) {
   }
 }
 
-// Cập nhật mật khẩu của người dùng
-export async function updatePassword(userId: string, password: string) {
-  console.log("abc")
-  const userIds: UUID = "5c4a8b76-45a6-41a9-beac-25a09713b12d";
-  //type ko biet import dung ko, test sau
-  try {
-    await sql`
-      UPDATE users
-      SET password = ${password}
-      WHERE id = ${userIds}
-    `;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to update password.');
-  }
-}
+

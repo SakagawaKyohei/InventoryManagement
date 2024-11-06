@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
-import { getResetToken, updatePassword } from "@/app/lib/data";
+import { updatePassword } from "@/app/lib/actions";
+import { getResetToken } from "@/app/lib/data";
 
 export default async function handler(req, res) {
   const { token, password } = req.body;

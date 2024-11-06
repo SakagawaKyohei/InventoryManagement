@@ -1,6 +1,7 @@
 import { Resend } from 'resend';
 import crypto from 'crypto';
-import { getUserByEmail, saveResetToken } from "@/app/lib/data";
+import {  saveResetToken } from "@/app/lib/actions";
+import {  getUserByEmail } from "@/app/lib/data";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export default async function handler(req, res) {
