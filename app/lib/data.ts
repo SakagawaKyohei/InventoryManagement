@@ -2,6 +2,7 @@ import { sql } from '@vercel/postgres';
 import {
   CustomerField,
   CustomersTableType,
+  DoiTac,
   InvoiceForm,
   InvoicesTable,
   LatestInvoiceRaw,
@@ -191,6 +192,27 @@ export async function fetchProductById(id: string) {
   }
 }
 
+
+export async function fetchPartnerById(id: string) {
+  try {
+    const data = await sql<Product>`
+      SELECT
+       *
+      FROM doitac
+      WHERE doitac.id = ${id};
+    `;
+
+    const doitac = data.rows.map((doitac) => ({
+      ...doitac,
+    }));
+
+    return doitac[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch product.');
+  }
+}
+
 export async function fetchCustomers() {
   try {
     const data = await sql<CustomerField>`
@@ -276,6 +298,22 @@ export async function getResetToken(token: string) {
   }
 }
 
+
+export async function fetchPartner() {
+  try {
+    const data = await sql<DoiTac>`
+      SELECT *
+      FROM doitac
+      ORDER BY name ASC
+    `;
+
+    const doitac= data.rows;
+    return doitac;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all partner.');
+  }
+}
 
 export async function fetchProduct() {
   try {

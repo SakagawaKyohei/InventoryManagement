@@ -63,7 +63,7 @@ export type DoiTac = {
   email: string;
   sdt: string;
   dia_chi:string
-  ao_nuoi: AoNuoi
+  ao_nuoi:any
 };
 
 export type AoNuoi= {

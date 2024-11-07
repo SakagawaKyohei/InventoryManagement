@@ -1,29 +1,28 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Product } from "../lib/definitions";
+import { DoiTac, Product } from "../../lib/definitions";
 import { redirect } from "next/navigation";
 
 export default function EditProduct() {
-  const id = "TA000006"; // You might want to dynamically retrieve this from URL params
-  const [product, setProduct] = useState<Product>({
+  const id = "KH_000008"; // You might want to dynamically retrieve this from URL params
+  const [doitac, setDoitac] = useState<DoiTac>({
     id: "",
     name: "",
-    buy_price: 0,
-    sell_price: 0,
-    company: "",
-    img_product: "",
-    description: "",
+    email: "",
+    sdt: "",
+    dia_chi: "",
+    ao_nuoi: {},
   });
 
   // Fetch product when the component mounts
   useEffect(() => {
-    fetchProductData();
+    fetchPartnerData();
   }, []); // Empty dependency array means this effect runs once when the component mounts
 
-  const fetchProductData = async () => {
+  const fetchPartnerData = async () => {
     try {
-      const response = await fetch(`/api/product/get-product?id=${id}`, {
+      const response = await fetch(`/api/doi-tac/get-partner?id=${id}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -31,12 +30,12 @@ export default function EditProduct() {
       const data = await response.json();
 
       if (response.ok) {
-        setProduct(data.product); // Make sure to use the correct API response field
+        setDoitac(data.doitac); // Make sure to use the correct API response field
       } else {
-        setError("Failed to load product");
+        setError("Failed to load doitac");
       }
     } catch (error) {
-      console.error("Error fetching product:", error);
+      console.error("Error fetching doitac:", error);
     }
   };
 
@@ -44,90 +43,79 @@ export default function EditProduct() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setProduct((prevProduct) => ({
-      ...prevProduct,
+    setDoitac((prevDoitac) => ({
+      ...prevDoitac,
       [name]: value,
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(doitac);
 
-    const res = await fetch("/api/product/edit-product", {
+    const res = await fetch("/api/doi-tac/edit-partner", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, product }),
+      body: JSON.stringify({ id, doitac }),
     });
 
     if (res.ok) {
-      alert("Product added successfully");
+      alert("doitac added successfully");
       redirect("/dashboard");
     } else {
       const data = await res.json();
-      setError(data.message || "Error creating product");
+      setError(data.message || "Error creating doitac");
     }
   };
 
   return (
     <div className="register-container">
-      <h2>Edit Product</h2>
+      <h2>Edit Partner</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="name">Product Name:</label>
+          <label htmlFor="name">Tên đối tác:</label>
           <input
             type="text"
             id="name"
             name="name"
-            value={product.name}
+            value={doitac.name}
             onChange={handleChange}
             required
           />
         </div>
 
         <div>
-          <label htmlFor="buy_price">Buy Price:</label>
+          <label htmlFor="email">Buy Price:</label>
           <input
-            type="text"
-            id="buy_price"
-            name="buy_price"
-            value={product.buy_price}
+            type="email"
+            id="email"
+            name="email"
+            value={doitac.email}
             onChange={handleChange}
             required
           />
         </div>
 
         <div>
-          <label htmlFor="sell_price">Sell Price:</label>
+          <label htmlFor="sdt">Sell Price:</label>
           <input
             type="text"
-            id="sell_price"
-            name="sell_price"
-            value={product.sell_price}
+            id="sdt"
+            name="sdt"
+            value={doitac.sdt}
             onChange={handleChange}
             required
           />
         </div>
 
         <div>
-          <label htmlFor="company">Company:</label>
+          <label htmlFor="dia_chi">Company:</label>
           <input
             type="text"
-            id="company"
-            name="company"
-            value={product.company}
+            id="dia_chi"
+            name="dia_chi"
+            value={doitac.dia_chi}
             onChange={handleChange}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="description">Product Description:</label>
-          <input
-            type="text"
-            id="description"
-            name="description"
-            value={product.description}
-            onChange={handleChange}
-            required
           />
         </div>
 

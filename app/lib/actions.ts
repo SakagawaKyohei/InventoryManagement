@@ -7,7 +7,7 @@ import { signIn } from '@/auth';
 import { AuthError, User } from 'next-auth';
 import bcrypt from 'bcrypt';
 import { UUID } from 'crypto';
-import { Product, Users } from './definitions';
+import { DoiTac, Product, Users } from './definitions';
 export type State = {
   errors?: {
     customerId?: string[];
@@ -177,6 +177,21 @@ export async function AddProduct(product:Product) {
   }
 }
 
+export async function AddDoiTac(doitac:DoiTac) {
+  try {
+    await sql`
+      INSERT INTO doitac (name, email, sdt, dia_chi)
+      VALUES (${doitac.name},${doitac.email}, ${doitac.sdt},${doitac.dia_chi})
+    `;
+  } catch (error) {
+    // If a database error occurs, return a more specific error.
+    console.log(error)
+    return {
+      message: 'Database Error: Failed to Create Partner.',
+    };
+  }
+}
+
 
 export async function EditProduct(id:string, product: Product) {
   try {
@@ -203,6 +218,32 @@ export async function EditProduct(id:string, product: Product) {
   }
 }
 
+export async function EditPartner(id: string, partner: DoiTac) {
+
+
+  try {
+    await sql`
+      UPDATE doitac
+      SET 
+        name = ${partner.name},
+        email = ${partner.email},
+        sdt = ${partner.sdt},
+        dia_chi = ${partner.dia_chi},
+        ao_nuoi = ${partner.ao_nuoi}
+      WHERE id = ${id}
+    `;
+
+    return { message: 'Đối tác đã được cập nhật thành công.' };
+  } catch (error) {
+    console.log('Lỗi khi cập nhật:', error);
+    return {
+      message: 'Lỗi Cơ sở Dữ liệu: Không thể cập nhật đối tác.',
+    };
+  }
+}
+
+
+
 export async function DeleteProduct(id: string) {
   try {
     // Xóa sản phẩm từ cơ sở dữ liệu
@@ -218,6 +259,21 @@ export async function DeleteProduct(id: string) {
   }
 }
 
+
+export async function DeletePartner(id: string) {
+  try {
+    // Xóa sản phẩm từ cơ sở dữ liệu
+    await sql`DELETE FROM doitac WHERE id = ${id}`;
+
+    // Gọi revalidatePath để làm mới dữ liệu cho trang '/product-list'
+    revalidatePath('doi-tac/partner-list'); 
+
+    return { message: 'Sản phẩm đã được xóa và cache đã được làm mới.' };
+  } catch (error) {
+    console.error(error); // Ghi log lỗi
+    return { message: 'Lỗi cơ sở dữ liệu: Không thể xóa sản phẩm.' };
+  }
+}
 
 // Lưu mã thông báo đặt lại và thời gian hết hạn
 export async function saveResetToken(userId: number, token: string, expiry: number) {

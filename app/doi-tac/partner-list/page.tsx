@@ -1,38 +1,38 @@
 "use client";
+import { DoiTac } from "@/app/lib/definitions";
 import React, { useState, useEffect } from "react";
-import { Product } from "../lib/definitions"; // Assuming you have the Product type defined
 
-const FetchProductButton = () => {
+const FetchdoitacButton = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [product, setProduct] = useState<Product[] | null>(null); // Product array or null initially
-  const fetchProductData = async () => {
+  const [doitac, setDoitac] = useState<DoiTac[] | null>(null); // doitac array or null initially
+  const fetchDoiTacData = async () => {
     setLoading(true);
     setMessage(""); // Clear any previous messages
 
     try {
-      const response = await fetch("/api/product/product-list", {
+      const response = await fetch("/api/doi-tac/partner-list", {
         method: "GET", // Or POST depending on your API
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        setProduct(data.products); // Corrected to reflect API response
-        setMessage("Product fetched successfully");
+        setDoitac(data.doitac); // Corrected to reflect API response
+        setMessage("doitac fetched successfully");
       } else {
-        setMessage("Failed to fetch product");
+        setMessage("Failed to fetch doitac");
       }
     } catch (error) {
-      console.error("Error fetching product:", error);
-      setMessage("Error fetching product. Please try again.");
+      console.error("Error fetching doitac:", error);
+      setMessage("Error fetching doitac. Please try again.");
     } finally {
       setLoading(false);
     }
   };
   const handleDelete = async (id: string) => {
     try {
-      const res = await fetch("/api/product/delete-product", {
+      const res = await fetch("/api/doi-tac/delete", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),
@@ -40,7 +40,7 @@ const FetchProductButton = () => {
 
       if (res.ok) {
         // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
-        fetchProductData();
+        fetchDoiTacData();
       } else {
         setMessage("Không thể xóa sản phẩm");
       }
@@ -50,9 +50,9 @@ const FetchProductButton = () => {
     }
   };
 
-  // Fetch product when the component mounts
+  // Fetch doitac when the component mounts
   useEffect(() => {
-    fetchProductData(); // Trigger the fetch when the component mounts
+    fetchDoiTacData(); // Trigger the fetch when the component mounts
   }, []); // Empty dependency array means this effect runs once when the component mounts
   return (
     <div>
@@ -60,15 +60,15 @@ const FetchProductButton = () => {
 
       {message && <p>{message}</p>}
 
-      {product && (
+      {doitac && (
         <div>
-          <h3>Product Details:</h3>
+          <h3>doitac Details:</h3>
           <ul>
-            {product.map((item, index) => (
+            {doitac.map((item, index) => (
               <li key={item.id}>
                 {" "}
                 {/* Use `item.id` instead of `index` as the key */}
-                <strong>{item.name}</strong>: {item.description}{" "}
+                <strong>{item.name}</strong>
                 {/* Adjust as needed */}
                 <button onClick={() => handleDelete(item.id)}>delete</button>
               </li>
@@ -80,4 +80,4 @@ const FetchProductButton = () => {
   );
 };
 
-export default FetchProductButton;
+export default FetchdoitacButton;

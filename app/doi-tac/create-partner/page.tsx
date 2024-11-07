@@ -1,19 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { Product, Users } from "../lib/definitions";
 import { redirect } from "next/navigation";
+import { DoiTac } from "@/app/lib/definitions";
 
 export default function CreateProduct() {
   // Initialize user state with default values
-  const [product, setProduct] = useState<Product>({
+  const [doitac, setDoitac] = useState<DoiTac>({
     id: "",
     name: "",
-    buy_price: 0,
-    sell_price: 0,
-    company: "", // Default is active
-    img_product: "", // Default is admin
-    description: "",
+    email: "",
+    sdt: "",
+    dia_chi: "",
+    ao_nuoi: {},
   });
 
   const [error, setError] = useState<string>("");
@@ -21,8 +20,8 @@ export default function CreateProduct() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setProduct((prevProduct) => ({
-      ...prevProduct,
+    setDoitac((prevDoitac) => ({
+      ...prevDoitac,
       [name]: value,
     }));
   };
@@ -31,10 +30,10 @@ export default function CreateProduct() {
     e.preventDefault();
 
     // Send the user data to the backend
-    const res = await fetch("/api/product/add-product", {
+    const res = await fetch("/api/doi-tac/add", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ product }),
+      body: JSON.stringify({ doitac }),
     });
 
     if (res.ok) {
@@ -51,61 +50,49 @@ export default function CreateProduct() {
       <h2>Đăng ký người dùng</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="name">Tên sản phẩm:</label>
+          <label htmlFor="name">Tên đối tác:</label>
           <input
             type="text"
             id="name"
             name="name"
-            value={product.name}
+            value={doitac.name}
             onChange={handleChange}
             required
           />
         </div>
 
         <div>
-          <label htmlFor="buy_price">Giá mua:</label>
+          <label htmlFor="email">Email:</label>
           <input
-            type="text"
-            id="buy_price"
-            name="buy_price"
-            value={product.buy_price}
+            type="email"
+            id="email"
+            name="email"
+            value={doitac.email}
             onChange={handleChange}
             required
           />
         </div>
 
         <div>
-          <label htmlFor="sell_price">Giá bán:</label>
+          <label htmlFor="sdt">Số điện thoại</label>
           <input
-            type="text"
-            id="sell_price"
-            name="sell_price"
-            value={product.sell_price}
+            type="tel"
+            id="sdt"
+            name="sdt"
+            value={doitac.sdt}
             onChange={handleChange}
             required
           />
         </div>
 
         <div>
-          <label htmlFor="company">Công ty:</label>
+          <label htmlFor="dia_chi">Địa chỉ:</label>
           <input
             type="text"
-            id="company"
-            name="company"
-            value={product.company}
+            id="dia_chi"
+            name="dia_chi"
+            value={doitac.dia_chi}
             onChange={handleChange}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="description">Mô tả sản phẩm:</label>
-          <input
-            type="text"
-            id="description"
-            name="description"
-            value={product.description}
-            onChange={handleChange}
-            required
           />
         </div>
 
