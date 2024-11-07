@@ -7,7 +7,7 @@ import { signIn } from '@/auth';
 import { AuthError, User } from 'next-auth';
 import bcrypt from 'bcrypt';
 import { UUID } from 'crypto';
-import { Users } from './definitions';
+import { Product, Users } from './definitions';
 export type State = {
   errors?: {
     customerId?: string[];
@@ -159,6 +159,62 @@ export async function AddUser(user:Users) {
     return {
       message: 'Database Error: Failed to Create Account.',
     };
+  }
+}
+
+export async function AddProduct(product:Product) {
+  try {
+    await sql`
+      INSERT INTO product (name,company,buy_price,sell_price, description, img_product)
+      VALUES (${product.name},${product.company}, ${product.buy_price},${product.sell_price}, ${product.description},${product.img_product})
+    `;
+  } catch (error) {
+    // If a database error occurs, return a more specific error.
+    console.log(error)
+    return {
+      message: 'Database Error: Failed to Create Account.',
+    };
+  }
+}
+
+
+export async function EditProduct(id:string, product: Product) {
+  try {
+    // Update the product based on its unique ID
+    await sql`
+      UPDATE product
+      SET 
+        name = ${product.name},
+        company = ${product.company},
+        buy_price = ${product.buy_price},
+        sell_price = ${product.sell_price},
+        description = ${product.description},
+        img_product = ${product.img_product}
+      WHERE id = ${id}
+    `;
+    
+    return { message: 'Product updated successfully.' };
+  } catch (error) {
+    // If a database error occurs, return a more specific error.
+    console.log(error);
+    return {
+      message: 'Database Error: Failed to Update Product.',
+    };
+  }
+}
+
+export async function DeleteProduct(id: string) {
+  try {
+    // Xóa sản phẩm từ cơ sở dữ liệu
+    await sql`DELETE FROM product WHERE id = ${id}`;
+
+    // Gọi revalidatePath để làm mới dữ liệu cho trang '/product-list'
+    revalidatePath('/product-list'); 
+
+    return { message: 'Sản phẩm đã được xóa và cache đã được làm mới.' };
+  } catch (error) {
+    console.error(error); // Ghi log lỗi
+    return { message: 'Lỗi cơ sở dữ liệu: Không thể xóa sản phẩm.' };
   }
 }
 

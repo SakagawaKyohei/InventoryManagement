@@ -19,10 +19,10 @@ export type Users = {
 
 export type Product = {
   id: string;
+  name: string;
   buy_price:number;
   sell_price:number;
   company:string;
-  date:string;
   img_product:string
   description:string
 };

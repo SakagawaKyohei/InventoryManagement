@@ -5,6 +5,7 @@ import {
   InvoiceForm,
   InvoicesTable,
   LatestInvoiceRaw,
+  Product,
   Revenue,
 } from './definitions';
 import { formatCurrency } from './utils';
@@ -170,6 +171,26 @@ export async function fetchInvoiceById(id: string) {
   }
 }
 
+export async function fetchProductById(id: string) {
+  try {
+    const data = await sql<Product>`
+      SELECT
+       *
+      FROM product
+      WHERE product.id = ${id};
+    `;
+
+    const product = data.rows.map((product) => ({
+      ...product,
+    }));
+
+    return product[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch product.');
+  }
+}
+
 export async function fetchCustomers() {
   try {
     const data = await sql<CustomerField>`
@@ -256,3 +277,18 @@ export async function getResetToken(token: string) {
 }
 
 
+export async function fetchProduct() {
+  try {
+    const data = await sql<Product>`
+      SELECT *
+      FROM product
+      ORDER BY name ASC
+    `;
+
+    const product = data.rows;
+    return product;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all product.');
+  }
+}
