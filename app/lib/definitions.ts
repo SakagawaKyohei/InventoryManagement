@@ -27,6 +27,17 @@ export type Product = {
   description:string
 };
 
+export type VanChuyen={
+  id:string
+  id_don_hang: string
+  status:string;
+  nhapxuat:string
+  start_time:string;
+  done_time: string;
+  kho_xuat_hang: string;
+  dia_chi_kho:string  
+}
+
 export type Customer = {
   id: string;
   name: string;
@@ -37,12 +48,7 @@ export type DonDatHang = {
   id: string;
   id_nguoi_van_chuyen: string;
   company: string;
-  sdt: string;
-  start_time:string;
-  done_time: string;
   han_su_dung:string;
-  kho_xuat_hang: string;
-  dia_chi_kho:string;
   product:any;
   total:number;
 };

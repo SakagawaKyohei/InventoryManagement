@@ -3,6 +3,7 @@ import React, { useState } from "react";
 
 const AddProductToOrder = () => {
   const [product, setProduct] = useState({
+    id: "",
     name: "",
     price: "",
     quantity: "",

@@ -259,6 +259,32 @@ export async function CancelDonDatHang() {
   }
 }
 
+//them don dat hang trang thai cho thanh toan
+
+export async function ThanhToan( donHangId:string, hanSuDung:string, khoXuatHang:string, diaChi:string,id_nguoi_van_chuyen:string ) {
+  try {
+    // Cập nhật trạng thái đơn hàng thành "paid" và cập nhật ngày hết hạn sử dụng
+    await sql`
+    UPDATE dondathang
+    SET status = 'paid', han_su_dung = ${hanSuDung}
+    WHERE id = ${donHangId};
+  `;
+  
+
+    // Thêm thông tin vào bảng vanchuyen
+    await sql`
+      INSERT INTO vanchuyen (id_don_hang, start_time, status, kho_xuat_hang, dia_chi_kho,nhapxuat,id_nguoi_van_chuyen)
+      VALUES (${donHangId}, CURRENT_TIMESTAMP, 'đang vận chuyển', ${khoXuatHang}, ${diaChi},'Nhập',${id_nguoi_van_chuyen});
+    `;
+
+    return { message: 'Đơn hàng đã được thanh toán và vận chuyển.' };
+  } catch (error) {
+    console.error('Database error:', error);  // Log the error for debugging
+    return { message: 'Lỗi cơ sở dữ liệu: Không thể xử lý đơn hàng.' };
+  }
+}
+
+
 
 
 
