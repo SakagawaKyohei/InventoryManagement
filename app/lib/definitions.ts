@@ -43,7 +43,7 @@ export type DonDatHang = {
   han_su_dung:string;
   kho_xuat_hang: string;
   dia_chi_kho:string;
-  product:Product[];
+  product:any;
   total:number;
 };
 export type DonXuatHang = {

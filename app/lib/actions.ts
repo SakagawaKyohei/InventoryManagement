@@ -7,7 +7,7 @@ import { signIn } from '@/auth';
 import { AuthError, User } from 'next-auth';
 import bcrypt from 'bcrypt';
 import { UUID } from 'crypto';
-import { DoiTac, Product, Users } from './definitions';
+import { DoiTac, DonDatHang, Product, Users } from './definitions';
 export type State = {
   errors?: {
     customerId?: string[];
@@ -176,6 +176,98 @@ export async function AddProduct(product:Product) {
     };
   }
 }
+export async function AddDonDatHang(product: Record<string, unknown>, company: string) {
+  const status = "draft";
+
+  try {
+    // Chuyển đối tượng product thành chuỗi JSON và sau đó chuyển thành jsonb
+    const productJson = JSON.parse(JSON.stringify(product));
+
+    console.log('Product JSON:', productJson); // Log dữ liệu trước khi gửi vào SQL
+
+    // Bước 1: Kiểm tra xem dondathang có tồn tại không
+    const existingOrder = await sql`
+      SELECT product FROM dondathang
+      WHERE company = ${company} AND status = ${status}
+      LIMIT 1;
+    `;
+    
+    console.log('Existing Order:', existingOrder); // Log kết quả truy vấn SELECT
+
+    if (existingOrder.rows.length === 0) {
+      // Bước 2: Nếu không có dondathang nào, tạo mới
+      await sql`
+        INSERT INTO dondathang (company, product, status)
+        VALUES (${company}, ARRAY[${productJson}::jsonb], ${status});
+      `;
+      return { message: 'New DonDatHang created successfully.' };
+    } else {
+      // Sử dụng array_append để thêm phần tử vào mảng jsonb[]
+      await sql`
+        UPDATE dondathang
+        SET product = array_append(product, ${productJson}::jsonb)
+        WHERE company = ${company} AND status = ${status};
+      `;
+      return { message: 'Product added to existing DonDatHang.' };
+    }
+
+  } catch (error) {
+    console.error('Database error:', error); // Log lỗi để kiểm tra chi tiết
+    return {
+      message: 'Database Error: Failed to Create or Update DonDatHang.',
+    };
+  }
+}
+//them don dat hang trang thai draft
+
+export async function AddDonDatHang1() {
+  const status = 'draft';  // Correct string assignment with single quotes
+
+  try {
+    // Using parameterized queries and properly setting 'status' to 'pending'
+    await sql`
+      UPDATE dondathang
+      SET status = 'pending' 
+      WHERE status = ${status}; 
+    `;
+    
+    return { message: 'Product added to existing DonDatHang.' };
+  } catch (error) {
+    console.error('Database error:', error); // Log the error for debugging
+    return {
+      message: 'Database Error: Failed to Create or Update DonDatHang.',
+    };
+  }
+}
+//them don dat hang trang thai cho thanh toan
+
+export async function CancelDonDatHang() {
+  try {
+
+    await sql`
+      DELETE FROM dondathang
+      WHERE status = 'draft';
+    `;
+
+    // If you're using caching or page revalidation:
+    // revalidatePath('/product-list'); 
+
+    return { message: 'Đơn hàng đã được hủy thành công.' };
+  } catch (error) {
+    console.error('Database error:', error);  // Log the error for debugging
+    return { message: 'Lỗi cơ sở dữ liệu: Không thể hủy đơn hàng.' };
+  }
+}
+
+
+
+
+
+
+
+
+
+
 
 export async function AddDoiTac(doitac:DoiTac) {
   try {
