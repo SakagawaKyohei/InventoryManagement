@@ -1,0 +1,103 @@
+.sidebar {
+    width: 250px;
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.logo span {
+    color: #00BFFF;
+}
+
+.navList {
+    list-style: none;
+    padding: 0;
+}
+
+.navItem {
+    margin-bottom: 10px;
+}
+
+.navLink {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    font-size: 16px;
+    padding: 8px 0;
+    width: 100%;
+    cursor: pointer; 
+    display: flex;
+    justify-content: space-between;
+}
+
+.navLink span {
+    margin-left: 45px;
+    text-align: right;
+}
+
+.navLink1 {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    font-size: 16px;
+    padding: 8px 0;
+    width: 100%;
+    cursor: pointer; 
+    display: flex;
+
+}
+
+.navLink1 span {
+    margin-left: 45px;
+    text-align: right;
+}
+
+
+.dropdownArrow {
+    margin-left: 10px;
+    float: right;
+}
+
+.dropdownMenu {
+    list-style: none;
+    padding-left: 60px;
+
+}
+
+.dropdownItem {
+    margin-top: 15px;
+}
+
+.dropdownItem a {
+    color: white;
+    text-decoration: none;
+}
+
+.logout {
+    color: white;
+    text-decoration: none;
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.logout span {
+    margin-left: 10px;
+}
