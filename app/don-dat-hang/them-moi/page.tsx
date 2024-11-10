@@ -99,6 +99,17 @@ const AddProductToOrder = () => {
             required
           />
         </div>
+
+        <div>
+          <label>id:</label>
+          <input
+            type="text"
+            name="id"
+            value={product.id}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
         <div>
           <label>Product Name:</label>
           <input

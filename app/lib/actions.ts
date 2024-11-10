@@ -286,6 +286,43 @@ export async function ThanhToan( donHangId:string, hanSuDung:string, khoXuatHang
 
 
 
+export async function DaVanChuyen(donHangId: string) {
+  try {
+    // Cập nhật trạng thái đơn hàng trong bảng vanchuyen
+    await sql`
+      UPDATE vanchuyen
+      SET done_time = CURRENT_TIMESTAMP, status = 'Đã vận chuyển'
+      WHERE id_don_hang = ${donHangId};
+    `;
+
+    // Chèn dữ liệu vào bảng hangton
+    await sql`
+     INSERT INTO tonkho (ma_don_hang, ma_hang, han_su_dung, so_luong, ngay_nhap)
+    SELECT 
+        v.id_don_hang AS ma_don_hang,  
+        p.value->>'id' AS ma_hang,     
+        d.han_su_dung,                  
+        (p.value->>'quantity')::int AS so_luong,
+        CURRENT_TIMESTAMP AS ngay_nhap
+    FROM 
+        vanchuyen v
+    JOIN 
+        dondathang d ON v.id_don_hang = d.id  
+    CROSS JOIN LATERAL 
+        unnest(d.product) AS p(value)
+    WHERE 
+        v.id_don_hang = ${donHangId};
+    `;
+
+    return { message: 'Đơn hàng đã được thanh toán và vận chuyển.' };
+  } catch (error) {
+    console.error('Database error:', error);  // Log the error for debugging
+    return { message: 'Lỗi cơ sở dữ liệu: Không thể xử lý đơn hàng.' };
+  }
+}
+
+
+
 
 
 
