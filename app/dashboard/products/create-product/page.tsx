@@ -26,8 +26,15 @@ export default function CreateProduct() {
   const [image, setImage] = useState<Blob | null>(null);
   const [imageURL, setImageURL] = useState<string>("");
 
-  // Tạo id_anhbia duy nhất cho mỗi sản phẩm
   const [id_anhbia] = useState(uuidv4());
+
+  const [errors, setErrors] = useState({
+    name: "",
+    company: "",
+    buy_price: "",
+    sell_price: "",
+    image: "",
+  });
 
   useEffect(() => {
     if (id_anhbia) {
@@ -70,14 +77,61 @@ export default function CreateProduct() {
     }
   };
 
+  const validateForm = () => {
+    let valid = true;
+    let newErrors = {
+      name: "",
+      company: "",
+      buy_price: "",
+      sell_price: "",
+      image: "",
+    };
+
+    if (!product.name) {
+      newErrors.name = "Tên sản phẩm không được để trống.";
+      valid = false;
+    }
+
+    if (!product.company) {
+      newErrors.company = "Công ty sản xuất không được để trống.";
+      valid = false;
+    }
+
+    if (product.buy_price && product.buy_price <= 0) {
+      newErrors.buy_price = "Giá mua phải lớn hơn 0.";
+      valid = false;
+    }
+    if (!product.buy_price) {
+      newErrors.buy_price = "Giá mua không được để trống.";
+      valid = false;
+    }
+
+    if (!product.sell_price) {
+      newErrors.sell_price = "Giá bán không được để trống.";
+      valid = false;
+    }
+
+    if (product.sell_price && product.sell_price <= 0) {
+      newErrors.sell_price = "Giá bán phải lớn hơn 0.";
+      valid = false;
+    }
+
+    if (!image) {
+      newErrors.image = "Vui lòng tải lên hình ảnh sản phẩm.";
+      valid = false;
+    }
+
+    setErrors(newErrors);
+    return valid;
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!image) {
-      alert("Vui lòng tải lên hình ảnh sản phẩm.");
-      return;
-    }
+    // Kiểm tra tính hợp lệ của form
+    if (!validateForm()) return;
 
+    // Gửi hình ảnh lên server nếu có ảnh
     await handleUpload();
 
     // Gửi dữ liệu sản phẩm lên backend
@@ -159,12 +213,15 @@ export default function CreateProduct() {
                 uploadButton
               )}
             </Upload>
+            {errors.image && (
+              <div style={{ color: "red", marginTop: 10 }}>{errors.image}</div>
+            )}
           </div>
+
           <div
             style={{
               display: "flex",
               flexDirection: "row",
-
               marginTop: 30,
               justifyContent: "space-between",
             }}
@@ -178,8 +235,8 @@ export default function CreateProduct() {
                 value={product.name}
                 onChange={handleChange}
                 style={{ width: 375, marginTop: 10 }}
-                required
               />
+              {errors.name && <div style={{ color: "red" }}>{errors.name}</div>}
             </div>
 
             <div>
@@ -192,6 +249,9 @@ export default function CreateProduct() {
                 onChange={handleChange}
                 style={{ width: 375, marginTop: 10 }}
               />
+              {errors.company && (
+                <div style={{ color: "red" }}>{errors.company}</div>
+              )}
             </div>
           </div>
 
@@ -199,7 +259,6 @@ export default function CreateProduct() {
             style={{
               display: "flex",
               flexDirection: "row",
-
               marginTop: 25,
               justifyContent: "space-between",
             }}
@@ -207,26 +266,30 @@ export default function CreateProduct() {
             <div>
               <label htmlFor="sell_price">Giá bán (Nghìn VNĐ):</label>
               <Input
-                type="text"
+                type="number"
                 id="sell_price"
                 name="sell_price"
                 value={product.sell_price ? product.sell_price : ""}
                 onChange={handleChange}
-                required
                 style={{ width: 375, marginTop: 10 }}
               />
+              {errors.sell_price && (
+                <div style={{ color: "red" }}>{errors.sell_price}</div>
+              )}
             </div>
             <div style={{ display: "flex", flexDirection: "column" }}>
               <label htmlFor="buy_price">Giá mua (Nghìn VNĐ):</label>
               <Input
-                type="text"
+                type="number"
                 id="buy_price"
                 name="buy_price"
                 value={product.buy_price ? product.buy_price : ""}
                 onChange={handleChange}
-                required
                 style={{ width: 375, marginTop: 5 }}
               />
+              {errors.buy_price && (
+                <div style={{ color: "red" }}>{errors.buy_price}</div>
+              )}
             </div>
           </div>
           <div style={{ marginTop: 25 }}>
@@ -236,16 +299,13 @@ export default function CreateProduct() {
               name="description"
               value={product.description}
               onChange={handleChange}
-              required
               style={{ width: "100%", marginTop: 10, height: "20vh" }}
             />
           </div>
 
-          {/* Hiển thị thông báo lỗi hoặc thành công */}
           <div
             style={{
               marginTop: 25,
-
               display: "flex",
               justifyContent: "end",
             }}
