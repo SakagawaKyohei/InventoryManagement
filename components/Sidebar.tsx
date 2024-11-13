@@ -64,52 +64,54 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <div className={styles.sidebar}>
-      <div className={styles.logo}>
-        Che<span>Que</span>Pot
+    <div style={{ position: "fixed" }}>
+      <div className={styles.sidebar}>
+        <div className={styles.logo}>
+          Che<span>Que</span>Pot
+        </div>
+        <nav>
+          <ul className={styles.navList}>
+            {sidebarItems.map((item, index) => (
+              <li key={index} className={styles.navItem}>
+                {item.href ? (
+                  <a href={item.href} className={styles.navLink1}>
+                    {item.icon}
+                    <span>{item.label}</span>
+                  </a>
+                ) : (
+                  <>
+                    <button
+                      className={styles.navLink}
+                      onClick={() => handleDropdownToggle(item.label)}
+                    >
+                      <div style={{ display: "flex" }}>
+                        {item.icon}
+                        <span>{item.label}</span>
+                      </div>
+                      <span className={styles.dropdownArrow}>
+                        {openDropdown === item.label ? "▲" : "▼"}
+                      </span>
+                    </button>
+                    {item.dropdownItems && openDropdown === item.label && (
+                      <ul className={styles.dropdownMenu}>
+                        {item.dropdownItems.map((dropdownItem, i) => (
+                          <li key={i} className={styles.dropdownItem}>
+                            <a href={dropdownItem.href}>{dropdownItem.label}</a>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <a href="#" className={styles.logout}>
+          <FaSignOutAlt />
+          <span>Logout</span>
+        </a>
       </div>
-      <nav>
-        <ul className={styles.navList}>
-          {sidebarItems.map((item, index) => (
-            <li key={index} className={styles.navItem}>
-              {item.href ? (
-                <a href={item.href} className={styles.navLink1}>
-                  {item.icon}
-                  <span>{item.label}</span>
-                </a>
-              ) : (
-                <>
-                  <button
-                    className={styles.navLink}
-                    onClick={() => handleDropdownToggle(item.label)}
-                  >
-                    <div style={{ display: "flex" }}>
-                      {item.icon}
-                      <span>{item.label}</span>
-                    </div>
-                    <span className={styles.dropdownArrow}>
-                      {openDropdown === item.label ? "▲" : "▼"}
-                    </span>
-                  </button>
-                  {item.dropdownItems && openDropdown === item.label && (
-                    <ul className={styles.dropdownMenu}>
-                      {item.dropdownItems.map((dropdownItem, i) => (
-                        <li key={i} className={styles.dropdownItem}>
-                          <a href={dropdownItem.href}>{dropdownItem.label}</a>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </>
-              )}
-            </li>
-          ))}
-        </ul>
-      </nav>
-      <a href="#" className={styles.logout}>
-        <FaSignOutAlt />
-        <span>Logout</span>
-      </a>
     </div>
   );
 };
