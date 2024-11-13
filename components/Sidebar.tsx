@@ -24,7 +24,7 @@ type SidebarItem = {
 
 const sidebarItems: SidebarItem[] = [
   { label: "Trang chủ", href: "/", icon: <FaHome /> },
-  { label: "Sản phẩm", href: "/products", icon: <FaBox /> },
+  { label: "Sản phẩm", href: "/dashboard/products", icon: <FaBox /> },
   {
     label: "Nhập hàng",
     icon: <FaBox />,

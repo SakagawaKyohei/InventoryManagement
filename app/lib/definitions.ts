@@ -20,8 +20,8 @@ export type Users = {
 export type Product = {
   id: string;
   name: string;
-  buy_price:number;
-  sell_price:number;
+  buy_price:number|null;
+  sell_price:number|null;
   company:string;
   img_product:string
   description:string

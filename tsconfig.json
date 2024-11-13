@@ -30,6 +30,6 @@
     ".next/types/**/*.ts",
     "app/lib/placeholder-data.ts",
     "scripts/seed.js"
-, "pages/api/auth/add-product.js", "app/api/reset-password/route.js"  ],
+, "pages/api/auth/add-product.js", "app/api/reset-password/route.js", "pages/api/van-chuyen/page.js"  ],
   "exclude": ["node_modules"]
 }

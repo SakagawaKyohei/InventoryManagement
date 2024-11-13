@@ -8,6 +8,9 @@ import { AuthError, User } from 'next-auth';
 import bcrypt from 'bcrypt';
 import { UUID } from 'crypto';
 import { DoiTac, DonDatHang, Product, Users } from './definitions';
+import supabase from "../../app/supabase";
+import { v4 as uuidv4 } from "uuid";
+
 export type State = {
   errors?: {
     customerId?: string[];
@@ -106,6 +109,28 @@ export async function deleteInvoice(id: string) {
   } catch (error) {
     console.error(error); // Log the error
     return { message: 'Database Error: Failed to Delete Invoice.' };
+  }
+}
+
+
+
+
+export async function uploadImage(img: Blob,imgid:string) {
+
+  try {
+    const { data, error } = await supabase.storage
+      .from("avt") // Giả sử "avt" là tên bucket trong Supabase
+      .upload(`public/${imgid}.jpg`, img);  // Chỉ định đường dẫn và phần mở rộng file
+
+    if (error) {
+      throw error; // Nếu có lỗi thì ném lỗi ra
+    }
+
+    // Trả về đường dẫn đầy đủ của ảnh vừa upload
+    return data;  // Data sẽ có id, path, fullPath
+  } catch (error) {
+    console.error('Lỗi khi tải ảnh lên:', error);
+    throw new Error('Không thể tải ảnh lên');
   }
 }
 

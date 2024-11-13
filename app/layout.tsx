@@ -1,7 +1,7 @@
 import "@/app/ui/global.css";
 import { inter } from "@/app/ui/fonts";
 import { Metadata } from "next";
-import Sidebar from "@/components/Sidebar";
+import { ConfigProvider } from "antd";
 
 export const metadata: Metadata = {
   title: {
@@ -19,9 +19,21 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
-        {" "}
-        <Sidebar />
-        {children}
+        <ConfigProvider
+          theme={{
+            components: {
+              Tooltip: { fontSize: 12 },
+              Upload: { controlHeightLG: 60 },
+            },
+            token: {
+              colorPrimary: "#FF9040",
+              fontFamily: "Arial, Helvetica, sans-seri",
+              fontSize: 14,
+            },
+          }}
+        >
+          {children}
+        </ConfigProvider>
       </body>
     </html>
   );
