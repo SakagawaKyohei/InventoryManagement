@@ -90,7 +90,7 @@ export default function EditProduct() {
             type="text"
             id="buy_price"
             name="buy_price"
-            value={product.buy_price}
+            // value={product.buy_price}
             onChange={handleChange}
             required
           />
@@ -102,7 +102,7 @@ export default function EditProduct() {
             type="text"
             id="sell_price"
             name="sell_price"
-            value={product.sell_price}
+            // value={product.sell_price}
             onChange={handleChange}
             required
           />
