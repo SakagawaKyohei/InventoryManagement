@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Product } from "../../lib/definitions";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import {
   Pagination,
   PaginationContent,
@@ -23,7 +24,7 @@ import { FaSearch } from "react-icons/fa";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
-import { generatePagination } from "@/app/lib/utils";
+import { formatCurrency } from "@/app/lib/utils";
 
 interface Props {
   product: Product[];
@@ -39,6 +40,28 @@ const FetchProductButton = ({ product, totalPages }: Props) => {
   const [item_per_page, setItemPerPage] = useState(
     Number(searchParams?.get("itemsPerPage")) || 5
   );
+
+  const handleDelete = async (id: string) => {
+    const params = new URLSearchParams(
+      searchParams ? searchParams.toString() : ""
+    );
+    try {
+      const res = await fetch("/api/product/delete-product", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+      if (res.ok) {
+        // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
+        replace(`${pathname}?${params.toString()}`);
+      } else {
+        setMessage("Không thể xóa sản phẩm");
+      }
+    } catch (error) {
+      console.error("Lỗi khi xóa sản phẩm:", error);
+      setMessage("Lỗi khi xóa sản phẩm. Vui lòng thử lại.");
+    }
+  };
 
   const handleSearch = useDebouncedCallback((term) => {
     const params = new URLSearchParams(
@@ -104,6 +127,7 @@ const FetchProductButton = ({ product, totalPages }: Props) => {
       }
       const startPage = Math.max(2, currentPage - 1);
       const endPage = Math.min(totalPages - 1, currentPage + 1);
+
       for (let i = startPage; i <= endPage; i++) {
         pageNumbers.push(
           <PaginationItem key={i}>
@@ -179,10 +203,10 @@ const FetchProductButton = ({ product, totalPages }: Props) => {
                 <TableHead className="w-[150px] text-center">
                   Mã sản phẩm
                 </TableHead>
-                <TableHead>Tên sản phẩm</TableHead>
-                <TableHead>Giá mua</TableHead>
-                <TableHead>Giá bán</TableHead>
-                <TableHead>Công ty sản xuất</TableHead>
+                <TableHead className="w-[275px]">Tên sản phẩm</TableHead>
+                <TableHead className="w-[125px]">Giá mua</TableHead>
+                <TableHead className="w-[125px]">Giá bán</TableHead>
+                <TableHead className="w-[300px]">Công ty sản xuất</TableHead>
                 <TableHead className="text-center">Action</TableHead>
               </TableRow>
             </TableHeader>
@@ -193,9 +217,48 @@ const FetchProductButton = ({ product, totalPages }: Props) => {
                     {item.id}
                   </TableCell>
                   <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.buy_price}</TableCell>
-                  <TableCell>{item.sell_price}</TableCell>
+                  <TableCell>
+                    {formatCurrency(item.buy_price ? item.buy_price * 1000 : 0)}
+                  </TableCell>
+                  <TableCell>
+                    {" "}
+                    {formatCurrency(
+                      item.sell_price ? item.sell_price * 1000 : 0
+                    )}
+                  </TableCell>
                   <TableCell>{item.company}</TableCell>
+                  <TableCell
+                    style={{
+                      display: "flex",
+
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {" "}
+                    <Link
+                      href={`/dashboard/products/edit-product?id=${item.id}`}
+                    >
+                      <Image
+                        src="/edit.png"
+                        style={{ marginRight: 15 }}
+                        width={25}
+                        height={25}
+                        className="hidden md:block"
+                        alt="Screenshots of the dashboard project showing desktop version"
+                      />
+                    </Link>
+                    <Image
+                      src="/delete.png"
+                      width={30}
+                      height={40}
+                      className="hidden md:block"
+                      alt="Screenshots of the dashboard project showing desktop version"
+                      onClick={() => {
+                        handleDelete(item.id);
+                      }}
+                    />
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

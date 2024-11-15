@@ -430,7 +430,7 @@ export async function DeleteProduct(id: string) {
     await sql`DELETE FROM product WHERE id = ${id}`;
 
     // Gọi revalidatePath để làm mới dữ liệu cho trang '/product-list'
-    revalidatePath('/product-list'); 
+    revalidatePath('/dashboard/products'); 
 
     return { message: 'Sản phẩm đã được xóa và cache đã được làm mới.' };
   } catch (error) {

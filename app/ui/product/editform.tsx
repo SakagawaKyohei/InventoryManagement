@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Product } from "../../../lib/definitions";
+
 import { v4 as uuidv4 } from "uuid";
 import { Upload } from "antd";
 import { PlusOutlined, LoadingOutlined } from "@ant-design/icons";
@@ -12,22 +12,32 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Textarea } from "@/components/ui/textarea";
 import { redirect } from "next/navigation";
+import { Product } from "@/app/lib/definitions";
 
-export default function CreateProduct() {
+interface Props {
+  product1: Product;
+}
+export default function EditForm({ product1 }: Props) {
   const [product, setProduct] = useState<Product>({
-    id: "",
-    name: "",
-    buy_price: 0,
-    sell_price: 0,
-    company: "",
-    img_product: "",
-    description: "",
+    id: product1.id,
+    name: product1.name,
+    buy_price: product1.buy_price,
+    sell_price: product1.sell_price,
+    company: product1.company,
+    img_product: product1.img_product,
+    description: product1.description,
   });
+
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState<Blob | null>(null);
   const [imageURL, setImageURL] = useState<string>("");
 
   const [id_anhbia] = useState(uuidv4());
+
+  const handleImageChange = (e: any) => {
+    const file = e.file;
+    setImage(file.originFileObj); // Cập nhật trạng thái ảnh
+  };
 
   const [errors, setErrors] = useState({
     name: "",
@@ -41,10 +51,12 @@ export default function CreateProduct() {
     if (id_anhbia) {
       setProduct((prevProduct) => ({
         ...prevProduct,
-        img_product: `https://zrhhzqtaizoqtwmnzzbi.supabase.co/storage/v1/object/public/avt/public/${id_anhbia}.jpg`,
+        img_product: image
+          ? `https://zrhhzqtaizoqtwmnzzbi.supabase.co/storage/v1/object/public/avt/public/${id_anhbia}.jpg`
+          : product.img_product,
       }));
     }
-  }, [id_anhbia]);
+  }, [id_anhbia, image]);
 
   const handleChange = (
     e:
@@ -57,24 +69,23 @@ export default function CreateProduct() {
       [name]: value,
     }));
   };
-
-  const handleUpload = async () => {
-    if (!image) return;
+  const handleUpload = async (): Promise<boolean> => {
+    if (!image) return false; // Return false if there's no image
 
     setLoading(true);
     try {
-      const res = await uploadImage(image, id_anhbia); // Sử dụng id_anhbia duy nhất cho mỗi sản phẩm
-      const imageURL = res?.path || ""; // Nhận đường dẫn ảnh sau khi tải lên
+      const res = await uploadImage(image, id_anhbia); // Use unique `id_anhbia` for each product
+      const imageURL = res?.path || ""; // Get the image URL after upload
       setImageURL(imageURL);
       setLoading(false);
-      // Set URL ảnh vào product sau khi tải lên thành công
-      setProduct((prevProduct) => ({
-        ...prevProduct,
-        img_product: `https://zrhhzqtaizoqtwmnzzbi.supabase.co/storage/v1/object/public/avt/public/${id_anhbia}.jpg`,
-      }));
+
+      alert(id_anhbia);
+      alert(product.img_product);
+      return true; // Return true on successful upload
     } catch (error) {
       setLoading(false);
       console.error(error);
+      return false; // Return false if there was an error
     }
   };
 
@@ -117,54 +128,118 @@ export default function CreateProduct() {
       valid = false;
     }
 
-    if (!image) {
-      newErrors.image = "Vui lòng tải lên hình ảnh sản phẩm.";
-      valid = false;
-    }
-
     setErrors(newErrors);
     return valid;
   };
 
+  const [error, setError] = useState<string>("");
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Kiểm tra tính hợp lệ của form
     if (!validateForm()) return;
 
-    // Gửi hình ảnh lên server nếu có ảnh
-    await handleUpload();
+    try {
+      // First handle the upload (if needed)
+      if (image) {
+        const res2 = await handleUpload();
+        if (!res2) {
+          throw new Error("Upload failed or returned an unexpected result.");
+        }
+      }
 
-    // Gửi dữ liệu sản phẩm lên backend
-    const res = await fetch("/api/product/add-product", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ product }),
-    });
+      // Proceed with the API call to edit the product
+      const res = await fetch("/api/product/edit-product", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: product.id, product }),
+      });
 
-    if (res.ok) {
-      alert("Thêm sản phẩm thành công!");
-      redirect("/dashboard/products");
-    } else {
-      const data = await res.json();
-      alert(data.message || "Lỗi tạo sản phẩm");
+      // Check if the API call was successful
+      if (res.ok) {
+        alert("Product updated successfully");
+        // Use a proper redirection method based on your framework (e.g., React Router)
+        redirect("/dashboard");
+      } else {
+        const data = await res.json();
+        setError(data.message || "Error updating product");
+      }
+    } catch (error) {
+      // Catch any unexpected errors
+      console.error("An error occurred:", error);
+      setError("Something went wrong. Please try again.");
     }
   };
 
-  const handleImageChange = (e: any) => {
-    const file = e.file;
-    setImage(file.originFileObj); // Cập nhật trạng thái ảnh
-  };
-
-  const uploadButton = (
-    <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>Tải lên</div>
-    </div>
-  );
-
   return (
-    <div className="register-container">
+    // <div className="register-container">
+    //   <h2>Edit Product</h2>
+    //   <form onSubmit={handleSubmit}>
+    //     <div>
+    //       <label htmlFor="name">Product Name:</label>
+    //       <input
+    //         type="text"
+    //         id="name"
+    //         name="name"
+    //         value={product.name}
+    //         onChange={handleChange}
+    //         required
+    //       />
+    //     </div>
+
+    //     <div>
+    //       <label htmlFor="buy_price">Buy Price:</label>
+    //       <input
+    //         type="text"
+    //         id="buy_price"
+    //         name="buy_price"
+    //         value={product.buy_price ? product.buy_price : 0}
+    //         onChange={handleChange}
+    //         required
+    //       />
+    //     </div>
+
+    //     <div>
+    //       <label htmlFor="sell_price">Sell Price:</label>
+    //       <input
+    //         type="text"
+    //         id="sell_price"
+    //         name="sell_price"
+    //         value={product.sell_price ? product.sell_price : 0}
+    //         onChange={handleChange}
+    //         required
+    //       />
+    //     </div>
+
+    //     <div>
+    //       <label htmlFor="company">Company:</label>
+    //       <input
+    //         type="text"
+    //         id="company"
+    //         name="company"
+    //         value={product.company}
+    //         onChange={handleChange}
+    //       />
+    //     </div>
+
+    //     <div>
+    //       <label htmlFor="description">Product Description:</label>
+    //       <input
+    //         type="text"
+    //         id="description"
+    //         name="description"
+    //         value={product.description}
+    //         onChange={handleChange}
+    //         required
+    //       />
+    //     </div>
+
+    //     {error && <p style={{ color: "red" }}>{error}</p>}
+
+    //     <button type="submit">Save Product</button>
+    //   </form>
+    // </div>
+    <>
       <div style={{ display: "flex" }}>
         <Image
           src="/return.png"
@@ -213,8 +288,19 @@ export default function CreateProduct() {
                   alt="avatar"
                   style={{ width: "100%", height: "100%" }}
                 />
+              ) : product.img_product ? (
+                <img
+                  src={product1.img_product}
+                  alt="avatar"
+                  style={{ width: "100%", height: "100%" }}
+                />
               ) : (
-                uploadButton
+                // If no image is available, you can render a placeholder or empty
+                <img
+                  src="/path/to/placeholder.jpg" // A default placeholder image
+                  alt="avatar"
+                  style={{ width: "100%", height: "100%" }}
+                />
               )}
             </Upload>
             {errors.image && (
@@ -324,7 +410,7 @@ export default function CreateProduct() {
               }}
               type="submit"
             >
-              Thêm mới
+              Chỉnh sửa
             </Button>
             <Link href={"/dashboard/products"}>
               <Button
@@ -341,6 +427,6 @@ export default function CreateProduct() {
           </div>
         </form>
       </div>
-    </div>
+    </>
   );
 }
