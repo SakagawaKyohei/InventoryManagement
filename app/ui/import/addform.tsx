@@ -31,9 +31,10 @@ const AddForm = (user: Users) => {
   const [product, setProduct] = useState({
     id: "",
     name: "",
-    price: "",
-    quantity: "",
+    price: 0,
+    quantity: 0,
   });
+
   const [company, setCompany] = useState("");
   const [dongia, setDonGia] = useState(0);
   const [soluong, setSoluong] = useState(0);
@@ -78,18 +79,20 @@ const AddForm = (user: Users) => {
     fetchProducts(); // Trigger the fetch when the component mounts
   }, []); // Empty dependency array means this effect runs once when the component mounts
 
-  const handleCompanyChange = (e: any) => {
-    setCompany(e.target.value);
-  };
-
   // Hàm xử lý submit form
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      name: productname,
+      price: dongia,
+      quantity: soluong,
+    }));
+
     try {
       const res = await fetch("/api/don-dat-hang/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ product, company }),
+        body: JSON.stringify({ product, company, manv: user.manv }),
       });
 
       if (res.ok) {
@@ -103,7 +106,7 @@ const AddForm = (user: Users) => {
     }
   };
 
-  const HandleAddDraft = () => {
+  const HandleAddDraft = async () => {
     setClientProducts([
       ...(clientproducts || []), // Nếu undefined, thay bằng []
       {
@@ -114,8 +117,17 @@ const AddForm = (user: Users) => {
       },
     ]);
     setSoluong(0);
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      quantity: 0,
+    }));
     setDonGia(0); // Reset giá trị dongia (nếu có state này)
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      price: 0,
+    }));
     setIsAdding(false); // Đóng form thêm mới
+    handleSubmit();
   };
 
   const [productList, setProductList] = useState([
@@ -168,7 +180,16 @@ const AddForm = (user: Users) => {
     const selectedProduct = JSON.parse(event.target.value) as Product;
     console.log("Selected product:", selectedProduct);
     setDonGia(selectedProduct.buy_price ? selectedProduct.buy_price : 0);
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      price: selectedProduct.buy_price ? selectedProduct.buy_price : 0,
+    }));
+    setCompany(selectedProduct.company);
     setProductname(selectedProduct.name);
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      name: selectedProduct.name,
+    }));
   };
   return (
     // <div>
@@ -437,6 +458,10 @@ const AddForm = (user: Users) => {
                           type="text"
                           onChange={(e) => {
                             setSoluong(parseInt(e.target.value));
+                            setProduct((prevProduct) => ({
+                              ...prevProduct,
+                              quantity: parseInt(e.target.value),
+                            }));
                           }}
                         />
                       </TableCell>
@@ -475,7 +500,15 @@ const AddForm = (user: Users) => {
                           onClick={() => {
                             // Reset lại các giá trị khi đóng form
                             setSoluong(0);
+                            setProduct((prevProduct) => ({
+                              ...prevProduct,
+                              quantity: 0,
+                            }));
                             setDonGia(0); // Reset giá trị dongia (nếu có state này)
+                            setProduct((prevProduct) => ({
+                              ...prevProduct,
+                              price: 0,
+                            }));
                             setIsAdding(false); // Đóng form thêm mới
                           }}
                         />
@@ -532,6 +565,7 @@ const AddForm = (user: Users) => {
                   width: 140,
                   height: 40,
                 }}
+                onClick={handleCancel}
               >
                 Hủy bỏ
               </Button>
