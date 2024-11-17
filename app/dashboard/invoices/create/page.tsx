@@ -1,9 +1,15 @@
 import Form from "@/app/ui/invoices/create-form";
 import Breadcrumbs from "@/app/ui/invoices/breadcrumbs";
-import { fetchCustomers } from "@/app/lib/data";
+import { fetchCustomers, getUserByEmail } from "@/app/lib/data";
+import { auth } from "@/auth";
 
 export default async function Page() {
   const customers = await fetchCustomers();
+  const session = await auth();
+  const user = await getUserByEmail(
+    session?.user?.email ? session?.user?.email : ""
+  );
+  console.log(user);
 
   return (
     <main>
@@ -18,6 +24,7 @@ export default async function Page() {
         ]}
       />
       <Form customers={customers} />
+      {user.role}
     </main>
   );
 }

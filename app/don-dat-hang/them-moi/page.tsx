@@ -23,6 +23,7 @@ const AddProductToOrder = () => {
   const handleCompanyChange = (e: any) => {
     setCompany(e.target.value);
   };
+  const manv = 35;
 
   // Hàm xử lý submit form
   const handleSubmit = async (e: any) => {
@@ -31,7 +32,7 @@ const AddProductToOrder = () => {
       const res = await fetch("/api/don-dat-hang/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ product, company }),
+        body: JSON.stringify({ product, company, manv }),
       });
 
       if (res.ok) {

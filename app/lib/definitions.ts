@@ -14,7 +14,8 @@ export type Users = {
   ngaysinh:string;
   sdt:string;
   cccd:string;
-  diachi:string;
+  dia_chi:string;
+  manv:number;
 };
 
 export type Product = {
@@ -51,6 +52,8 @@ export type DonDatHang = {
   han_su_dung:string;
   product:any;
   total:number;
+  ngay_dat:string;
+  status:string;
 };
 export type DonXuatHang = {
   id: string;

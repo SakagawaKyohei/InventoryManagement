@@ -144,9 +144,9 @@ export async function authenticate(
     if (error instanceof AuthError) {
       switch (error.type) {
         case 'CredentialsSignin':
-          return 'Tài khoản hoạt mật khẩu không đúng.';
+          return 'Tài khoản hoặc mật khẩu không đúng.';
         default:
-          return 'Tài khoản hoạt mật khẩu không đúng.';
+          return 'Tài khoản hoặc mật khẩu không đúng.';
       }
     }
     throw error;
@@ -176,7 +176,7 @@ export async function AddUser(user:Users) {
   try {
     await sql`
       INSERT INTO users (name,email,password,status, role, bank, stk, ngay_sinh,sdt, cccd,dia_chi)
-      VALUES (${user.name},${user.email}, ${user.password},${user.status}, ${user.role},${user.bank}, ${user.stk}, ${user.ngaysinh},${user.sdt},${user.cccd},${user.diachi})
+      VALUES (${user.name},${user.email}, ${user.password},${user.status}, ${user.role},${user.bank}, ${user.stk}, ${user.ngaysinh},${user.sdt},${user.cccd},${user.dia_chi})
     `;
   } catch (error) {
     // If a database error occurs, return a more specific error.
@@ -201,7 +201,7 @@ export async function AddProduct(product:Product) {
     };
   }
 }
-export async function AddDonDatHang(product: Record<string, unknown>, company: string) {
+export async function AddDonDatHang(product: Record<string, unknown>, company: string, manv:number) {
   const status = "draft";
 
   try {
@@ -222,8 +222,8 @@ export async function AddDonDatHang(product: Record<string, unknown>, company: s
     if (existingOrder.rows.length === 0) {
       // Bước 2: Nếu không có dondathang nào, tạo mới
       await sql`
-        INSERT INTO dondathang (company, product, status)
-        VALUES (${company}, ARRAY[${productJson}::jsonb], ${status});
+        INSERT INTO dondathang (company, product, status, manv)
+        VALUES (${company}, ARRAY[${productJson}::jsonb], ${status}, ${manv});
       `;
       return { message: 'New DonDatHang created successfully.' };
     } else {
@@ -430,7 +430,7 @@ export async function DeleteProduct(id: string) {
     await sql`DELETE FROM product WHERE id = ${id}`;
 
     // Gọi revalidatePath để làm mới dữ liệu cho trang '/product-list'
-    revalidatePath('/dashboard/products'); 
+   
 
     return { message: 'Sản phẩm đã được xóa và cache đã được làm mới.' };
   } catch (error) {

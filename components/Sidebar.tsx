@@ -1,5 +1,4 @@
-"use client";
-import { JSX, useState } from "react";
+import { JSX } from "react";
 import styles from "styles/Sidebar.module.css";
 import {
   FaHome,
@@ -9,6 +8,9 @@ import {
   FaCog,
   FaSignOutAlt,
 } from "react-icons/fa";
+import { signOut } from "@/auth";
+import { PowerIcon } from "@heroicons/react/24/outline";
+import NavBar from "@/app/ui/navbar";
 
 type DropdownItem = {
   label: string;
@@ -29,40 +31,44 @@ const sidebarItems: SidebarItem[] = [
     label: "Nhập hàng",
     icon: <FaBox />,
     dropdownItems: [
-      { label: "Option 1", href: "/import/option1" },
-      { label: "Option 2", href: "/import/option2" },
+      { label: "Chờ thanh toán", href: "/dashboard/nhap-hang/cho-thanh-toan" },
+      { label: "Đang nhập kho", href: "/dashboard/nhap-hang/dang-nhap-kho" },
+      { label: "Đã nhập kho", href: "/dashboard/nhap-hang/da-nhap-kho" },
     ],
   },
   { label: "Xuất hàng", href: "/export", icon: <FaTruck /> },
-  { label: "Công cụ", href: "/tools", icon: <FaCog /> },
+  { label: "Công nợ", href: "/tools", icon: <FaCog /> },
+  { label: "Vận chuyển", href: "/tools", icon: <FaCog /> },
   {
     label: "Hàng tồn",
     icon: <FaBox />,
     dropdownItems: [
-      { label: "Option 1", href: "/inventory/option1" },
-      { label: "Option 2", href: "/inventory/option2" },
+      { label: "Còn hạn", href: "/inventory/option1" },
+      { label: "Hết hạn", href: "/inventory/option2" },
     ],
   },
-  { label: "Nhân viên", href: "/staff", icon: <FaUser /> },
+  {
+    label: "Nhân viên",
+    icon: <FaUser />,
+    dropdownItems: [
+      { label: "Chờ duyệt", href: "/system/option1" },
+      { label: "Đang hoạt động", href: "/system/option2" },
+      { label: "Ngừng hoạt động", href: "/system/option2" },
+    ],
+  },
   { label: "Đối tác", href: "/partners", icon: <FaUser /> },
   {
     label: "Hệ thống",
     icon: <FaCog />,
     dropdownItems: [
-      { label: "Option 1", href: "/system/option1" },
-      { label: "Option 2", href: "/system/option2" },
+      { label: "Logging", href: "/system/option1" },
+      { label: "Back-up", href: "/system/option2" },
     ],
   },
   { label: "Tài khoản", href: "/account", icon: <FaUser /> },
 ];
 
 const Sidebar: React.FC = () => {
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-
-  const handleDropdownToggle = (label: string) => {
-    setOpenDropdown(openDropdown === label ? null : label);
-  };
-
   return (
     <div style={{ position: "fixed" }}>
       <div className={styles.sidebar}>
@@ -79,38 +85,24 @@ const Sidebar: React.FC = () => {
                     <span>{item.label}</span>
                   </a>
                 ) : (
-                  <>
-                    <button
-                      className={styles.navLink}
-                      onClick={() => handleDropdownToggle(item.label)}
-                    >
-                      <div style={{ display: "flex" }}>
-                        {item.icon}
-                        <span>{item.label}</span>
-                      </div>
-                      <span className={styles.dropdownArrow}>
-                        {openDropdown === item.label ? "▲" : "▼"}
-                      </span>
-                    </button>
-                    {item.dropdownItems && openDropdown === item.label && (
-                      <ul className={styles.dropdownMenu}>
-                        {item.dropdownItems.map((dropdownItem, i) => (
-                          <li key={i} className={styles.dropdownItem}>
-                            <a href={dropdownItem.href}>{dropdownItem.label}</a>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </>
+                  <NavBar {...item} />
                 )}
               </li>
             ))}
           </ul>
         </nav>
-        <a href="#" className={styles.logout}>
-          <FaSignOutAlt />
-          <span>Logout</span>
-        </a>
+        <form
+          className={styles.logout}
+          action={async () => {
+            "use server";
+            await signOut();
+          }}
+        >
+          <button className={styles.logout}>
+            <FaSignOutAlt />
+            <span>Logout</span>
+          </button>
+        </form>
       </div>
     </div>
   );

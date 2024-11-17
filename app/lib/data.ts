@@ -3,6 +3,7 @@ import {
   CustomerField,
   CustomersTableType,
   DoiTac,
+  DonDatHang,
   InvoiceForm,
   InvoicesTable,
   LatestInvoiceRaw,
@@ -289,7 +290,7 @@ export async function fetchFilteredCustomers(query: string) {
 export async function getUserByEmail(email: string) {
   try {
     const data = await sql`
-      SELECT id, email, password
+      SELECT *
       FROM users
       WHERE email = ${email}
     `;
@@ -376,4 +377,54 @@ export async function fetchFilteredProducts(
     console.error('Database Error:', err);
     throw new Error('Failed to fetch all product.');
   } 
+}
+
+export async function fetchFilteredDonDatHang(
+  query: string,
+  currentPage: number,
+  item_per_page:number
+) {
+  const offset = (currentPage - 1) * item_per_page;
+
+  try {
+    const data = await sql<DonDatHang>`
+      SELECT *
+      FROM dondathang
+      WHERE
+      id ILIKE ${`%${query}%`} OR
+      company::text ILIKE ${`%${query}%`} OR
+      product::text ILIKE ${`%${query}%`} 
+      ORDER BY 
+      status asc,
+      id ASC
+      LIMIT ${item_per_page} OFFSET ${offset}
+    `;
+
+    const dondathang = data.rows;
+    return dondathang;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all product.');
+  } 
+}
+
+export async function fetchDonDatHangPages(query: string,item_per_page:number) {
+  try {
+    const count = await sql`SELECT COUNT(*)
+      FROM dondathang
+      WHERE
+        id ILIKE ${`%${query}%`} OR
+        company ILIKE ${`%${query}%`} OR
+        product::text ILIKE ${`%${query}%`} 
+        status::text ILIKE ${`%${query}%`} 
+        ngay_dat::text ILIKE ${`%${query}%`} 
+
+  `;
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / item_per_page);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of products.');
+  }
 }
