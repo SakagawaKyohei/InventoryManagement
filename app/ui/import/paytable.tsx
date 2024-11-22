@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { DonDatHang, Product } from "../../lib/definitions";
 import { Button } from "@/components/ui/button";
+import { RiMoneyDollarCircleFill } from "react-icons/ri";
 import Image from "next/image";
 import { format } from "date-fns";
 import {
@@ -26,7 +27,6 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import { formatCurrency } from "@/app/lib/utils";
-import { Underline } from "lucide-react";
 
 interface Props {
   dondathang: DonDatHang[];
@@ -144,8 +144,10 @@ const FetchProductButton = ({ dondathang, totalPages }: Props) => {
     <div>
       <div style={{ backgroundColor: "#EAEAEA" }}>
         <div className="px-2 py-4 md:px-4" style={{ backgroundColor: "white" }}>
-          <p style={{ fontWeight: "bold", fontSize: 24 }}>Đơn đặt hàng</p>
-          <p style={{ marginBottom: 15 }}>Danh sách các đơn đặt hàng</p>
+          <p style={{ fontWeight: "bold", fontSize: 24 }}>Chờ thanh toán</p>
+          <p style={{ marginBottom: 15 }}>
+            Danh sách đơn đặt hàng chờ thanh toán
+          </p>
           <div
             style={{ display: "flex", flexDirection: "row", paddingBottom: 15 }}
           >
@@ -186,30 +188,31 @@ const FetchProductButton = ({ dondathang, totalPages }: Props) => {
                 <TableHead>Tên công ty</TableHead>
                 <TableHead>Ngày đặt</TableHead>
                 <TableHead>Số tiền</TableHead>
-                <TableHead>Trạng thái</TableHead>
+                <TableHead className="text-center">Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {dondathang?.map((item) => (
                 <TableRow key={item.id} style={{ height: 65 }}>
-                  <TableCell
-                    className="font-medium text-center"
-                    style={{ textDecoration: "underline" }}
-                  >
-                    <Link
-                      href={`/dashboard/nhap-hang/thong-tin-don-hang?id=${item.id}`}
-                    >
-                      {item.id}
-                    </Link>
+                  <TableCell className="font-medium text-center">
+                    {item.id}
                   </TableCell>
                   <TableCell>{item.company}</TableCell>
                   <TableCell>
                     {format(new Date(item.ngay_dat), "dd/MM/yyyy")}
                   </TableCell>
 
-                  <TableCell>500.000đ</TableCell>
-                  <TableCell>
-                    {item.status == "paid" ? "Đã thanh toán" : "Chờ thanh toán"}
+                  <TableCell>{item.total}</TableCell>
+                  <TableCell
+                    style={{ display: "flex", justifyContent: "center" }}
+                  >
+                    <Link
+                      href={`/dashboard/nhap-hang/thanh-toan?id=${item.id}`}
+                    >
+                      <RiMoneyDollarCircleFill
+                        style={{ fontSize: 25, marginTop: 5 }}
+                      />
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))}
@@ -236,28 +239,6 @@ const FetchProductButton = ({ dondathang, totalPages }: Props) => {
             )}
           </Pagination>
         </div>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "end",
-          marginRight: 25,
-          marginTop: 30,
-        }}
-      >
-        <Link href={"/dashboard/nhap-hang/them-moi"}>
-          <Button
-            style={{
-              marginRight: 15,
-              fontSize: 18,
-              backgroundColor: "#007ACC",
-              width: 140,
-              height: 40,
-            }}
-          >
-            Thêm mới
-          </Button>
-        </Link>
       </div>
     </div>
   );

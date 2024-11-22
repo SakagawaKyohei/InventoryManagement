@@ -1,12 +1,10 @@
 import {
-  fetchDonDatHangPages,
-  fetchFilteredDonDatHang,
-  fetchFilteredProducts,
+  fetchFilteredPendingDonDatHang,
+  fetchPendingDonDatHangPages,
   fetchProductsPages,
 } from "@/app/lib/data";
-import { DonDatHang, Product } from "@/app/lib/definitions";
-import Table from "@/app/ui/import/table";
-import PayTable from "@/app/ui/import/paytable";
+import { DonDatHang } from "@/app/lib/definitions";
+import Paytable from "@/app/ui/import/paytable";
 const FetchProductButton = async (props: {
   searchParams?: Promise<{
     query?: string;
@@ -18,8 +16,8 @@ const FetchProductButton = async (props: {
   const query = searchParams?.query || "";
   const currentPage = Number(searchParams?.page) || 1;
   const item_per_page = Number(searchParams?.itemsPerPage) || 5;
-  const totalPages = await fetchDonDatHangPages(query, item_per_page);
-  const dondathang: DonDatHang[] = await fetchFilteredDonDatHang(
+  const totalPages = await fetchPendingDonDatHangPages(query, item_per_page);
+  const dondathang: DonDatHang[] = await fetchFilteredPendingDonDatHang(
     query,
     currentPage,
     item_per_page
@@ -27,7 +25,7 @@ const FetchProductButton = async (props: {
 
   return (
     <div>
-      <Table dondathang={dondathang} totalPages={totalPages} />
+      <Paytable dondathang={dondathang} totalPages={totalPages} />
     </div>
   );
 };

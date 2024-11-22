@@ -9,6 +9,7 @@ import {
   LatestInvoiceRaw,
   Product,
   Revenue,
+  Users,
 } from './definitions';
 import { formatCurrency } from './utils';
 import { UUID } from 'crypto';
@@ -233,6 +234,47 @@ export async function fetchPartnerById(id: string) {
   }
 }
 
+export async function fetchDonDatHangById(id: string) {
+  try {
+    const data = await sql<DonDatHang>`
+      SELECT
+       *
+      FROM dondathang
+      WHERE dondathang.id = ${id};
+    `;
+
+    const dondathang = data.rows.map((dondathang) => ({
+      ...dondathang,
+    }));
+
+    return dondathang[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch product.');
+  }
+}
+
+
+export async function fetchUserByID(id: number) {
+  try {
+    const data = await sql<Users>`
+      SELECT
+       *
+      FROM users
+      WHERE users.manv = ${id};
+    `;
+
+    const user= data.rows.map((user) => ({
+      ...user,
+    }));
+
+    return user[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch product.');
+  }
+}
+
 export async function fetchCustomers() {
   try {
     const data = await sql<CustomerField>`
@@ -285,6 +327,35 @@ export async function fetchFilteredCustomers(query: string) {
 }
 
 
+export async function getOrderPrice(id:string) {
+  try {
+    const data = await sql`
+    SELECT SUM(
+      (elem->>'price')::NUMERIC * (elem->>'quantity')::NUMERIC
+    ) AS total_price
+    FROM (
+    SELECT jsonb_array_elements(
+          ('[' || string_agg(
+              REGEXP_REPLACE(jsonb_item::TEXT, '"\\{', '{', 'g'), ','
+          ) || ']'
+          )::JSONB
+      ) AS elem
+    FROM dondathang, 
+    unnest(product) AS jsonb_item -- Tách từng phần tử của JSONB[]
+    WHERE id = ${id} -- Chọn dòng cụ thể (nếu cần)
+    ) subquery;
+    `;
+
+    return data.rows[0]; // Trả về đối tượng người dùng hoặc undefined
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch user by email.');
+  }
+}
+
+
+
+
 //forgot password
 // Lấy người dùng theo email
 export async function getUserByEmail(email: string) {
@@ -334,6 +405,22 @@ export async function fetchPartner() {
     throw new Error('Failed to fetch all partner.');
   }
 }
+export async function fetchNguoiVanChuyen() {
+  try {
+    const data = await sql<Users>`
+      SELECT *
+      FROM users
+      where role='người vận chuyển'
+    `;
+
+    const product = data.rows;
+    return product;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch nguoi van chuyen.');
+  }
+}
+
 
 export async function fetchProduct() {
   try {
@@ -408,6 +495,59 @@ export async function fetchFilteredDonDatHang(
   } 
 }
 
+
+export async function fetchFilteredPendingDonDatHang(
+  query: string,
+  currentPage: number,
+  item_per_page:number
+) {
+  const offset = (currentPage - 1) * item_per_page;
+
+  try {
+    const data = await sql<DonDatHang>`
+    SELECT *
+    FROM dondathang
+    WHERE
+        status = 'pending' AND
+        (
+            id ILIKE ${`%${query}%`} OR
+            company::text ILIKE ${`%${query}%`} OR
+            product::text ILIKE ${`%${query}%`}
+        )
+    ORDER BY
+        id ASC
+    LIMIT ${item_per_page} OFFSET ${offset};
+    `;
+
+    const pendingdondathang = data.rows;
+    return pendingdondathang;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all product.');
+  } 
+}
+
+export async function fetchPendingDonDatHangPages(query: string,item_per_page:number) {
+  try {
+    const count = await sql`SELECT COUNT(*)
+    FROM dondathang
+    WHERE
+        status = 'pending' AND
+        (
+            id ILIKE ${`%${query}%`} OR
+            company::text ILIKE ${`%${query}%`} OR
+            product::text ILIKE ${`%${query}%`}
+        )
+  `;
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / item_per_page);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of products.');
+  }
+}
+
 export async function fetchDonDatHangPages(query: string,item_per_page:number) {
   try {
     const count = await sql`SELECT COUNT(*)
@@ -415,10 +555,9 @@ export async function fetchDonDatHangPages(query: string,item_per_page:number) {
       WHERE
         id ILIKE ${`%${query}%`} OR
         company ILIKE ${`%${query}%`} OR
-        product::text ILIKE ${`%${query}%`} 
-        status::text ILIKE ${`%${query}%`} 
+        product::text ILIKE ${`%${query}%`} OR
+        status::text ILIKE ${`%${query}%`} OR
         ngay_dat::text ILIKE ${`%${query}%`} 
-
   `;
 
     const totalPages = Math.ceil(Number(count.rows[0].count) / item_per_page);

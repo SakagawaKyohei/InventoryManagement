@@ -7,10 +7,15 @@ import {
   FaUser,
   FaCog,
   FaSignOutAlt,
+  FaTruckMoving,
+  FaFileImport,
+  FaFileExport,
 } from "react-icons/fa";
 import { signOut } from "@/auth";
+import Image from "next/image";
 import { PowerIcon } from "@heroicons/react/24/outline";
 import NavBar from "@/app/ui/navbar";
+import { RiMoneyDollarCircleFill } from "react-icons/ri";
 
 type DropdownItem = {
   label: string;
@@ -29,16 +34,34 @@ const sidebarItems: SidebarItem[] = [
   { label: "Sản phẩm", href: "/dashboard/products", icon: <FaBox /> },
   {
     label: "Nhập hàng",
-    icon: <FaBox />,
+    icon: <Image src="/import.png" width={20} height={20} alt="return" />,
     dropdownItems: [
       { label: "Chờ thanh toán", href: "/dashboard/nhap-hang/cho-thanh-toan" },
       { label: "Đang nhập kho", href: "/dashboard/nhap-hang/dang-nhap-kho" },
       { label: "Đã nhập kho", href: "/dashboard/nhap-hang/da-nhap-kho" },
     ],
   },
-  { label: "Xuất hàng", href: "/export", icon: <FaTruck /> },
-  { label: "Công nợ", href: "/tools", icon: <FaCog /> },
-  { label: "Vận chuyển", href: "/tools", icon: <FaCog /> },
+  {
+    label: "Xuất hàng",
+    href: "/export",
+    icon: <Image src="/export.png" width={20} height={20} alt="return" />,
+  },
+  {
+    label: "Công nợ",
+    href: "/tools",
+    icon: <RiMoneyDollarCircleFill />,
+  },
+  {
+    label: "Vận chuyển",
+    icon: <FaTruckMoving />,
+    dropdownItems: [
+      {
+        label: "Đang vận chuyển",
+        href: "/dashboard/van-chuyen/dang-van-chuyen",
+      },
+      { label: "Đã vận chuyển", href: "/dashboard/van-chuyen/dang-van-chuyen" },
+    ],
+  },
   {
     label: "Hàng tồn",
     icon: <FaBox />,
@@ -47,15 +70,7 @@ const sidebarItems: SidebarItem[] = [
       { label: "Hết hạn", href: "/inventory/option2" },
     ],
   },
-  {
-    label: "Nhân viên",
-    icon: <FaUser />,
-    dropdownItems: [
-      { label: "Chờ duyệt", href: "/system/option1" },
-      { label: "Đang hoạt động", href: "/system/option2" },
-      { label: "Ngừng hoạt động", href: "/system/option2" },
-    ],
-  },
+
   { label: "Đối tác", href: "/partners", icon: <FaUser /> },
   {
     label: "Hệ thống",

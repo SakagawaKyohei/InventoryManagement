@@ -1,7 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import { DonDatHang, Product } from "../../lib/definitions";
+
 import { Button } from "@/components/ui/button";
+import { RiMoneyDollarCircleFill } from "react-icons/ri";
 import Image from "next/image";
 import { format } from "date-fns";
 import {
@@ -25,8 +26,7 @@ import { FaSearch } from "react-icons/fa";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
-import { formatCurrency } from "@/app/lib/utils";
-import { Underline } from "lucide-react";
+import { DonDatHang } from "../lib/definitions";
 
 interface Props {
   dondathang: DonDatHang[];
@@ -144,8 +144,8 @@ const FetchProductButton = ({ dondathang, totalPages }: Props) => {
     <div>
       <div style={{ backgroundColor: "#EAEAEA" }}>
         <div className="px-2 py-4 md:px-4" style={{ backgroundColor: "white" }}>
-          <p style={{ fontWeight: "bold", fontSize: 24 }}>Đơn đặt hàng</p>
-          <p style={{ marginBottom: 15 }}>Danh sách các đơn đặt hàng</p>
+          <p style={{ fontWeight: "bold", fontSize: 24 }}>Đang vận chuyển</p>
+          <p style={{ marginBottom: 15 }}>Danh sách đơn hàng đang vận chuyển</p>
           <div
             style={{ display: "flex", flexDirection: "row", paddingBottom: 15 }}
           >
@@ -180,27 +180,21 @@ const FetchProductButton = ({ dondathang, totalPages }: Props) => {
             <TableHeader>
               <TableRow style={{ height: 65 }}>
                 <TableHead className="w-[150px] text-center">
-                  Mã đặt hàng
+                  Mã đơn hàng
                 </TableHead>
 
-                <TableHead>Tên công ty</TableHead>
-                <TableHead>Ngày đặt</TableHead>
-                <TableHead>Số tiền</TableHead>
-                <TableHead>Trạng thái</TableHead>
+                <TableHead>Tên kho nhập hàng/đối tác</TableHead>
+                <TableHead>Địa chỉ</TableHead>
+                <TableHead>Thời gian</TableHead>
+                <TableHead>Nhập/Xuất</TableHead>
+                <TableHead className="text-center">Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {dondathang?.map((item) => (
                 <TableRow key={item.id} style={{ height: 65 }}>
-                  <TableCell
-                    className="font-medium text-center"
-                    style={{ textDecoration: "underline" }}
-                  >
-                    <Link
-                      href={`/dashboard/nhap-hang/thong-tin-don-hang?id=${item.id}`}
-                    >
-                      {item.id}
-                    </Link>
+                  <TableCell className="font-medium text-center">
+                    {item.id}
                   </TableCell>
                   <TableCell>{item.company}</TableCell>
                   <TableCell>
@@ -208,8 +202,16 @@ const FetchProductButton = ({ dondathang, totalPages }: Props) => {
                   </TableCell>
 
                   <TableCell>500.000đ</TableCell>
-                  <TableCell>
-                    {item.status == "paid" ? "Đã thanh toán" : "Chờ thanh toán"}
+                  <TableCell
+                    style={{ display: "flex", justifyContent: "center" }}
+                  >
+                    <Link
+                      href={`/dashboard/nhap-hang/thanh-toan?id=${item.id}`}
+                    >
+                      <RiMoneyDollarCircleFill
+                        style={{ fontSize: 25, marginTop: 5 }}
+                      />
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))}
@@ -236,28 +238,6 @@ const FetchProductButton = ({ dondathang, totalPages }: Props) => {
             )}
           </Pagination>
         </div>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "end",
-          marginRight: 25,
-          marginTop: 30,
-        }}
-      >
-        <Link href={"/dashboard/nhap-hang/them-moi"}>
-          <Button
-            style={{
-              marginRight: 15,
-              fontSize: 18,
-              backgroundColor: "#007ACC",
-              width: 140,
-              height: 40,
-            }}
-          >
-            Thêm mới
-          </Button>
-        </Link>
       </div>
     </div>
   );

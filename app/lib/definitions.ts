@@ -50,10 +50,11 @@ export type DonDatHang = {
   id_nguoi_van_chuyen: string;
   company: string;
   han_su_dung:string;
-  product:any;
+  product:any[];
   total:number;
   ngay_dat:string;
   status:string;
+  manv:number
 };
 export type DonXuatHang = {
   id: string;
