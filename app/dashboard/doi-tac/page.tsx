@@ -1,11 +1,13 @@
 import {
-  fetchFilteredPendingDonDatHang,
-  fetchFilteredVanChuyen,
-  fetchPendingDonDatHangPages,
-  fetchVanChuyenPage,
+  fetchDoiTacPages,
+  fetchDonDatHangPages,
+  fetchFilteredDoiTac,
+  fetchFilteredDonDatHang,
+  fetchFilteredProducts,
+  fetchProductsPages,
 } from "@/app/lib/data";
-import { DonDatHang, VanChuyen } from "@/app/lib/definitions";
-import VanChuyenComponent from "@/app/ui/vanchuyen/vanchuyen";
+import { DoiTac, DonDatHang, Product } from "@/app/lib/definitions";
+import PartnerList from "@/app/ui/doitac/partnerlist";
 const FetchProductButton = async (props: {
   searchParams?: Promise<{
     query?: string;
@@ -17,8 +19,8 @@ const FetchProductButton = async (props: {
   const query = searchParams?.query || "";
   const currentPage = Number(searchParams?.page) || 1;
   const item_per_page = Number(searchParams?.itemsPerPage) || 5;
-  const totalPages = await fetchVanChuyenPage(query, item_per_page);
-  const vanchuyen: VanChuyen[] = await fetchFilteredVanChuyen(
+  const totalPages = await fetchDoiTacPages(query, item_per_page);
+  const doitac: DoiTac[] = await fetchFilteredDoiTac(
     query,
     currentPage,
     item_per_page
@@ -26,7 +28,7 @@ const FetchProductButton = async (props: {
 
   return (
     <div>
-      <VanChuyenComponent vanchuyen={vanchuyen} totalPages={totalPages} />
+      <PartnerList doitac={doitac} totalPages={totalPages} />
     </div>
   );
 };

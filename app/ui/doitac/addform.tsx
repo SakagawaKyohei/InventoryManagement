@@ -16,45 +16,38 @@ import {
 import { useRouter } from "next/navigation";
 import { auth } from "@/auth";
 import { getUserByEmail } from "@/app/lib/data";
-import { Product, Users } from "@/app/lib/definitions";
+import { DoiTac, Product, Users } from "@/app/lib/definitions";
 import { formatCurrency } from "@/app/lib/utils";
 import { redirect } from "next/navigation";
 
 interface OrderProduct {
-  id: string;
-  name: string;
+  stt: number;
+  dientich: number;
+  thuysan: string;
   soluong: number;
-  dongia: string;
-  thanhtien: string;
+  ngaytuoi: number;
 }
 
-const AddForm = (user: Users) => {
+const AddForm = () => {
   const router = useRouter();
-  const [products, setProducts] = useState<Product[]>();
   const [clientproducts, setClientProducts] = useState<OrderProduct[]>([]);
-  const [product, setProduct] = useState({
+
+  const [stt, setSTT] = useState(0);
+  const [doitac, setDoitac] = useState<DoiTac>({
     id: "",
     name: "",
-    price: 0,
-    quantity: 0,
+    email: "",
+    sdt: "",
+    dia_chi: "",
+    ao_nuoi: "",
   });
 
-  const [company, setCompany] = useState("");
-  const [dongia, setDonGia] = useState(0);
-  const [soluong, setSoluong] = useState(0);
   const [message, setMessage] = useState("");
   const [isadding, setIsAdding] = useState(false);
-  const [productname, setProductname] = useState("");
-  const [productid, setProductid] = useState("");
-
-  // Hàm xử lý khi người dùng thay đổi giá trị trong form
-  const handleInputChange = (e: any) => {
-    const { name, value } = e.target;
-    setProduct((prevProduct) => ({
-      ...prevProduct,
-      [name]: value,
-    }));
-  };
+  const [dientich, setDientich] = useState(0);
+  const [thuysan, setThuysan] = useState("");
+  const [soluong, setsoluong] = useState(0);
+  const [ngaytuoi, setNgaytuoi] = useState(0);
 
   const fetchProducts = async () => {
     setMessage(""); // Clear any previous messages
@@ -67,7 +60,6 @@ const AddForm = (user: Users) => {
       const data = await response.json();
 
       if (response.ok) {
-        setProducts(data.products); // Corrected to reflect API response
         setMessage("product list fetched successfully");
       } else {
         setMessage("Failed to fetch product list");
@@ -86,23 +78,16 @@ const AddForm = (user: Users) => {
 
   // Hàm xử lý submit form
   const handleSubmit = async () => {
-    setProduct((prevProduct) => ({
-      ...prevProduct,
-      name: productname,
-      id: productid,
-      price: dongia,
-      quantity: soluong,
-    }));
-
     try {
-      const res = await fetch("/api/don-dat-hang/add", {
+      const res = await fetch("/api/doi-tac/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ product, company, manv: user.manv }),
+        body: JSON.stringify({ doitac: doitac }),
       });
-
       if (res.ok) {
         // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
+        alert("Thêm thông tin đối tác thành công");
+        router.push("/dashboard/doi-tac");
       } else {
         setMessage("Không thể xóa sản phẩm");
       }
@@ -113,35 +98,33 @@ const AddForm = (user: Users) => {
   };
 
   const HandleAddDraft = async () => {
-    setClientProducts([
+    // Tạo danh sách mới
+    const updatedProducts = [
       ...(clientproducts || []), // Nếu undefined, thay bằng []
       {
-        thanhtien: formatCurrency(dongia * soluong * 1000), // Directly assign the result of the multiplication
-        dongia: formatCurrency(dongia * 1000),
+        stt: stt,
+        thuysan: thuysan,
+        dientich: dientich,
         soluong: soluong,
-        name: productname,
-        id: productid,
+        ngaytuoi: ngaytuoi,
       },
-    ]);
-    setSoluong(0);
-    setProduct((prevProduct) => ({
-      ...prevProduct,
-      quantity: 0,
+    ];
+
+    // Cập nhật clientProducts
+    setClientProducts(updatedProducts);
+
+    // Cập nhật ao_nuoi trong doitac
+    setDoitac((prevdoitac) => ({
+      ...prevdoitac,
+      ao_nuoi: updatedProducts, // Sử dụng danh sách mới nhất
     }));
-    setDonGia(0); // Reset giá trị dongia (nếu có state này)
-    setProduct((prevProduct) => ({
-      ...prevProduct,
-      price: 0,
-    }));
-    setIsAdding(false); // Đóng form thêm mới
-    handleSubmit();
+
+    // Đóng form và xử lý thêm
+    setIsAdding(false);
   };
 
-  const [productList, setProductList] = useState([
-    { id: "", name: "", quantity: "", price: "" },
-  ]);
-
   const addProductRow = () => {
+    setSTT(stt + 1);
     setIsAdding(true);
   };
 
@@ -166,115 +149,28 @@ const AddForm = (user: Users) => {
 
   const handleadd = async (e: any) => {
     e.preventDefault();
-    try {
-      const res = await fetch("/api/don-dat-hang/add1", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
+    // try {
+    //   const res = await fetch("/api/don-dat-hang/add1", {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //   });
 
-      if (res.ok) {
-        // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
+    //   if (res.ok) {
+    //     // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
 
-        router.push("/dashboard/nhap-hang"); // Use router.push for client-side navigation
-      } else {
-        setMessage("Không thể xóa sản phẩm");
-      }
-    } catch (error) {
-      console.error("Lỗi khi xóa sản phẩm:", error);
-      setMessage("Lỗi khi xóa sản phẩm. Vui lòng thử lại.");
-    }
+    //     router.push("/dashboard/nhap-hang"); // Use router.push for client-side navigation
+    //   } else {
+    //     setMessage("Không thể xóa sản phẩm");
+    //   }
+    // } catch (error) {
+    //   console.error("Lỗi khi xóa sản phẩm:", error);
+    //   setMessage("Lỗi khi xóa sản phẩm. Vui lòng thử lại.");
+    // }
+    console.log(doitac);
   };
 
-  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedProduct = JSON.parse(event.target.value) as Product;
-    console.log("Selected product:", selectedProduct);
-    setDonGia(selectedProduct.buy_price ? selectedProduct.buy_price : 0);
-    setProduct((prevProduct) => ({
-      ...prevProduct,
-      price: selectedProduct.buy_price ? selectedProduct.buy_price : 0,
-    }));
-    setCompany(selectedProduct.company);
-    setProductname(selectedProduct.name);
-    setProduct((prevProduct) => ({
-      ...prevProduct,
-      name: selectedProduct.name,
-    }));
-    setProductid(selectedProduct.id);
-    setProduct((prevProduct) => ({
-      ...prevProduct,
-      name: selectedProduct.name,
-      id: selectedProduct.id,
-    }));
-  };
   return (
-    // <div>
-    //   <h1>Add Product to DonDatHang</h1>
-    //   <button onClick={handleCancel}>Cancel</button>
-    //   <button onClick={handleadd}>add</button>
-    //   <form onSubmit={handleSubmit}>
-    //     <div>
-    //       <label>Company:</label>
-    //       <input
-    //         type="text"
-    //         name="company"
-    //         value={company}
-    //         onChange={handleCompanyChange}
-    //         required
-    //       />
-    //     </div>
-
-    //     <div>
-    //       <label>id:</label>
-    //       <input
-    //         type="text"
-    //         name="id"
-    //         value={product.id}
-    //         onChange={handleInputChange}
-    //         required
-    //       />
-    //     </div>
-    //     <div>
-    //       <label>Product Name:</label>
-    //       <input
-    //         type="text"
-    //         name="name"
-    //         value={product.name}
-    //         onChange={handleInputChange}
-    //         required
-    //       />
-    //     </div>
-    //     <div>
-    //       <label>Price:</label>
-    //       <input
-    //         type="number"
-    //         name="price"
-    //         value={product.price}
-    //         onChange={handleInputChange}
-    //         required
-    //       />
-    //     </div>
-    //     <div>
-    //       <label>Quantity:</label>
-    //       <input
-    //         type="number"
-    //         name="quantity"
-    //         value={product.quantity}
-    //         onChange={handleInputChange}
-    //         required
-    //       />
-    //     </div>
-    //     <button type="submit">Add Product</button>
-    //   </form>
-    //   {message && <p>{message}</p>}
-    // </div>
     <div className="register-container">
-      <button
-        onClick={() => {
-          console.log(products);
-        }}
-      >
-        a
-      </button>
       <div style={{ display: "flex" }}>
         <Image
           src="/return.png"
@@ -308,39 +204,21 @@ const AddForm = (user: Users) => {
           }}
         >
           <div style={{ display: "flex", flexDirection: "row" }}>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                marginRight: 15,
-              }}
-            >
-              <label htmlFor="name">Mã nhân viên</label>
-              <Input
-                type="text"
-                id="name"
-                name="name"
-                value={user.manv}
-                disabled
-                style={{
-                  width: 150,
-                  marginTop: 10,
-                  backgroundColor: "#dddddd",
-                }}
-              />
-            </div>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <label htmlFor="name">Tên nhân viên</label>
+              <label htmlFor="name">Tên đối tác</label>
               <Input
                 type="text"
                 id="name"
                 name="name"
-                value={user.name}
-                disabled
                 style={{
-                  width: 285,
+                  width: 375,
                   marginTop: 10,
-                  backgroundColor: "#dddddd",
+                }}
+                onChange={(e) => {
+                  setDoitac((prevdoitac) => ({
+                    ...prevdoitac,
+                    name: e.target.value,
+                  }));
                 }}
               />
               {/* {errors.name && <div style={{ color: "red" }}>{errors.name}</div>} */}
@@ -361,12 +239,15 @@ const AddForm = (user: Users) => {
                 type="number"
                 id="sell_price"
                 name="sell_price"
-                value={user.sdt}
-                disabled
                 style={{
                   width: 150,
                   marginTop: 10,
-                  backgroundColor: "#dddddd",
+                }}
+                onChange={(e) => {
+                  setDoitac((prevdoitac) => ({
+                    ...prevdoitac,
+                    sdt: e.target.value,
+                  }));
                 }}
               />
               {/* {errors.sell_price && (
@@ -377,14 +258,17 @@ const AddForm = (user: Users) => {
               <label htmlFor="company">Email:</label>
               <Input
                 type="text"
-                value={user.email}
                 id="company"
                 name="company"
-                disabled
                 style={{
                   width: 305,
                   marginTop: 10,
-                  backgroundColor: "#dddddd",
+                }}
+                onChange={(e) => {
+                  setDoitac((prevdoitac) => ({
+                    ...prevdoitac,
+                    email: e.target.value,
+                  }));
                 }}
               />
               {/* {errors.company && (
@@ -407,12 +291,15 @@ const AddForm = (user: Users) => {
               type="text"
               id="buy_price"
               name="buy_price"
-              disabled
-              value={user.dia_chi}
               style={{
-                width: 1075,
+                width: 1055,
                 marginTop: 5,
-                backgroundColor: "#dddddd",
+              }}
+              onChange={(e) => {
+                setDoitac((prevdoitac) => ({
+                  ...prevdoitac,
+                  dia_chi: e.target.value,
+                }));
               }}
             />
             {/* {errors.buy_price && (
@@ -421,67 +308,72 @@ const AddForm = (user: Users) => {
           </div>
         </div>
         <div style={{ marginTop: 25 }}>
-          <label htmlFor="description">Sản phẩm:</label>
+          <label htmlFor="description">Ao nuôi:</label>
           <Table>
             <TableHeader>
               <TableRow style={{ height: 65 }}>
-                <TableHead className="w-[350]">Tên sản phẩm</TableHead>
-
-                <TableHead className="w-[175]">Số lượng</TableHead>
-                <TableHead className="w-[220]">Đơn giá</TableHead>
-                <TableHead className="w-[220]">Thành tiền </TableHead>
-                <TableHead>Action </TableHead>
+                <TableHead className="text-center">STT</TableHead>
+                <TableHead>Diện tích</TableHead>
+                <TableHead>Loại thủy sản</TableHead>
+                <TableHead>Số lượng</TableHead>
+                <TableHead>Ngày tuổi</TableHead>
+                <TableHead className="text-center w-[100]">Action </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {clientproducts?.map((item) => (
-                <TableRow style={{ height: 65 }} key={item.name}>
-                  <TableCell>{item.name}</TableCell>
+                <TableRow style={{ height: 65 }} key={item.stt}>
+                  <TableCell className="text-center">{item.stt}</TableCell>
 
-                  <TableCell>{item.soluong}</TableCell>
-                  <TableCell>{item.dongia}</TableCell>
-                  <TableCell>{item.thanhtien}</TableCell>
+                  <TableCell>
+                    {Number(item.dientich).toLocaleString()} m²
+                  </TableCell>
+                  <TableCell>{item.thuysan}</TableCell>
+                  <TableCell>
+                    {Number(item.soluong).toLocaleString()} con
+                  </TableCell>
+                  <TableCell>{item.ngaytuoi} ngày</TableCell>
                 </TableRow>
               ))}
 
               {isadding ? (
                 <>
                   <TableRow key="1" style={{ height: 65 }}>
-                    <TableCell>
-                      <select
-                        onChange={handleSelectChange}
-                        className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                        defaultValue={""}
-                      >
-                        <option value="" disabled>
-                          Chọn thức ăn
-                        </option>
-
-                        {products?.map((product) => (
-                          <option
-                            key={product.id}
-                            value={JSON.stringify(product)}
-                          >
-                            {product.name}
-                          </option>
-                        ))}
-                      </select>
-                    </TableCell>
+                    <TableCell className="text-center">{stt}</TableCell>
                     <TableCell>
                       <Input
                         type="text"
                         onChange={(e) => {
-                          setSoluong(parseInt(e.target.value));
-                          setProduct((prevProduct) => ({
-                            ...prevProduct,
-                            quantity: parseInt(e.target.value),
-                          }));
+                          setDientich(parseInt(e.target.value));
                         }}
                       />
                     </TableCell>
-                    <TableCell>{formatCurrency(dongia * 1000)}</TableCell>
                     <TableCell>
-                      {formatCurrency(dongia * 1000 * (soluong ? soluong : 0))}
+                      {" "}
+                      <Input
+                        type="text"
+                        onChange={(e) => {
+                          setThuysan(e.target.value);
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      {" "}
+                      <Input
+                        type="text"
+                        onChange={(e) => {
+                          setsoluong(parseInt(e.target.value));
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      {" "}
+                      <Input
+                        type="text"
+                        onChange={(e) => {
+                          setNgaytuoi(parseInt(e.target.value));
+                        }}
+                      />
                     </TableCell>
                     <TableCell
                       style={{
@@ -510,17 +402,6 @@ const AddForm = (user: Users) => {
                         className="hidden md:block"
                         alt="Screenshots of the dashboard project showing desktop version"
                         onClick={() => {
-                          // Reset lại các giá trị khi đóng form
-                          setSoluong(0);
-                          setProduct((prevProduct) => ({
-                            ...prevProduct,
-                            quantity: 0,
-                          }));
-                          setDonGia(0); // Reset giá trị dongia (nếu có state này)
-                          setProduct((prevProduct) => ({
-                            ...prevProduct,
-                            price: 0,
-                          }));
                           setIsAdding(false); // Đóng form thêm mới
                         }}
                       />
@@ -566,11 +447,11 @@ const AddForm = (user: Users) => {
               marginRight: 15,
             }}
             // type="submit"
-            onClick={handleadd}
+            onClick={handleSubmit}
           >
             Thêm mới
           </Button>
-          <Link href={"/dashboard/products"}>
+          <Link href={"/dashboard/doi-tac"}>
             <Button
               style={{
                 fontSize: 18,

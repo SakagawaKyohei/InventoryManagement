@@ -1,8 +1,7 @@
 "use client";
 import React, { useState } from "react";
-
+import { DoiTac, DonDatHang, Product } from "../../lib/definitions";
 import { Button } from "@/components/ui/button";
-import { RiMoneyDollarCircleFill } from "react-icons/ri";
 import Image from "next/image";
 import { format } from "date-fns";
 import {
@@ -26,14 +25,15 @@ import { FaSearch } from "react-icons/fa";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
-import { DonDatHang } from "../lib/definitions";
+import { formatCurrency } from "@/app/lib/utils";
+import { Underline } from "lucide-react";
 
 interface Props {
-  dondathang: DonDatHang[];
+  doitac: DoiTac[];
   totalPages: number;
 }
 
-const FetchProductButton = ({ dondathang, totalPages }: Props) => {
+const FetchProductButton = ({ doitac, totalPages }: Props) => {
   const pathname = usePathname();
   const { replace } = useRouter();
   const searchParams = useSearchParams();
@@ -144,8 +144,8 @@ const FetchProductButton = ({ dondathang, totalPages }: Props) => {
     <div>
       <div style={{ backgroundColor: "#EAEAEA" }}>
         <div className="px-2 py-4 md:px-4" style={{ backgroundColor: "white" }}>
-          <p style={{ fontWeight: "bold", fontSize: 24 }}>Đang vận chuyển</p>
-          <p style={{ marginBottom: 15 }}>Danh sách đơn hàng đang vận chuyển</p>
+          <p style={{ fontWeight: "bold", fontSize: 24 }}>Đối tác</p>
+          <p style={{ marginBottom: 15 }}>Danh sách các đối tác</p>
           <div
             style={{ display: "flex", flexDirection: "row", paddingBottom: 15 }}
           >
@@ -180,36 +180,41 @@ const FetchProductButton = ({ dondathang, totalPages }: Props) => {
             <TableHeader>
               <TableRow style={{ height: 65 }}>
                 <TableHead className="w-[150px] text-center">
-                  Mã đơn hàng
+                  Mã đối tác
                 </TableHead>
 
-                <TableHead>Tên kho nhập hàng/đối tác</TableHead>
+                <TableHead>Tên đối tác</TableHead>
                 <TableHead>Địa chỉ</TableHead>
-                <TableHead>Thời gian</TableHead>
-                <TableHead>Nhập/Xuất</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>SĐT</TableHead>
                 <TableHead className="text-center">Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {dondathang?.map((item) => (
+              {doitac?.map((item) => (
                 <TableRow key={item.id} style={{ height: 65 }}>
                   <TableCell className="font-medium text-center">
                     {item.id}
                   </TableCell>
-                  <TableCell>{item.company}</TableCell>
-                  <TableCell>
-                    {format(new Date(item.ngay_dat), "dd/MM/yyyy")}
-                  </TableCell>
-
-                  <TableCell>500.000đ</TableCell>
+                  <TableCell>{item.name}</TableCell>
+                  <TableCell>{item.dia_chi}</TableCell>
+                  <TableCell>{item.email}</TableCell>
+                  <TableCell>{item.sdt}</TableCell>
                   <TableCell
-                    style={{ display: "flex", justifyContent: "center" }}
+                    style={{
+                      marginTop: 10,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
                   >
-                    <Link
-                      href={`/dashboard/nhap-hang/thanh-toan?id=${item.id}`}
-                    >
-                      <RiMoneyDollarCircleFill
-                        style={{ fontSize: 25, marginTop: 5 }}
+                    <Link href={`/dashboard/doi-tac/edit?id=${item.id}`}>
+                      <Image
+                        src="/edit.png"
+                        width={25}
+                        height={25}
+                        className="hidden md:block"
+                        alt="Screenshots of the dashboard project showing desktop version"
                       />
                     </Link>
                   </TableCell>
@@ -238,6 +243,28 @@ const FetchProductButton = ({ dondathang, totalPages }: Props) => {
             )}
           </Pagination>
         </div>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "end",
+          marginRight: 25,
+          marginTop: 30,
+        }}
+      >
+        <Link href={"/dashboard/doi-tac/them-moi"}>
+          <Button
+            style={{
+              marginRight: 15,
+              fontSize: 18,
+              backgroundColor: "#007ACC",
+              width: 140,
+              height: 40,
+            }}
+          >
+            Thêm mới
+          </Button>
+        </Link>
       </div>
     </div>
   );

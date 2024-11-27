@@ -10,6 +10,7 @@ import { UUID } from 'crypto';
 import { DoiTac, DonDatHang, Product, Users } from './definitions';
 import supabase from "../../app/supabase";
 import { v4 as uuidv4 } from "uuid";
+import { getOrderPrice } from './data';
 
 export type State = {
   errors?: {
@@ -212,29 +213,48 @@ export async function AddDonDatHang(product: Record<string, unknown>, company: s
 
     // Bước 1: Kiểm tra xem dondathang có tồn tại không
     const existingOrder = await sql`
-      SELECT product FROM dondathang
+      SELECT id, product FROM dondathang
       WHERE company = ${company} AND status = ${status}
       LIMIT 1;
     `;
     
     console.log('Existing Order:', existingOrder); // Log kết quả truy vấn SELECT
 
-    if (existingOrder.rows.length === 0) {
+    let orderId = existingOrder.rows.length > 0 ? existingOrder.rows[0].id : null;
+
+    if (!orderId) {
       // Bước 2: Nếu không có dondathang nào, tạo mới
       await sql`
         INSERT INTO dondathang (company, product, status, manv)
         VALUES (${company}, ARRAY[${productJson}::jsonb], ${status}, ${manv});
       `;
-      return { message: 'New DonDatHang created successfully.' };
+      // Sau khi tạo, lấy ID của đơn hàng mới để tính toán total
+      const newOrder = await sql`
+        SELECT id FROM dondathang
+        WHERE company = ${company} AND status = ${status}
+      `;
+      orderId = newOrder.rows[0].id;
     } else {
-      // Sử dụng array_append để thêm phần tử vào mảng jsonb[]
+      // Nếu đơn hàng đã tồn tại, cập nhật sản phẩm mới
       await sql`
         UPDATE dondathang
         SET product = array_append(product, ${productJson}::jsonb)
-        WHERE company = ${company} AND status = ${status};
+        WHERE id = ${orderId};
       `;
-      return { message: 'Product added to existing DonDatHang.' };
     }
+
+    // Tính toán tổng giá trị đơn hàng
+    const orderPrice = await getOrderPrice(orderId.toString());
+    const totalPrice = orderPrice.total_price;
+
+    // Cập nhật giá trị tổng vào cột 'total'
+    await sql`
+      UPDATE dondathang
+      SET total = ${totalPrice}
+      WHERE id = ${orderId};
+    `;
+
+    return { message: 'DonDatHang created or updated successfully with total price.' };
 
   } catch (error) {
     console.error('Database error:', error); // Log lỗi để kiểm tra chi tiết
@@ -243,6 +263,7 @@ export async function AddDonDatHang(product: Record<string, unknown>, company: s
     };
   }
 }
+
 //them don dat hang trang thai draft
 
 export async function AddDonDatHang1() {
@@ -322,7 +343,7 @@ export async function DaVanChuyen(donHangId: string) {
 
     // Chèn dữ liệu vào bảng hangton
     await sql`
-     INSERT INTO tonkho (ma_don_hang, ma_hang, han_su_dung, so_luong, ngay_nhap)
+    INSERT INTO tonkho (ma_don_hang, ma_hang, han_su_dung, so_luong, ngay_nhap)
     SELECT 
         v.id_don_hang AS ma_don_hang,  
         p.value->>'id' AS ma_hang,     
@@ -356,16 +377,19 @@ export async function DaVanChuyen(donHangId: string) {
 
 
 
-
-export async function AddDoiTac(doitac:DoiTac) {
+export async function AddDoiTac(doitac: DoiTac) {
   try {
+    const aonuoiJson = JSON.stringify(doitac.ao_nuoi); // Ensure it's a valid JSON string
+
+    console.log('aonuoi JSON:', aonuoiJson); // Log dữ liệu trước khi gửi vào SQL
+
+    // Use parameterized query to prevent SQL injection
     await sql`
-      INSERT INTO doitac (name, email, sdt, dia_chi)
-      VALUES (${doitac.name},${doitac.email}, ${doitac.sdt},${doitac.dia_chi})
+      INSERT INTO doitac (name, email, sdt, dia_chi, ao_nuoi)
+      VALUES (${doitac.name}, ${doitac.email}, ${doitac.sdt}, ${doitac.dia_chi}, ARRAY[${aonuoiJson}::jsonb])
     `;
   } catch (error) {
-    // If a database error occurs, return a more specific error.
-    console.log(error)
+    console.error('Database Error:', error);
     return {
       message: 'Database Error: Failed to Create Partner.',
     };
@@ -400,7 +424,6 @@ export async function EditProduct(id:string, product: Product) {
 
 export async function EditPartner(id: string, partner: DoiTac) {
 
-
   try {
     await sql`
       UPDATE doitac
@@ -408,11 +431,10 @@ export async function EditPartner(id: string, partner: DoiTac) {
         name = ${partner.name},
         email = ${partner.email},
         sdt = ${partner.sdt},
-        dia_chi = ${partner.dia_chi},
-        ao_nuoi = ${partner.ao_nuoi}
+        dia_chi = ${partner.dia_chi}
       WHERE id = ${id}
     `;
-
+    // ao_nuoi = ${partner.ao_nuoi}
     return { message: 'Đối tác đã được cập nhật thành công.' };
   } catch (error) {
     console.log('Lỗi khi cập nhật:', error);

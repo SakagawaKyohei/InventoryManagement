@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { DonDatHang, Product } from "../../lib/definitions";
+
 import { Button } from "@/components/ui/button";
 import { RiMoneyDollarCircleFill } from "react-icons/ri";
 import Image from "next/image";
@@ -26,14 +26,14 @@ import { FaSearch } from "react-icons/fa";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
-import { formatCurrency } from "@/app/lib/utils";
+import { DonDatHang, VanChuyen } from "../lib/definitions";
 
 interface Props {
-  dondathang: DonDatHang[];
+  vanchuyen: VanChuyen[];
   totalPages: number;
 }
 
-const FetchProductButton = ({ dondathang, totalPages }: Props) => {
+const FetchProductButton = ({ vanchuyen, totalPages }: Props) => {
   const pathname = usePathname();
   const { replace } = useRouter();
   const searchParams = useSearchParams();
@@ -144,10 +144,8 @@ const FetchProductButton = ({ dondathang, totalPages }: Props) => {
     <div>
       <div style={{ backgroundColor: "#EAEAEA" }}>
         <div className="px-2 py-4 md:px-4" style={{ backgroundColor: "white" }}>
-          <p style={{ fontWeight: "bold", fontSize: 24 }}>Chờ thanh toán</p>
-          <p style={{ marginBottom: 15 }}>
-            Danh sách đơn đặt hàng chờ thanh toán
-          </p>
+          <p style={{ fontWeight: "bold", fontSize: 24 }}>Đang vận chuyển</p>
+          <p style={{ marginBottom: 15 }}>Danh sách đơn hàng đang vận chuyển</p>
           <div
             style={{ display: "flex", flexDirection: "row", paddingBottom: 15 }}
           >
@@ -182,35 +180,49 @@ const FetchProductButton = ({ dondathang, totalPages }: Props) => {
             <TableHeader>
               <TableRow style={{ height: 65 }}>
                 <TableHead className="w-[150px] text-center">
-                  Mã đặt hàng
+                  Mã đơn hàng
                 </TableHead>
 
-                <TableHead>Tên công ty</TableHead>
-                <TableHead>Ngày đặt</TableHead>
-                <TableHead>Số tiền</TableHead>
+                <TableHead>Tên kho nhập hàng/đối tác</TableHead>
+                <TableHead>Địa chỉ</TableHead>
+                <TableHead>Thời gian</TableHead>
+                <TableHead>Nhập/Xuất</TableHead>
                 <TableHead className="text-center">Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {dondathang?.map((item) => (
-                <TableRow key={item.id} style={{ height: 65 }}>
-                  <TableCell className="font-medium text-center">
-                    {item.id}
+              {vanchuyen?.map((item) => (
+                <TableRow key={item.id_don_hang} style={{ height: 65 }}>
+                  <TableCell
+                    className="font-medium text-center"
+                    style={{ textDecoration: "underline" }}
+                  >
+                    <Link
+                      href={`/dashboard/nhap-hang/thong-tin-don-hang?id=${item.id_don_hang}`}
+                    >
+                      {item.id_don_hang}
+                    </Link>
                   </TableCell>
-                  <TableCell>{item.company}</TableCell>
-                  <TableCell>
-                    {format(new Date(item.ngay_dat), "dd/MM/yyyy")}
-                  </TableCell>
+                  <TableCell>{item.kho_xuat_hang}</TableCell>
+                  <TableCell>{item.dia_chi_kho}</TableCell>
 
-                  <TableCell>{formatCurrency(item.total * 1000)}</TableCell>
+                  <TableCell>
+                    {format(new Date(item.start_time), "dd/MM/yyyy")}
+                  </TableCell>
+                  <TableCell>{item.nhapxuat}</TableCell>
                   <TableCell
                     style={{ display: "flex", justifyContent: "center" }}
                   >
                     <Link
-                      href={`/dashboard/nhap-hang/thanh-toan?id=${item.id}`}
+                      href={`/dashboard/van-chuyen/dang-van-chuyen/xac-nhan?id=${item.id_don_hang}`}
                     >
-                      <RiMoneyDollarCircleFill
-                        style={{ fontSize: 25, marginTop: 5 }}
+                      <Image
+                        src="/done.jpg"
+                        style={{ marginRight: 15 }}
+                        width={25}
+                        height={25}
+                        className="hidden md:block"
+                        alt="Screenshots of the dashboard project showing desktop version"
                       />
                     </Link>
                   </TableCell>

@@ -59,7 +59,7 @@ const sidebarItems: SidebarItem[] = [
         label: "Đang vận chuyển",
         href: "/dashboard/van-chuyen/dang-van-chuyen",
       },
-      { label: "Đã vận chuyển", href: "/dashboard/van-chuyen/dang-van-chuyen" },
+      { label: "Đã vận chuyển", href: "/dashboard/van-chuyen/da-van-chuyen" },
     ],
   },
   {
@@ -71,7 +71,7 @@ const sidebarItems: SidebarItem[] = [
     ],
   },
 
-  { label: "Đối tác", href: "/partners", icon: <FaUser /> },
+  { label: "Đối tác", href: "/dashboard/doi-tac", icon: <FaUser /> },
   {
     label: "Hệ thống",
     icon: <FaCog />,

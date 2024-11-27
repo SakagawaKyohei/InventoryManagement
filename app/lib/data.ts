@@ -10,6 +10,7 @@ import {
   Product,
   Revenue,
   Users,
+  VanChuyen,
 } from './definitions';
 import { formatCurrency } from './utils';
 import { UUID } from 'crypto';
@@ -216,7 +217,7 @@ export async function fetchProductById(id: string) {
 
 export async function fetchPartnerById(id: string) {
   try {
-    const data = await sql<Product>`
+    const data = await sql<DoiTac>`
       SELECT
        *
       FROM doitac
@@ -248,6 +249,25 @@ export async function fetchDonDatHangById(id: string) {
     }));
 
     return dondathang[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch product.');
+  }
+}
+
+export async function fetchVanChuyenById(id: string) {
+  try {
+    const data = await sql<VanChuyen>`
+      SELECT *
+      FROM vanchuyen
+      WHERE vanchuyen.id_don_hang = ${id};
+    `;
+
+    const vanchuyen = data.rows.map((vanchuyen) => ({
+      ...vanchuyen,
+    }));
+
+    return vanchuyen[0];
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch product.');
@@ -494,7 +514,96 @@ export async function fetchFilteredDonDatHang(
     throw new Error('Failed to fetch all product.');
   } 
 }
+export async function fetchFilteredDoiTac(
+  query: string,
+  currentPage: number,
+  item_per_page:number
+) {
+  const offset = (currentPage - 1) * item_per_page;
 
+  try {
+    const data = await sql<DoiTac>`
+      SELECT *
+      FROM doitac
+      WHERE
+      id ILIKE ${`%${query}%`} OR
+      email::text ILIKE ${`%${query}%`} OR
+      dia_chi::text ILIKE ${`%${query}%`} OR
+      name::text ILIKE ${`%${query}%`} OR
+      sdt::text ILIKE ${`%${query}%`} 
+      ORDER BY 
+      id ASC
+      LIMIT ${item_per_page} OFFSET ${offset}
+    `;
+
+    const dondathang = data.rows;
+    return dondathang;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all product.');
+  } 
+}
+export async function fetchFilteredVanChuyen(
+  query: string,
+  currentPage: number,
+  item_per_page:number
+) {
+  const offset = (currentPage - 1) * item_per_page;
+
+  try {
+    const data = await sql<VanChuyen>`
+    SELECT * 
+    FROM vanchuyen
+    WHERE 
+        (id_don_hang ILIKE ${`%${query}%`} 
+        OR status ILIKE ${`%${query}%`} 
+        OR nhapxuat ILIKE ${`%${query}%`} 
+        OR kho_xuat_hang ILIKE ${`%${query}%`} 
+        OR dia_chi_kho ILIKE ${`%${query}%`})
+        AND status = 'đang vận chuyển'
+    ORDER BY id_don_hang ASC
+    LIMIT ${item_per_page} OFFSET ${offset};
+
+    `;
+
+    const vanchuyen = data.rows;
+    return vanchuyen;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all product.');
+  } 
+}
+
+export async function fetchFilteredVanChuyenDone(
+  query: string,
+  currentPage: number,
+  item_per_page:number
+) {
+  const offset = (currentPage - 1) * item_per_page;
+
+  try {
+    const data = await sql<VanChuyen>`
+    SELECT * 
+    FROM vanchuyen
+    WHERE 
+        (id_don_hang ILIKE ${`%${query}%`} 
+        OR status ILIKE ${`%${query}%`} 
+        OR nhapxuat ILIKE ${`%${query}%`} 
+        OR kho_xuat_hang ILIKE ${`%${query}%`} 
+        OR dia_chi_kho ILIKE ${`%${query}%`})
+        AND status = 'Đã vận chuyển'
+    ORDER BY id_don_hang ASC
+    LIMIT ${item_per_page} OFFSET ${offset};
+
+    `;
+
+    const vanchuyen = data.rows;
+    return vanchuyen;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all product.');
+  } 
+}
 
 export async function fetchFilteredPendingDonDatHang(
   query: string,
@@ -548,6 +657,26 @@ export async function fetchPendingDonDatHangPages(query: string,item_per_page:nu
   }
 }
 
+export async function fetchVanChuyenPage(query: string,item_per_page:number) {
+  try {
+    const count = await sql`SELECT COUNT(*)
+    FROM vanchuyen
+    WHERE
+          id_don_hang ILIKE ${`%${query}%`}  or
+          status ILIKE ${`%${query}%`} or
+          nhapxuat ILIKE ${`%${query}%`} or
+          kho_xuat_hang ILIKE ${`%${query}%`} or
+          dia_chi_kho ILIKE ${`%${query}%`}
+  `;
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / item_per_page);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of products.');
+  }
+}
+
 export async function fetchDonDatHangPages(query: string,item_per_page:number) {
   try {
     const count = await sql`SELECT COUNT(*)
@@ -558,6 +687,26 @@ export async function fetchDonDatHangPages(query: string,item_per_page:number) {
         product::text ILIKE ${`%${query}%`} OR
         status::text ILIKE ${`%${query}%`} OR
         ngay_dat::text ILIKE ${`%${query}%`} 
+  `;
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / item_per_page);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of products.');
+  }
+}
+
+export async function fetchDoiTacPages(query: string,item_per_page:number) {
+  try {
+    const count = await sql`SELECT COUNT(*)
+      FROM doitac
+      WHERE
+      id ILIKE ${`%${query}%`} OR
+      email::text ILIKE ${`%${query}%`} OR
+      dia_chi::text ILIKE ${`%${query}%`} OR
+      name::text ILIKE ${`%${query}%`} OR
+      sdt::text ILIKE ${`%${query}%`} 
   `;
 
     const totalPages = Math.ceil(Number(count.rows[0].count) / item_per_page);

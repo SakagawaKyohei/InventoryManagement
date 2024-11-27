@@ -80,6 +80,10 @@ const FetchProductButton = ({ dondathang, ketoan, nguoivanchuyen }: Props) => {
     setId(selectedNguoiVanChuyen.id);
     console.log("abc");
   };
+  const total = dondathang.product?.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
+  );
 
   return (
     <div className="register-container">
@@ -110,7 +114,6 @@ const FetchProductButton = ({ dondathang, ketoan, nguoivanchuyen }: Props) => {
               Đơn hàng: {dondathang.id}
             </p>
           </div>
-
           <div
             style={{
               display: "flex",
@@ -258,7 +261,16 @@ const FetchProductButton = ({ dondathang, ketoan, nguoivanchuyen }: Props) => {
               </TableBody>
             </Table>
           </div>
-
+          <div
+            style={{
+              marginTop: 25,
+              fontSize: 20,
+              fontWeight: "bold",
+            }}
+            className="text-right"
+          >
+            Tổng tiền: {formatCurrency(total * 1000)}
+          </div>
           <div
             style={{
               marginTop: 25,
