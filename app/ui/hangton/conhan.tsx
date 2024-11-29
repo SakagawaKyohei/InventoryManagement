@@ -1,7 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import { DoiTac, DonDatHang, Product } from "../../lib/definitions";
+import { DonDatHang, Product, TonKho } from "../../lib/definitions";
 import { Button } from "@/components/ui/button";
+import { RiMoneyDollarCircleFill } from "react-icons/ri";
 import Image from "next/image";
 import { format } from "date-fns";
 import {
@@ -26,14 +27,14 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import { formatCurrency } from "@/app/lib/utils";
-import { Underline } from "lucide-react";
 
+type TonKhoWithProduct = TonKho & Product;
 interface Props {
-  doitac: DoiTac[];
+  tonkho: TonKhoWithProduct[];
   totalPages: number;
 }
 
-const FetchProductButton = ({ doitac, totalPages }: Props) => {
+const FetchProductButton = ({ tonkho, totalPages }: Props) => {
   const pathname = usePathname();
   const { replace } = useRouter();
   const searchParams = useSearchParams();
@@ -41,26 +42,6 @@ const FetchProductButton = ({ doitac, totalPages }: Props) => {
   const [item_per_page, setItemPerPage] = useState(
     Number(searchParams?.get("itemsPerPage")) || 5
   );
-
-  const handleDelete = async (id: string) => {
-    const params = new URLSearchParams(
-      searchParams ? searchParams.toString() : ""
-    );
-    try {
-      const res = await fetch("/api/doi-tac/delete", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id }),
-      });
-      if (res.ok) {
-        // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
-        replace(`${pathname}?${params.toString()}`);
-      } else {
-      }
-    } catch (error) {
-      console.error("Lỗi khi xóa sản phẩm:", error);
-    }
-  };
 
   const handleSearch = useDebouncedCallback((term) => {
     const params = new URLSearchParams(
@@ -164,8 +145,8 @@ const FetchProductButton = ({ doitac, totalPages }: Props) => {
     <div>
       <div style={{ backgroundColor: "#EAEAEA" }}>
         <div className="px-2 py-4 md:px-4" style={{ backgroundColor: "white" }}>
-          <p style={{ fontWeight: "bold", fontSize: 24 }}>Đối tác</p>
-          <p style={{ marginBottom: 15 }}>Danh sách các đối tác</p>
+          <p style={{ fontWeight: "bold", fontSize: 24 }}>Còn hạn</p>
+          <p style={{ marginBottom: 15 }}>Danh sách các thức ăn còn hạn</p>
           <div
             style={{ display: "flex", flexDirection: "row", paddingBottom: 15 }}
           >
@@ -200,55 +181,41 @@ const FetchProductButton = ({ doitac, totalPages }: Props) => {
             <TableHeader>
               <TableRow style={{ height: 65 }}>
                 <TableHead className="w-[150px] text-center">
-                  Mã đối tác
+                  Mã đơn hàng
                 </TableHead>
 
-                <TableHead>Tên đối tác</TableHead>
-                <TableHead>Địa chỉ</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>SĐT</TableHead>
-                <TableHead className="text-center">Action</TableHead>
+                <TableHead>Tên hàng</TableHead>
+                <TableHead>Ngày nhập</TableHead>
+                <TableHead>Hạn sử dụng</TableHead>
+                <TableHead>Số lượng</TableHead>
+                <TableHead>Giá tiền</TableHead>
+                <TableHead>Công ty nhập</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {doitac?.map((item) => (
-                <TableRow key={item.id} style={{ height: 65 }}>
+              {tonkho?.map((item) => (
+                <TableRow
+                  key={item.ma_don_hang + item.ma_hang}
+                  style={{ height: 65 }}
+                >
                   <TableCell className="font-medium text-center">
-                    {item.id}
+                    {item.ma_don_hang}
                   </TableCell>
                   <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.dia_chi}</TableCell>
-                  <TableCell>{item.email}</TableCell>
-                  <TableCell>{item.sdt}</TableCell>
-                  <TableCell
-                    style={{
-                      marginTop: 10,
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Link href={`/dashboard/doi-tac/edit?id=${item.id}`}>
-                      <Image
-                        src="/edit.png"
-                        width={25}
-                        height={25}
-                        className="hidden md:block"
-                        alt="Screenshots of the dashboard project showing desktop version"
-                        style={{ marginRight: 10 }}
-                      />
-                    </Link>{" "}
-                    <Image
-                      src="/delete.png"
-                      width={30}
-                      height={40}
-                      className="hidden md:block"
-                      alt="Screenshots of the dashboard project showing desktop version"
-                      onClick={() => {
-                        handleDelete(item.id);
-                      }}
-                    />
+                  <TableCell>
+                    {format(new Date(item.ngay_nhap), "dd/MM/yyyy")}
                   </TableCell>
+                  <TableCell>
+                    {format(new Date(item.han_su_dung), "dd/MM/yyyy")}
+                  </TableCell>
+
+                  <TableCell>{item.so_luong}</TableCell>
+                  <TableCell>
+                    {item.sell_price
+                      ? formatCurrency(item.sell_price * 1000)
+                      : 0}
+                  </TableCell>
+                  <TableCell>{item.company}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -274,28 +241,6 @@ const FetchProductButton = ({ doitac, totalPages }: Props) => {
             )}
           </Pagination>
         </div>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "end",
-          marginRight: 25,
-          marginTop: 30,
-        }}
-      >
-        <Link href={"/dashboard/doi-tac/them-moi"}>
-          <Button
-            style={{
-              marginRight: 15,
-              fontSize: 18,
-              backgroundColor: "#007ACC",
-              width: 140,
-              height: 40,
-            }}
-          >
-            Thêm mới
-          </Button>
-        </Link>
       </div>
     </div>
   );

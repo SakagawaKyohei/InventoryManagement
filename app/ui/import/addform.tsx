@@ -134,6 +134,7 @@ const AddForm = (user: Users) => {
       price: 0,
     }));
     setIsAdding(false); // Đóng form thêm mới
+    setSelectedProducts((prev) => [...prev, product.name]);
     handleSubmit();
   };
 
@@ -185,9 +186,16 @@ const AddForm = (user: Users) => {
     }
   };
 
+  const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
+
+  const availableProducts = products?.filter(
+    (product) => !selectedProducts.includes(product.name) // Loại bỏ sản phẩm đã chọn
+  );
+
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedProduct = JSON.parse(event.target.value) as Product;
     console.log("Selected product:", selectedProduct);
+
     setDonGia(selectedProduct.buy_price ? selectedProduct.buy_price : 0);
     setProduct((prevProduct) => ({
       ...prevProduct,
@@ -457,7 +465,7 @@ const AddForm = (user: Users) => {
                           Chọn thức ăn
                         </option>
 
-                        {products?.map((product) => (
+                        {availableProducts?.map((product) => (
                           <option
                             key={product.id}
                             value={JSON.stringify(product)}

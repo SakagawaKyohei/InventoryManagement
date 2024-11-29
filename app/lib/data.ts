@@ -9,6 +9,7 @@ import {
   LatestInvoiceRaw,
   Product,
   Revenue,
+  TonKho,
   Users,
   VanChuyen,
 } from './definitions';
@@ -458,6 +459,65 @@ export async function fetchProduct() {
   }
 }
 
+export async function fetchConHan(query: string, currentPage: number, itemsPerPage: number) {
+  try {
+    const offset = (currentPage - 1) * itemsPerPage;
+
+    const data = await sql<TonKho & Product>`
+    SELECT tonkho.*, product.*
+    FROM tonkho
+    JOIN product ON tonkho.ma_hang = product.id
+    WHERE tonkho.han_su_dung >= NOW() AND
+    (
+        tonkho.ma_hang ILIKE ${`%${query}%`} OR
+        product.name ILIKE ${`%${query}%`} OR
+        tonkho.so_luong::TEXT ILIKE ${`%${query}%`} OR
+        product.sell_price::TEXT ILIKE ${`%${query}%`} OR
+        product.company ILIKE ${`%${query}%`} OR
+        tonkho.han_su_dung::TEXT ILIKE ${`%${query}%`} OR
+        tonkho.ngay_nhap::TEXT ILIKE ${`%${query}%`}
+    )
+   order by tonkho.ma_don_hang asc
+    LIMIT ${itemsPerPage} OFFSET ${offset}
+
+    `;
+
+    const result = data.rows;
+    return result;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch filtered tonkho data.');
+  }
+}
+
+export async function fetchHetHan(query: string, currentPage: number, itemsPerPage: number) {
+  try {
+    const offset = (currentPage - 1) * itemsPerPage;
+
+    const data = await sql<TonKho & Product>`
+    SELECT tonkho.*, product.*
+    FROM tonkho
+    JOIN product ON tonkho.ma_hang = product.id
+    WHERE tonkho.han_su_dung < NOW() AND
+    (
+        tonkho.ma_hang ILIKE ${`%${query}%`} OR
+        product.name ILIKE ${`%${query}%`} OR
+        tonkho.so_luong::text ILIKE ${`%${query}%`} OR
+        product.sell_price::text ILIKE ${`%${query}%`} OR
+        product.company ILIKE ${`%${query}%`} 
+    )
+    order by tonkho.ma_don_hang asc
+    LIMIT ${itemsPerPage} OFFSET ${offset}
+
+    `;
+
+    const result = data.rows;
+    return result;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch filtered tonkho data.');
+  }
+}
 
 export async function fetchFilteredProducts(
   query: string,
@@ -657,16 +717,85 @@ export async function fetchPendingDonDatHangPages(query: string,item_per_page:nu
   }
 }
 
+
+export async function fetchConHanPages(query: string,item_per_page:number) {
+  try {
+    const count = await sql`SELECT COUNT(*)
+    FROM tonkho
+    JOIN product ON tonkho.ma_hang = product.id
+    WHERE tonkho.han_su_dung >= NOW() AND
+    (
+        tonkho.ma_hang ILIKE ${`%${query}%`} OR
+        product.name ILIKE ${`%${query}%`} OR
+        tonkho.so_luong::text ILIKE ${`%${query}%`} OR
+        product.sell_price::text ILIKE ${`%${query}%`} OR
+        product.company ILIKE ${`%${query}%`} 
+    )
+  `;
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / item_per_page);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of products.');
+  }
+}
+
+export async function fetchHetHanPages(query: string,item_per_page:number) {
+  try {
+    const count = await sql`SELECT COUNT(*)
+    FROM tonkho
+    JOIN product ON tonkho.ma_hang = product.id
+    WHERE tonkho.han_su_dung < NOW() AND
+    (
+        tonkho.ma_hang ILIKE ${`%${query}%`} OR
+        product.name ILIKE ${`%${query}%`} OR
+        tonkho.so_luong::text ILIKE ${`%${query}%`} OR
+        product.sell_price::text ILIKE ${`%${query}%`} OR
+        product.company ILIKE ${`%${query}%`} 
+    )
+  `;
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / item_per_page);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of products.');
+  }
+}
+
 export async function fetchVanChuyenPage(query: string,item_per_page:number) {
   try {
     const count = await sql`SELECT COUNT(*)
     FROM vanchuyen
-    WHERE
-          id_don_hang ILIKE ${`%${query}%`}  or
-          status ILIKE ${`%${query}%`} or
-          nhapxuat ILIKE ${`%${query}%`} or
-          kho_xuat_hang ILIKE ${`%${query}%`} or
-          dia_chi_kho ILIKE ${`%${query}%`}
+    WHERE 
+        (id_don_hang ILIKE ${`%${query}%`} 
+        OR status ILIKE ${`%${query}%`} 
+        OR nhapxuat ILIKE ${`%${query}%`} 
+        OR kho_xuat_hang ILIKE ${`%${query}%`} 
+        OR dia_chi_kho ILIKE ${`%${query}%`})
+        AND status = 'đang vận chuyển'
+  `;
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / item_per_page);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of products.');
+  }
+}
+
+export async function fetchVanChuyenDonePage(query: string,item_per_page:number) {
+  try {
+    const count = await sql`SELECT COUNT(*)
+    FROM vanchuyen
+    WHERE 
+        (id_don_hang ILIKE ${`%${query}%`} 
+        OR status ILIKE ${`%${query}%`} 
+        OR nhapxuat ILIKE ${`%${query}%`} 
+        OR kho_xuat_hang ILIKE ${`%${query}%`} 
+        OR dia_chi_kho ILIKE ${`%${query}%`})
+        AND status = 'Đã vận chuyển'
   `;
 
     const totalPages = Math.ceil(Number(count.rows[0].count) / item_per_page);

@@ -23,6 +23,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useRouter } from "next/navigation";
 
 interface Props {
   dondathang: DonDatHang;
@@ -39,6 +40,7 @@ const FetchProductButton = ({ dondathang, vanchuyen }: Props) => {
     e.preventDefault();
     console.log("abc");
   };
+  const router = useRouter();
 
   return (
     <div
@@ -228,22 +230,6 @@ const FetchProductButton = ({ dondathang, vanchuyen }: Props) => {
                   height: 40,
                   marginBottom: 30,
                 }}
-                onClick={async () => {
-                  try {
-                    const res = await fetch("/api/van-chuyen/da-van-chuyen", {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({ id: dondathang.id }),
-                    });
-
-                    if (res.ok) {
-                      // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
-                    } else {
-                    }
-                  } catch (error) {
-                    console.error("Lỗi khi xóa sản phẩm:", error);
-                  }
-                }}
               >
                 Xác nhận
               </Button>
@@ -258,7 +244,27 @@ const FetchProductButton = ({ dondathang, vanchuyen }: Props) => {
                 </DialogDescription>
               </DialogHeader>
               <DialogFooter>
-                <Button>Cập nhật</Button>
+                <Button
+                  onClick={async () => {
+                    try {
+                      const res = await fetch("/api/van-chuyen/da-van-chuyen", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ id: dondathang.id }),
+                      });
+
+                      if (res.ok) {
+                        // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
+                        router.push("/dashboard/van-chuyen/dang-van-chuyen");
+                      } else {
+                      }
+                    } catch (error) {
+                      console.error("Lỗi khi xóa sản phẩm:", error);
+                    }
+                  }}
+                >
+                  Cập nhật
+                </Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>

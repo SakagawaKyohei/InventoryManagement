@@ -1,12 +1,15 @@
 import {
+  fetchConHan,
   fetchFilteredPendingDonDatHang,
-  fetchFilteredVanChuyen,
+  fetchHetHan,
+  fetchHetHanPages,
   fetchPendingDonDatHangPages,
-  fetchVanChuyenDonePage,
-  fetchVanChuyenPage,
+  fetchProductsPages,
 } from "@/app/lib/data";
-import { DonDatHang, VanChuyen } from "@/app/lib/definitions";
-import VanChuyenComponent from "@/app/ui/vanchuyen/vanchuyen";
+import { DonDatHang, Product, TonKho } from "@/app/lib/definitions";
+import Paytable from "@/app/ui/import/paytable";
+import HetHang from "@/app/ui/hangton/hethan";
+type TonKhoWithProduct = TonKho & Product;
 const FetchProductButton = async (props: {
   searchParams?: Promise<{
     query?: string;
@@ -18,8 +21,9 @@ const FetchProductButton = async (props: {
   const query = searchParams?.query || "";
   const currentPage = Number(searchParams?.page) || 1;
   const item_per_page = Number(searchParams?.itemsPerPage) || 5;
-  const totalPages = await fetchVanChuyenPage(query, item_per_page);
-  const vanchuyen: VanChuyen[] = await fetchFilteredVanChuyen(
+  const totalPages = await fetchHetHanPages(query, item_per_page);
+
+  const tonkho: TonKhoWithProduct[] = await fetchHetHan(
     query,
     currentPage,
     item_per_page
@@ -27,7 +31,7 @@ const FetchProductButton = async (props: {
 
   return (
     <div>
-      <VanChuyenComponent vanchuyen={vanchuyen} totalPages={totalPages} />
+      <HetHang tonkho={tonkho} totalPages={totalPages} />
     </div>
   );
 };

@@ -2,6 +2,7 @@ import {
   fetchFilteredPendingDonDatHang,
   fetchFilteredVanChuyenDone,
   fetchPendingDonDatHangPages,
+  fetchVanChuyenDonePage,
   fetchVanChuyenPage,
 } from "@/app/lib/data";
 import { DonDatHang, VanChuyen } from "@/app/lib/definitions";
@@ -17,7 +18,7 @@ const FetchProductButton = async (props: {
   const query = searchParams?.query || "";
   const currentPage = Number(searchParams?.page) || 1;
   const item_per_page = Number(searchParams?.itemsPerPage) || 5;
-  const totalPages = await fetchVanChuyenPage(query, item_per_page);
+  const totalPages = await fetchVanChuyenDonePage(query, item_per_page);
   const vanchuyen: VanChuyen[] = await fetchFilteredVanChuyenDone(
     query,
     currentPage,

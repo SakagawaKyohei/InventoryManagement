@@ -66,8 +66,8 @@ const sidebarItems: SidebarItem[] = [
     label: "Hàng tồn",
     icon: <FaBox />,
     dropdownItems: [
-      { label: "Còn hạn", href: "/inventory/option1" },
-      { label: "Hết hạn", href: "/inventory/option2" },
+      { label: "Còn hạn", href: "/dashboard/hang-ton/con-han" },
+      { label: "Hết hạn", href: "/dashboard/hang-ton/het-han" },
     ],
   },
 

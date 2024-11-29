@@ -21,6 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useRouter } from "next/router";
 
 interface Props {
   doitac1: DoiTac;
@@ -34,6 +35,8 @@ export default function EditForm({ doitac1 }: Props) {
     dia_chi: doitac1.dia_chi,
     ao_nuoi: doitac1.ao_nuoi,
   });
+
+  const router = useRouter();
 
   const [errors, setErrors] = useState({
     name: "",
@@ -103,7 +106,7 @@ export default function EditForm({ doitac1 }: Props) {
       if (res.ok) {
         alert("Product updated successfully");
         // Use a proper redirection method based on your framework (e.g., React Router)
-        redirect("/dashboard");
+        router.push("/dashboard/doi-tac");
       } else {
         const data = await res.json();
         setError(data.message || "Error updating product");

@@ -477,6 +477,18 @@ export async function DeletePartner(id: string) {
   }
 }
 
+export async function DeleteHangTon(donhangid: string, hangid:string) {
+  try {
+    // Xóa sản phẩm từ cơ sở dữ liệu
+    await sql`DELETE FROM tonkho WHERE ma_don_hang = ${donhangid} AND ma_hang = ${hangid}`;
+
+    return { message: 'Sản phẩm đã được xóa và cache đã được làm mới.' };
+  } catch (error) {
+    console.error(error); // Ghi log lỗi
+    return { message: 'Lỗi cơ sở dữ liệu: Không thể xóa sản phẩm.' };
+  }
+}
+
 // Lưu mã thông báo đặt lại và thời gian hết hạn
 export async function saveResetToken(userId: number, token: string, expiry: number) {
   try {
