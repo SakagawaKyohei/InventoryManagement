@@ -26,7 +26,7 @@ import { FaSearch } from "react-icons/fa";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
-import { DonDatHang, VanChuyen } from "../lib/definitions";
+import { VanChuyen } from "@/app/lib/definitions";
 
 interface Props {
   vanchuyen: VanChuyen[];
@@ -197,11 +197,22 @@ const FetchProductButton = ({ vanchuyen, totalPages }: Props) => {
                     className="font-medium text-center"
                     style={{ textDecoration: "underline" }}
                   >
-                    <Link
-                      href={`/dashboard/nhap-hang/thong-tin-don-hang?id=${item.id_don_hang}`}
-                    >
-                      {item.id_don_hang}
-                    </Link>
+                    {item.id.startsWith("DH") ? (
+                      <>
+                        <Link
+                          href={`/dashboard/nhap-hang/thong-tin-don-hang?id=${item.id_don_hang}`}
+                        >
+                          {item.id_don_hang}
+                        </Link>
+                      </>
+                    ) : (
+                      <Link
+                        href={`/dashboard/van-chuyen/dang-van-chuyen/xuat-hang/xac-nhan?id=${item.id_don_hang}`}
+                      >
+                        {" "}
+                        {item.id_don_hang}
+                      </Link>
+                    )}
                   </TableCell>
                   <TableCell>{item.kho_xuat_hang}</TableCell>
                   <TableCell>{item.dia_chi_kho}</TableCell>
@@ -213,18 +224,35 @@ const FetchProductButton = ({ vanchuyen, totalPages }: Props) => {
                   <TableCell
                     style={{ display: "flex", justifyContent: "center" }}
                   >
-                    <Link
-                      href={`/dashboard/van-chuyen/dang-van-chuyen/xac-nhan?id=${item.id_don_hang}`}
-                    >
-                      <Image
-                        src="/done.jpg"
-                        style={{ marginRight: 15 }}
-                        width={25}
-                        height={25}
-                        className="hidden md:block"
-                        alt="Screenshots of the dashboard project showing desktop version"
-                      />
-                    </Link>
+                    {item.id.startsWith("DH") ? (
+                      <>
+                        <Link
+                          href={`/dashboard/van-chuyen/dang-van-chuyen/xac-nhan?id=${item.id_don_hang}`}
+                        >
+                          <Image
+                            src="/done.jpg"
+                            style={{ marginRight: 15 }}
+                            width={25}
+                            height={25}
+                            className="hidden md:block"
+                            alt="Screenshots of the dashboard project showing desktop version"
+                          />
+                        </Link>
+                      </>
+                    ) : (
+                      <Link
+                        href={`/dashboard/van-chuyen/dang-van-chuyen/xuat-hang/xac-nhan?id=${item.id_don_hang}`}
+                      >
+                        <Image
+                          src="/done.jpg"
+                          style={{ marginRight: 15 }}
+                          width={25}
+                          height={25}
+                          className="hidden md:block"
+                          alt="Screenshots of the dashboard project showing desktop version"
+                        />
+                      </Link>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}

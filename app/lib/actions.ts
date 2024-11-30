@@ -7,7 +7,7 @@ import { signIn } from '@/auth';
 import { AuthError, User } from 'next-auth';
 import bcrypt from 'bcrypt';
 import { UUID } from 'crypto';
-import { DoiTac, DonDatHang, Product, TonKho, Users } from './definitions';
+import { DoiTac, DonDatHang, DonXuatHang, Product, TonKho, Users } from './definitions';
 import supabase from "../../app/supabase";
 import { v4 as uuidv4 } from "uuid";
 import { getOrderPrice } from './data';
@@ -367,6 +367,30 @@ export async function DaVanChuyen(donHangId: string) {
   }
 }
 
+export async function DaXuat(donHang: DonXuatHang, phuongthuc:string, doitac:DoiTac) {
+  try {
+    // Cập nhật trạng thái đơn hàng trong bảng vanchuyen
+    await sql`
+      UPDATE vanchuyen
+      SET done_time = CURRENT_TIMESTAMP, status = 'Đã vận chuyển'
+      WHERE id_don_hang = ${donHang.id};
+    `;
+
+  if (phuongthuc=="Chuyển khoản")
+  {
+      await sql`
+      INSERT INTO congno (donhangid, doitacname, doitacid, orderdate, total, status)
+      VALUES (${donHang.id}, ${doitac.name}, ${doitac.id}, ${donHang.ngayxuat}, ${donHang.total}, 'Chưa thanh toán')
+    `;
+  }
+
+    return { message: 'Đơn hàng đã được thanh toán và vận chuyển.' };
+  } catch (error) {
+    console.error('Database error:', error);  // Log the error for debugging
+    return { message: 'Lỗi cơ sở dữ liệu: Không thể xử lý đơn hàng.' };
+  }
+}
+
 
 
 
@@ -490,16 +514,7 @@ export async function DeleteHangTon(donhangid: string, hangid:string) {
 }
 
 
-export async function DeleteProductFromStock(clientproducts:any) {
-  // try {
-  //   // Xóa sản phẩm từ cơ sở dữ liệu
-  //   await sql`DELETE FROM tonkho WHERE ma_don_hang = ${donhangid} AND ma_hang = ${hangid}`;
-
-  //   return { message: 'Sản phẩm đã được xóa và cache đã được làm mới.' };
-  // } catch (error) {
-  //   console.error(error); // Ghi log lỗi
-  //   return { message: 'Lỗi cơ sở dữ liệu: Không thể xóa sản phẩm.' };
-  // }
+export async function DeleteProductFromStock(clientproducts:any, doitac:DoiTac, nguoivanchuyen:Users,thanhtien:number) {
 
   for (const product of clientproducts) {
     let remainingQuantity = product.soluong;
@@ -547,8 +562,25 @@ export async function DeleteProductFromStock(clientproducts:any) {
       );
     }
   }
-}
+  const productJson = JSON.stringify(clientproducts);
 
+  //add don xuat hang
+  // Thực hiện insert vào bảng donxuathang và lấy id vừa tạo
+  const result:any = await sql`
+    INSERT INTO donxuathang (ma_doi_tac, product, status, total, ngayxuat )
+    VALUES (${doitac.id}, ARRAY[${productJson}::jsonb], 'đang vận chuyển', ${thanhtien} ,now())
+    RETURNING id;`;
+
+  // Lấy id của dòng vừa được insert
+  const donxuatId = result.rows[0].id;
+
+  // Chèn vào bảng vanchuyen với id vừa lấy từ donxuathang
+  await sql`
+    INSERT INTO vanchuyen (id_don_hang, status, nhapxuat, start_time,id_nguoi_van_chuyen,id_doi_tac, kho_xuat_hang, dia_chi_kho) 
+    VALUES (${donxuatId}, 'đang vận chuyển', 'Xuất', now(), ${nguoivanchuyen.id}, ${doitac.id}, ${doitac.name}, ${doitac.dia_chi});`;
+
+  console.log(productJson);
+}
 
 // Lưu mã thông báo đặt lại và thời gian hết hạn
 export async function saveResetToken(userId: number, token: string, expiry: number) {

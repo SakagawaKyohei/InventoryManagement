@@ -1,6 +1,13 @@
 "use client";
 import React, { useState } from "react";
-import { DoiTac, DonDatHang, Product, Users } from "../../lib/definitions";
+import {
+  DoiTac,
+  DonDatHang,
+  DonXuatHang,
+  Product,
+  TonKho,
+  Users,
+} from "../../lib/definitions";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { format } from "date-fns";
@@ -39,8 +46,10 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
+type XuatHangWithDoiTac = DonXuatHang & DoiTac;
+
 interface Props {
-  dondathang: DonDatHang[];
+  dondathang: XuatHangWithDoiTac[];
   totalPages: number;
   doitac: DoiTac[];
   nguoivanchuyen: Users[];
@@ -212,18 +221,20 @@ const FetchProductButton = ({
             <TableHeader>
               <TableRow style={{ height: 65 }}>
                 <TableHead className="w-[150px] text-center">
-                  Mã đặt hàng
+                  Mã xuất hàng
                 </TableHead>
 
-                <TableHead>Tên công ty</TableHead>
+                <TableHead>Tên đối tác</TableHead>
+                <TableHead>Số điện thoại</TableHead>
+                <TableHead>Địa chỉ</TableHead>
                 <TableHead>Ngày đặt</TableHead>
-                <TableHead>Số tiền</TableHead>
+
                 <TableHead>Trạng thái</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {dondathang?.map((item) => (
-                <TableRow key={item.id} style={{ height: 65 }}>
+                <TableRow key={item.id + item.ngayxuat} style={{ height: 65 }}>
                   <TableCell
                     className="font-medium text-center"
                     style={{ textDecoration: "underline" }}
@@ -234,12 +245,13 @@ const FetchProductButton = ({
                       {item.id}
                     </Link>
                   </TableCell>
-                  <TableCell>{item.company}</TableCell>
+                  <TableCell>{item.name}</TableCell>
+                  <TableCell>{item.sdt}</TableCell>
                   <TableCell>
-                    {format(new Date(item.ngay_dat), "dd/MM/yyyy")}
+                    {format(new Date(item.ngayxuat), "dd/MM/yyyy")}
                   </TableCell>
 
-                  <TableCell>500.000đ</TableCell>
+                  <TableCell>{formatCurrency(item.total * 1000)}</TableCell>
                   <TableCell>
                     {item.status == "paid" ? "Đã thanh toán" : "Chờ thanh toán"}
                   </TableCell>

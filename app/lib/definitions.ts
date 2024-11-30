@@ -61,8 +61,9 @@ export type DonXuatHang = {
   ma_doi_tac: string;
   id_nguoi_van_chuyen: string;
   start_time: string;
+  ngayxuat:string;
   done_time: string;
-  product:string;
+  product:any[];
   total:number;
   status: string
 };

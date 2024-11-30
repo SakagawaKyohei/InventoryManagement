@@ -4,6 +4,7 @@ import {
   CustomersTableType,
   DoiTac,
   DonDatHang,
+  DonXuatHang,
   InvoiceForm,
   InvoicesTable,
   LatestInvoiceRaw,
@@ -243,6 +244,26 @@ export async function fetchDonDatHangById(id: string) {
        *
       FROM dondathang
       WHERE dondathang.id = ${id};
+    `;
+
+    const dondathang = data.rows.map((dondathang) => ({
+      ...dondathang,
+    }));
+
+    return dondathang[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch product.');
+  }
+}
+
+export async function fetchDonXuatHangById(id: string) {
+  try {
+    const data = await sql<DonXuatHang>`
+      SELECT
+       *
+      FROM donxuathang
+      WHERE donxuathang.id = ${id};
     `;
 
     const dondathang = data.rows.map((dondathang) => ({
@@ -565,6 +586,38 @@ export async function fetchFilteredDonDatHang(
       status asc,
       id ASC
       LIMIT ${item_per_page} OFFSET ${offset}
+    `;
+
+    const dondathang = data.rows;
+    return dondathang;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all product.');
+  } 
+}
+
+
+export async function fetchFilteredXuatHang(
+  query: string,
+  currentPage: number,
+  item_per_page:number
+) {
+  const offset = (currentPage - 1) * item_per_page;
+
+  try {
+    const data = await sql<DonXuatHang&DoiTac>`
+SELECT *
+FROM donxuathang
+JOIN doitac ON doitac.id = donxuathang.ma_doi_tac
+WHERE
+  (doitac.id::text ILIKE '%' || ${query} || '%' OR
+   donxuathang.ma_doi_tac::text ILIKE '%' || ${query} || '%' OR
+   donxuathang.status::text ILIKE '%' || ${query} || '%')
+ORDER BY 
+  donxuathang.status ASC,
+  donxuathang.id ASC
+LIMIT ${item_per_page} OFFSET ${offset};
+
     `;
 
     const dondathang = data.rows;

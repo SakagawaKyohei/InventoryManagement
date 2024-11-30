@@ -45,6 +45,7 @@ export default function AddForm({ doitac, nguoivanchuyen }: Props) {
 
   const [company, setCompany] = useState("");
   const [dongia, setDonGia] = useState(0);
+  const [thanhtien, setThanhTien] = useState(0);
   const [soluong, setSoluong] = useState(0);
   const [message, setMessage] = useState("");
   const [isadding, setIsAdding] = useState(false);
@@ -102,6 +103,7 @@ export default function AddForm({ doitac, nguoivanchuyen }: Props) {
         id: productid,
       },
     ]);
+    setThanhTien(thanhtien + dongia * soluong);
     setSoluong(0);
     //     ...prevProduct,
     //     quantity: 0,
@@ -145,7 +147,12 @@ export default function AddForm({ doitac, nguoivanchuyen }: Props) {
       const res = await fetch("/api/xuat-hang/delete-from-stock", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ clientproducts }),
+        body: JSON.stringify({
+          clientproducts,
+          doitac,
+          nguoivanchuyen,
+          thanhtien,
+        }),
       });
 
       if (res.ok) {
@@ -522,6 +529,7 @@ export default function AddForm({ doitac, nguoivanchuyen }: Props) {
                             ...prevProduct,
                             price: 0,
                           }));
+
                           setIsAdding(false); // Đóng form thêm mới
                         }}
                       />

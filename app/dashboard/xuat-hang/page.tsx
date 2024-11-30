@@ -3,11 +3,18 @@ import {
   fetchFilteredDoiTac,
   fetchFilteredDonDatHang,
   fetchFilteredProducts,
+  fetchFilteredXuatHang,
   fetchNguoiVanChuyen,
   fetchPartner,
   fetchProductsPages,
 } from "@/app/lib/data";
-import { DonDatHang, Product } from "@/app/lib/definitions";
+import {
+  DoiTac,
+  DonDatHang,
+  DonXuatHang,
+  Product,
+  VanChuyen,
+} from "@/app/lib/definitions";
 import Table from "@/app/ui/xuathang/table";
 import PayTable from "@/app/ui/import/paytable";
 const FetchProductButton = async (props: {
@@ -21,8 +28,9 @@ const FetchProductButton = async (props: {
   const query = searchParams?.query || "";
   const currentPage = Number(searchParams?.page) || 1;
   const item_per_page = Number(searchParams?.itemsPerPage) || 5;
+  type XuatHangWithDoiTac = DonXuatHang & DoiTac;
   const totalPages = await fetchDonDatHangPages(query, item_per_page);
-  const dondathang: DonDatHang[] = await fetchFilteredDonDatHang(
+  const dondathang: XuatHangWithDoiTac[] = await fetchFilteredXuatHang(
     query,
     currentPage,
     item_per_page
