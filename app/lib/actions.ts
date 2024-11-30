@@ -7,7 +7,7 @@ import { signIn } from '@/auth';
 import { AuthError, User } from 'next-auth';
 import bcrypt from 'bcrypt';
 import { UUID } from 'crypto';
-import { DoiTac, DonDatHang, Product, Users } from './definitions';
+import { DoiTac, DonDatHang, Product, TonKho, Users } from './definitions';
 import supabase from "../../app/supabase";
 import { v4 as uuidv4 } from "uuid";
 import { getOrderPrice } from './data';
@@ -488,6 +488,67 @@ export async function DeleteHangTon(donhangid: string, hangid:string) {
     return { message: 'Lỗi cơ sở dữ liệu: Không thể xóa sản phẩm.' };
   }
 }
+
+
+export async function DeleteProductFromStock(clientproducts:any) {
+  // try {
+  //   // Xóa sản phẩm từ cơ sở dữ liệu
+  //   await sql`DELETE FROM tonkho WHERE ma_don_hang = ${donhangid} AND ma_hang = ${hangid}`;
+
+  //   return { message: 'Sản phẩm đã được xóa và cache đã được làm mới.' };
+  // } catch (error) {
+  //   console.error(error); // Ghi log lỗi
+  //   return { message: 'Lỗi cơ sở dữ liệu: Không thể xóa sản phẩm.' };
+  // }
+
+  for (const product of clientproducts) {
+    let remainingQuantity = product.soluong;
+    let stockEntries;
+
+    // Lấy danh sách tồn kho theo sản phẩm và sắp xếp theo hạn sử dụng gần nhất
+    try {
+      const data = await sql<TonKho>`
+      SELECT ma_don_hang, so_luong, han_su_dung
+      FROM tonkho 
+      WHERE ma_hang = ${product.id} and han_su_dung >= now()
+      ORDER BY han_su_dung ASC
+      `;
+      stockEntries= data.rows;
+    } catch (err) {
+      console.error('Database Error:', err);
+      throw new Error('Failed to fetch all partner.');
+    }
+
+    // Duyệt qua từng dòng tồn kho và trừ số lượng
+    for (const entry of stockEntries) {
+      if (remainingQuantity <= 0) break;
+
+      const stockId = entry.ma_don_hang;
+      const stockQuantity = entry.so_luong;
+
+      if (stockQuantity <= remainingQuantity) {
+        // Trừ hết dòng tồn kho này
+        await sql`delete from tonkho 
+          WHERE ma_don_hang = ${stockId} and ma_hang=${product.id}`;
+        remainingQuantity -= stockQuantity;
+      } else {
+        // Trừ một phần và dừng lại
+        await sql`UPDATE tonkho 
+          SET so_luong = so_luong - ${remainingQuantity}
+          WHERE ma_don_hang = ${stockId}`;
+        remainingQuantity = 0;
+      }
+    }
+
+    // Nếu còn dư số lượng cần trừ => báo lỗi hoặc xử lý tùy ý
+    if (remainingQuantity > 0) {
+      throw new Error(
+        `Not enough stock for product ${product.name}. Missing: ${remainingQuantity}`
+      );
+    }
+  }
+}
+
 
 // Lưu mã thông báo đặt lại và thời gian hết hạn
 export async function saveResetToken(userId: number, token: string, expiry: number) {

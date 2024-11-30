@@ -477,7 +477,7 @@ export async function fetchConHan(query: string, currentPage: number, itemsPerPa
         tonkho.han_su_dung::TEXT ILIKE ${`%${query}%`} OR
         tonkho.ngay_nhap::TEXT ILIKE ${`%${query}%`}
     )
-   order by tonkho.ma_don_hang asc
+   order by product.name asc
     LIMIT ${itemsPerPage} OFFSET ${offset}
 
     `;
@@ -816,6 +816,119 @@ export async function fetchDonDatHangPages(query: string,item_per_page:number) {
         product::text ILIKE ${`%${query}%`} OR
         status::text ILIKE ${`%${query}%`} OR
         ngay_dat::text ILIKE ${`%${query}%`} 
+  `;
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / item_per_page);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of products.');
+  }
+}
+
+
+export async function fetchDaNhapHang(
+  query: string,
+  currentPage: number,
+  item_per_page:number
+) {
+  const offset = (currentPage - 1) * item_per_page;
+
+  try {
+    const data = await sql<VanChuyen & DonDatHang>`SELECT *
+    FROM vanchuyen
+    JOIN dondathang
+    ON vanchuyen.id_don_hang = dondathang.id
+    WHERE vanchuyen.status = 'Đã vận chuyển'
+      AND (
+      vanchuyen.id_don_hang ILIKE ${`%${query}%`} OR
+      vanchuyen.kho_xuat_hang ILIKE ${`%${query}%`} OR
+      dondathang.manv::text ILIKE ${`%${query}%`} OR
+      vanchuyen.dia_chi_kho::text ILIKE ${`%${query}%`} 
+      )
+      order by vanchuyen.id_don_hang       
+      LIMIT ${item_per_page} OFFSET ${offset};
+
+  `;
+
+    const vanchuyen = data.rows;
+    return vanchuyen;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all product.');
+  } 
+}
+
+export async function fetchDangNhapHang(
+  query: string,
+  currentPage: number,
+  item_per_page:number
+) {
+  const offset = (currentPage - 1) * item_per_page;
+
+  try {
+    const data = await sql<VanChuyen&DonDatHang>`SELECT *
+    FROM vanchuyen
+    JOIN dondathang
+    ON vanchuyen.id_don_hang = dondathang.id
+    WHERE vanchuyen.status = 'đang vận chuyển'
+      AND (
+      vanchuyen.id_don_hang ILIKE ${`%${query}%`} OR
+      vanchuyen.kho_xuat_hang ILIKE ${`%${query}%`} OR
+      dondathang.manv::text ILIKE ${`%${query}%`} OR
+      vanchuyen.dia_chi_kho::text ILIKE ${`%${query}%`} 
+      )
+      order by vanchuyen.id_don_hang 
+      LIMIT ${item_per_page} OFFSET ${offset};
+  `;
+
+    const vanchuyen = data.rows;
+    return vanchuyen;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all product.');
+  } 
+}
+
+
+export async function fetchDangNhapPage(query: string,item_per_page:number) {
+  try {
+    const count = await sql`SELECT COUNT(*)
+      FROM vanchuyen
+      JOIN dondathang
+      ON vanchuyen.id_don_hang = dondathang.id
+      WHERE vanchuyen.status = 'đang vận chuyển'
+        AND (
+        vanchuyen.id_don_hang ILIKE ${`%${query}%`} OR
+        vanchuyen.kho_xuat_hang ILIKE ${`%${query}%`} OR
+        dondathang.manv::text ILIKE ${`%${query}%`} OR
+        vanchuyen.dia_chi_kho::text ILIKE ${`%${query}%`} 
+      )
+  `;
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / item_per_page);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of products.');
+  }
+}
+
+
+
+export async function fetchDaNhapPage(query: string,item_per_page:number) {
+  try {
+    const count = await sql`SELECT COUNT(*)
+      FROM vanchuyen
+      JOIN dondathang
+      ON vanchuyen.id_don_hang = dondathang.id
+      WHERE vanchuyen.status = 'Đã vận chuyển'
+        AND (
+        vanchuyen.id_don_hang ILIKE ${`%${query}%`} OR
+        vanchuyen.kho_xuat_hang ILIKE ${`%${query}%`} OR
+        dondathang.manv::text ILIKE ${`%${query}%`} OR
+        vanchuyen.dia_chi_kho::text ILIKE ${`%${query}%`} 
+      )
   `;
 
     const totalPages = Math.ceil(Number(count.rows[0].count) / item_per_page);

@@ -43,7 +43,7 @@ const sidebarItems: SidebarItem[] = [
   },
   {
     label: "Xuất hàng",
-    href: "/export",
+    href: "/dashboard/xuat-hang",
     icon: <Image src="/export.png" width={20} height={20} alt="return" />,
   },
   {

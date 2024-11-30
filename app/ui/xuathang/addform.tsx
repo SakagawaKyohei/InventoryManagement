@@ -16,7 +16,7 @@ import {
 import { useRouter } from "next/navigation";
 import { auth } from "@/auth";
 import { getUserByEmail } from "@/app/lib/data";
-import { Product, Users } from "@/app/lib/definitions";
+import { DoiTac, Product, Users } from "@/app/lib/definitions";
 import { formatCurrency } from "@/app/lib/utils";
 import { redirect } from "next/navigation";
 
@@ -28,7 +28,11 @@ interface OrderProduct {
   thanhtien: string;
 }
 
-const AddForm = (user: Users) => {
+interface Props {
+  doitac: DoiTac;
+  nguoivanchuyen: Users;
+}
+export default function AddForm({ doitac, nguoivanchuyen }: Props) {
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>();
   const [clientproducts, setClientProducts] = useState<OrderProduct[]>([]);
@@ -85,32 +89,7 @@ const AddForm = (user: Users) => {
   }, []); // Empty dependency array means this effect runs once when the component mounts
 
   // Hàm xử lý submit form
-  const handleSubmit = async () => {
-    setProduct((prevProduct) => ({
-      ...prevProduct,
-      name: productname,
-      id: productid,
-      price: dongia,
-      quantity: soluong,
-    }));
-
-    try {
-      const res = await fetch("/api/don-dat-hang/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ product, company, manv: user.manv }),
-      });
-
-      if (res.ok) {
-        // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
-      } else {
-        setMessage("Không thể xóa sản phẩm");
-      }
-    } catch (error) {
-      console.error("Lỗi khi xóa sản phẩm:", error);
-      setMessage("Lỗi khi xóa sản phẩm. Vui lòng thử lại.");
-    }
-  };
+  const handleSubmit = async () => {};
 
   const HandleAddDraft = async () => {
     setClientProducts([
@@ -124,18 +103,13 @@ const AddForm = (user: Users) => {
       },
     ]);
     setSoluong(0);
-    setProduct((prevProduct) => ({
-      ...prevProduct,
-      quantity: 0,
-    }));
+    //     ...prevProduct,
+    //     quantity: 0,
+    //   }));
     setDonGia(0); // Reset giá trị dongia (nếu có state này)
-    setProduct((prevProduct) => ({
-      ...prevProduct,
-      price: 0,
-    }));
     setIsAdding(false); // Đóng form thêm mới
     setSelectedProducts((prev) => [...prev, product.name]);
-    handleSubmit();
+    // handleSubmit();
   };
 
   const [productList, setProductList] = useState([
@@ -168,15 +142,14 @@ const AddForm = (user: Users) => {
   const handleadd = async (e: any) => {
     e.preventDefault();
     try {
-      const res = await fetch("/api/don-dat-hang/add1", {
+      const res = await fetch("/api/xuat-hang/delete-from-stock", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clientproducts }),
       });
 
       if (res.ok) {
         // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
-
-        router.push("/dashboard/nhap-hang"); // Use router.push for client-side navigation
       } else {
         setMessage("Không thể xóa sản phẩm");
       }
@@ -316,12 +289,12 @@ const AddForm = (user: Users) => {
                 marginRight: 15,
               }}
             >
-              <label htmlFor="name">Mã nhân viên</label>
+              <label htmlFor="name">Mã đối tác</label>
               <Input
                 type="text"
                 id="name"
                 name="name"
-                value={user.manv}
+                value={doitac.id}
                 disabled
                 style={{
                   width: 150,
@@ -331,12 +304,12 @@ const AddForm = (user: Users) => {
               />
             </div>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <label htmlFor="name">Tên nhân viên</label>
+              <label htmlFor="name">Tên đối tác</label>
               <Input
                 type="text"
                 id="name"
                 name="name"
-                value={user.name}
+                value={doitac.name}
                 disabled
                 style={{
                   width: 285,
@@ -362,7 +335,7 @@ const AddForm = (user: Users) => {
                 type="number"
                 id="sell_price"
                 name="sell_price"
-                value={user.sdt}
+                value={doitac.sdt}
                 disabled
                 style={{
                   width: 150,
@@ -378,7 +351,7 @@ const AddForm = (user: Users) => {
               <label htmlFor="company">Email:</label>
               <Input
                 type="text"
-                value={user.email}
+                value={doitac.email}
                 id="company"
                 name="company"
                 disabled
@@ -409,7 +382,34 @@ const AddForm = (user: Users) => {
               id="buy_price"
               name="buy_price"
               disabled
-              value={user.dia_chi}
+              value={doitac.dia_chi}
+              style={{
+                width: 1075,
+                marginTop: 5,
+                backgroundColor: "#dddddd",
+              }}
+            />
+            {/* {errors.buy_price && (
+              <div style={{ color: "red" }}>{errors.buy_price}</div>
+            )} */}
+          </div>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            marginTop: 25,
+            justifyContent: "space-between",
+          }}
+        >
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <label htmlFor="buy_price">Người vận chuyển:</label>
+            <Input
+              type="text"
+              id="buy_price"
+              name="buy_price"
+              disabled
+              value={`${nguoivanchuyen.manv} - ${nguoivanchuyen.name}`}
               style={{
                 width: 1075,
                 marginTop: 5,
@@ -565,6 +565,7 @@ const AddForm = (user: Users) => {
               width: 140,
               height: 40,
               marginRight: 15,
+              marginBottom: 15,
             }}
             // type="submit"
             onClick={handleadd}
@@ -588,7 +589,5 @@ const AddForm = (user: Users) => {
       </div>
     </div>
   );
-};
-
-export default AddForm;
+}
 //thêm hàm khi add order product rồi sẽ xóa product đó trong select

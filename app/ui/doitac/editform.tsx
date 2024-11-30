@@ -21,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 interface Props {
   doitac1: DoiTac;
@@ -128,7 +128,7 @@ export default function EditForm({ doitac1 }: Props) {
           alt="return"
           style={{ marginRight: 15, marginLeft: 20, marginTop: 20 }}
         />
-        <Link href={"/dashboard/products"}>
+        <Link href={"/dashboard/doi-tac"}>
           <p style={{ marginTop: 25, fontSize: 20 }}>Quay lại</p>
         </Link>
       </div>
@@ -288,7 +288,7 @@ export default function EditForm({ doitac1 }: Props) {
             // type="submit"
             onClick={handleSubmit}
           >
-            Thêm mới
+            Chỉnh sửa
           </Button>
           <Link href={"/dashboard/doi-tac"}>
             <Button
