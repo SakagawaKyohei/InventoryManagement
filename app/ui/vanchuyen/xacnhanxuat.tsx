@@ -270,7 +270,7 @@ const FetchProductButton = ({ dondathang, vanchuyen, doitac }: Props) => {
                     onChange={handleSelectChange}
                   >
                     <option value="" disabled>
-                      Chọn người vận chuyển
+                      Chọn phương thức thanh toán
                     </option>
                     <option value="Trực tiếp">Trực tiếp</option>
                     <option value="Chuyển khoản">Chuyển khoản</option>

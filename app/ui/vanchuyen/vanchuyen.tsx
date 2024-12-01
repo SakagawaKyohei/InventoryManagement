@@ -224,7 +224,7 @@ const FetchProductButton = ({ vanchuyen, totalPages }: Props) => {
                   <TableCell
                     style={{ display: "flex", justifyContent: "center" }}
                   >
-                    {item.id.startsWith("DH") ? (
+                    {item.id_don_hang.startsWith("DH") ? (
                       <>
                         <Link
                           href={`/dashboard/van-chuyen/dang-van-chuyen/xac-nhan?id=${item.id_don_hang}`}

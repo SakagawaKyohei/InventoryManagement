@@ -39,6 +39,15 @@ export type VanChuyen={
   dia_chi_kho:string  
 }
 
+export type CongNo={
+  donhangid: string;
+  doitacname:string;
+  doitacid:string;
+  orderdate:string;
+  total: number;
+  status: string;
+}
+
 export type Customer = {
   id: string;
   name: string;

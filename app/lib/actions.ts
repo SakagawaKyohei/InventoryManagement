@@ -202,6 +202,24 @@ export async function AddProduct(product:Product) {
     };
   }
 }
+
+export async function Soluongbyidhang(id:string) {
+  try {
+    await sql`
+    SELECT SUM(so_luong) AS tong_so_luong
+    FROM tonkho
+    WHERE ma_hang = ${id};
+
+    `;
+  } catch (error) {
+    // If a database error occurs, return a more specific error.
+    console.log(error)
+    return {
+      message: 'Database Error: Failed to Create Account.',
+    };
+  }
+}
+
 export async function AddDonDatHang(product: Record<string, unknown>, company: string, manv:number) {
   const status = "draft";
 
@@ -367,6 +385,33 @@ export async function DaVanChuyen(donHangId: string) {
   }
 }
 
+
+
+export async function DaThanhToan(doitacid: string, donhangid:string, sotien:number) {
+  try {
+    // Cập nhật trạng thái đơn hàng trong bảng vanchuyen
+    await sql`
+    UPDATE congno
+    SET status = 'Đã thanh toán'
+    WHERE donhangid = ${donhangid} AND doitacid = ${doitacid};
+    `;
+
+    await sql`
+    INSERT INTO doanhthu (month, year, revenue)
+    VALUES (EXTRACT(MONTH FROM CURRENT_DATE), EXTRACT(YEAR FROM CURRENT_DATE), ${sotien})
+    ON CONFLICT (month, year) 
+    DO UPDATE SET revenue = doanhthu.revenue + EXCLUDED.revenue;
+    `;
+
+
+
+    return { message: 'Đơn hàng đã được thanh toán và vận chuyển.' };
+  } catch (error) {
+    console.error('Database error:', error);  // Log the error for debugging
+    return { message: 'Lỗi cơ sở dữ liệu: Không thể xử lý đơn hàng.' };
+  }
+}
+
 export async function DaXuat(donHang: DonXuatHang, phuongthuc:string, doitac:DoiTac) {
   try {
     // Cập nhật trạng thái đơn hàng trong bảng vanchuyen
@@ -376,12 +421,29 @@ export async function DaXuat(donHang: DonXuatHang, phuongthuc:string, doitac:Doi
       WHERE id_don_hang = ${donHang.id};
     `;
 
+    await sql`
+    UPDATE donxuathang
+    SET status = 'Đã vận chuyển'
+    WHERE id = ${donHang.id};
+  `;
+
   if (phuongthuc=="Chuyển khoản")
   {
       await sql`
       INSERT INTO congno (donhangid, doitacname, doitacid, orderdate, total, status)
       VALUES (${donHang.id}, ${doitac.name}, ${doitac.id}, ${donHang.ngayxuat}, ${donHang.total}, 'Chưa thanh toán')
     `;
+  }
+
+  else 
+  {
+    await sql`
+        INSERT INTO doanhthu (month, year, revenue)
+    VALUES (EXTRACT(MONTH FROM CURRENT_DATE), EXTRACT(YEAR FROM CURRENT_DATE), ${donHang.total})
+    ON CONFLICT (month, year) 
+    DO UPDATE SET revenue = doanhthu.revenue + EXCLUDED.revenue;
+  `;
+
   }
 
     return { message: 'Đơn hàng đã được thanh toán và vận chuyển.' };

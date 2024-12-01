@@ -1,5 +1,6 @@
 import { sql } from '@vercel/postgres';
 import {
+  CongNo,
   CustomerField,
   CustomersTableType,
   DoiTac,
@@ -82,6 +83,43 @@ export async function fetchCardData() {
     const numberOfCustomers = Number(data[1].rows[0].count ?? '0');
     const totalPaidInvoices = formatCurrency(data[2].rows[0].paid ?? '0');
     const totalPendingInvoices = formatCurrency(data[2].rows[0].pending ?? '0');
+
+    return {
+      numberOfCustomers,
+      numberOfInvoices,
+      totalPaidInvoices,
+      totalPendingInvoices,
+    };
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch card data.');
+  }
+}
+
+
+export async function fetchCard1Data() {
+  try {
+    // You can probably combine these into a single SQL query
+    // However, we are intentionally splitting them to demonstrate
+    // how to initialize multiple queries in parallel with JS.
+    const invoiceCountPromise = sql`SELECT COUNT(*) FROM dondathang`;
+    const customerCountPromise = sql`SELECT COUNT(*) FROM doitac`;
+    const pendingpaid = sql`SELECT COUNT(*) FROM dondathang  where status='pending'`;
+    const invoiceStatusPromise = sql`SELECT SUM(revenue) AS "paid"
+FROM doanhthu;
+`;
+
+    const data = await Promise.all([
+      invoiceCountPromise,
+      customerCountPromise,
+      invoiceStatusPromise,
+      pendingpaid,
+    ]);
+
+    const numberOfInvoices = Number(data[0].rows[0].count ?? '0');
+    const numberOfCustomers = Number(data[1].rows[0].count ?? '0');
+    const totalPaidInvoices = formatCurrency(data[2].rows[0].paid ?? '0');
+    const totalPendingInvoices = formatCurrency(data[3].rows[0].count?? '0');
 
     return {
       numberOfCustomers,
@@ -511,6 +549,24 @@ export async function fetchConHan(query: string, currentPage: number, itemsPerPa
   }
 }
 
+export async function fetchsoluongtonkho() {
+  try {
+    const data = await sql<any>`
+      SELECT product.id, product.name, product.company, product.buy_price,
+             COALESCE(SUM(tonkho.so_luong), 0) AS tong_so_luong
+      FROM product
+      LEFT JOIN tonkho 
+        ON product.id = tonkho.ma_hang
+        AND tonkho.han_su_dung >= NOW()
+      GROUP BY product.id, product.name, product.company
+    `;
+    return data.rows;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 export async function fetchHetHan(query: string, currentPage: number, itemsPerPage: number) {
   try {
     const offset = (currentPage - 1) * itemsPerPage;
@@ -606,17 +662,17 @@ export async function fetchFilteredXuatHang(
 
   try {
     const data = await sql<DonXuatHang&DoiTac>`
-SELECT *
-FROM donxuathang
-JOIN doitac ON doitac.id = donxuathang.ma_doi_tac
-WHERE
-  (doitac.id::text ILIKE '%' || ${query} || '%' OR
-   donxuathang.ma_doi_tac::text ILIKE '%' || ${query} || '%' OR
-   donxuathang.status::text ILIKE '%' || ${query} || '%')
-ORDER BY 
-  donxuathang.status ASC,
-  donxuathang.id ASC
-LIMIT ${item_per_page} OFFSET ${offset};
+    SELECT *, donxuathang.id as xuatid
+    FROM donxuathang
+    JOIN doitac ON doitac.id = donxuathang.ma_doi_tac
+    WHERE
+      (doitac.id::text ILIKE '%' || ${query} || '%' OR
+      donxuathang.ma_doi_tac::text ILIKE '%' || ${query} || '%' OR
+      donxuathang.status::text ILIKE '%' || ${query} || '%')
+    ORDER BY 
+      donxuathang.status ASC,
+      donxuathang.id ASC
+    LIMIT ${item_per_page} OFFSET ${offset};
 
     `;
 
@@ -651,6 +707,38 @@ export async function fetchFilteredDoiTac(
 
     const dondathang = data.rows;
     return dondathang;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all product.');
+  } 
+}
+
+
+export async function fetchFilteredCongNo(
+  query: string,
+  currentPage: number,
+  item_per_page:number
+) {
+  const offset = (currentPage - 1) * item_per_page;
+
+  try {
+    const data = await sql<CongNo>`
+    SELECT * 
+    FROM congno
+    WHERE 
+        donhangid ILIKE ${`%${query}%`} 
+        OR doitacname ILIKE ${`%${query}%`} 
+        OR doitacid ILIKE ${`%${query}%`} 
+        OR total::text ILIKE ${`%${query}%`} 
+        OR status ILIKE ${`%${query}%`}
+       ORDER BY status ASC,
+      donhangid ASC
+
+    LIMIT ${item_per_page} OFFSET ${offset};
+    `;
+
+    const vanchuyen = data.rows;
+    return vanchuyen;
   } catch (err) {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch all product.');
@@ -828,6 +916,26 @@ export async function fetchVanChuyenPage(query: string,item_per_page:number) {
         OR kho_xuat_hang ILIKE ${`%${query}%`} 
         OR dia_chi_kho ILIKE ${`%${query}%`})
         AND status = 'đang vận chuyển'
+  `;
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / item_per_page);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of products.');
+  }
+}
+
+export async function fetchCongNoPage(query: string,item_per_page:number) {
+  try {
+    const count = await sql`SELECT COUNT(*)
+    FROM congno
+    WHERE 
+        donhangid ILIKE ${`%${query}%`} 
+        OR doitacname ILIKE ${`%${query}%`} 
+        OR doitacid ILIKE ${`%${query}%`} 
+        OR total::text ILIKE ${`%${query}%`} 
+        OR status ILIKE ${`%${query}%`}
   `;
 
     const totalPages = Math.ceil(Number(count.rows[0].count) / item_per_page);

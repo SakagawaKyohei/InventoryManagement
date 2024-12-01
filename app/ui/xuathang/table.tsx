@@ -49,7 +49,7 @@ import { Input } from "@/components/ui/input";
 type XuatHangWithDoiTac = DonXuatHang & DoiTac;
 
 interface Props {
-  dondathang: XuatHangWithDoiTac[];
+  dondathang: any[];
   totalPages: number;
   doitac: DoiTac[];
   nguoivanchuyen: Users[];
@@ -240,9 +240,9 @@ const FetchProductButton = ({
                     style={{ textDecoration: "underline" }}
                   >
                     <Link
-                      href={`/dashboard/nhap-hang/thong-tin-don-hang?id=${item.id}`}
+                      href={`/dashboard/nhap-hang/thong-tin-don-hang?id=${item.xuatid}`}
                     >
-                      {item.id}
+                      {item.xuatid}
                     </Link>
                   </TableCell>
                   <TableCell>{item.name}</TableCell>
@@ -253,7 +253,9 @@ const FetchProductButton = ({
 
                   <TableCell>{formatCurrency(item.total * 1000)}</TableCell>
                   <TableCell>
-                    {item.status == "paid" ? "Đã thanh toán" : "Chờ thanh toán"}
+                    {item.status == "đang vận chuyển"
+                      ? "Đang vận chuyển"
+                      : "Đã vận chuyển"}
                   </TableCell>
                 </TableRow>
               ))}

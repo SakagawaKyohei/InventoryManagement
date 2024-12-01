@@ -30,7 +30,7 @@ type SidebarItem = {
 };
 
 const sidebarItems: SidebarItem[] = [
-  { label: "Trang chủ", href: "/", icon: <FaHome /> },
+  { label: "Trang chủ", href: "/dashboard", icon: <FaHome /> },
   { label: "Sản phẩm", href: "/dashboard/products", icon: <FaBox /> },
   {
     label: "Nhập hàng",
@@ -48,7 +48,7 @@ const sidebarItems: SidebarItem[] = [
   },
   {
     label: "Công nợ",
-    href: "/tools",
+    href: "/dashboard/cong-no",
     icon: <RiMoneyDollarCircleFill />,
   },
   {

@@ -34,7 +34,7 @@ interface Props {
 }
 export default function AddForm({ doitac, nguoivanchuyen }: Props) {
   const router = useRouter();
-  const [products, setProducts] = useState<Product[]>();
+  const [products, setProducts] = useState<any[]>();
   const [clientproducts, setClientProducts] = useState<OrderProduct[]>([]);
   const [product, setProduct] = useState({
     id: "",
@@ -45,6 +45,7 @@ export default function AddForm({ doitac, nguoivanchuyen }: Props) {
 
   const [company, setCompany] = useState("");
   const [dongia, setDonGia] = useState(0);
+  const [toida, setToiDa] = useState(0);
   const [thanhtien, setThanhTien] = useState(0);
   const [soluong, setSoluong] = useState(0);
   const [message, setMessage] = useState("");
@@ -65,7 +66,7 @@ export default function AddForm({ doitac, nguoivanchuyen }: Props) {
     setMessage(""); // Clear any previous messages
 
     try {
-      const response = await fetch("/api/product/product-list", {
+      const response = await fetch("/api/product/stock-product", {
         method: "GET", // Or POST depending on your API
       });
 
@@ -93,6 +94,12 @@ export default function AddForm({ doitac, nguoivanchuyen }: Props) {
   const handleSubmit = async () => {};
 
   const HandleAddDraft = async () => {
+    if (soluong > toida) {
+      alert(
+        "Không đủ hàng để xuất, Vui lòng nhập hàng hoặc chọn số lượng ít hơn"
+      );
+      return;
+    }
     setClientProducts([
       ...(clientproducts || []), // Nếu undefined, thay bằng []
       {
@@ -109,6 +116,7 @@ export default function AddForm({ doitac, nguoivanchuyen }: Props) {
     //     quantity: 0,
     //   }));
     setDonGia(0); // Reset giá trị dongia (nếu có state này)
+    setToiDa(0); // Reset giá trị dongia (nếu có state này)
     setIsAdding(false); // Đóng form thêm mới
     setSelectedProducts((prev) => [...prev, product.name]);
     // handleSubmit();
@@ -157,6 +165,7 @@ export default function AddForm({ doitac, nguoivanchuyen }: Props) {
 
       if (res.ok) {
         // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
+        router.push("/dashboard/xuat-hang");
       } else {
         setMessage("Không thể xóa sản phẩm");
       }
@@ -173,10 +182,11 @@ export default function AddForm({ doitac, nguoivanchuyen }: Props) {
   );
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedProduct = JSON.parse(event.target.value) as Product;
+    const selectedProduct = JSON.parse(event.target.value) as any;
     console.log("Selected product:", selectedProduct);
 
     setDonGia(selectedProduct.buy_price ? selectedProduct.buy_price : 0);
+    setToiDa(selectedProduct.tong_so_luong); // Reset giá trị dongia (nếu có state này)
     setProduct((prevProduct) => ({
       ...prevProduct,
       price: selectedProduct.buy_price ? selectedProduct.buy_price : 0,
@@ -465,14 +475,16 @@ export default function AddForm({ doitac, nguoivanchuyen }: Props) {
                           Chọn thức ăn
                         </option>
 
-                        {availableProducts?.map((product) => (
-                          <option
-                            key={product.id}
-                            value={JSON.stringify(product)}
-                          >
-                            {product.name}
-                          </option>
-                        ))}
+                        {availableProducts
+                          ?.filter((product) => product.tong_so_luong != 0) // Lọc các sản phẩm có số lượng khác 0
+                          .map((product) => (
+                            <option
+                              key={product.id}
+                              value={JSON.stringify(product)}
+                            >
+                              {product.name} - Còn {product.tong_so_luong}
+                            </option>
+                          ))}
                       </select>
                     </TableCell>
                     <TableCell>
@@ -525,6 +537,7 @@ export default function AddForm({ doitac, nguoivanchuyen }: Props) {
                             quantity: 0,
                           }));
                           setDonGia(0); // Reset giá trị dongia (nếu có state này)
+                          setToiDa(0); // Reset giá trị dongia (nếu có state này)
                           setProduct((prevProduct) => ({
                             ...prevProduct,
                             price: 0,

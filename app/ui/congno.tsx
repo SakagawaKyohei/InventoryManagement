@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import { DonDatHang, Product, TonKho } from "../../lib/definitions";
+import { AiFillDollarCircle } from "react-icons/ai";
+
 import { Button } from "@/components/ui/button";
 import { RiMoneyDollarCircleFill } from "react-icons/ri";
 import Image from "next/image";
@@ -26,21 +27,34 @@ import { FaSearch } from "react-icons/fa";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
-import { formatCurrency } from "@/app/lib/utils";
+import { CongNo, VanChuyen } from "@/app/lib/definitions";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { CircleDollarSign, DollarSignIcon } from "lucide-react";
+import { formatCurrency } from "../lib/utils";
 
-type TonKhoWithProduct = TonKho & Product;
 interface Props {
-  tonkho: TonKhoWithProduct[];
+  vanchuyen: CongNo[];
   totalPages: number;
 }
 
-const FetchProductButton = ({ tonkho, totalPages }: Props) => {
+const FetchProductButton = ({ vanchuyen, totalPages }: Props) => {
   const pathname = usePathname();
   const { replace } = useRouter();
   const searchParams = useSearchParams();
   const currentPage = (searchParams && Number(searchParams.get("page"))) || 1;
   const [item_per_page, setItemPerPage] = useState(
     Number(searchParams?.get("itemsPerPage")) || 5
+  );
+  const params = new URLSearchParams(
+    searchParams ? searchParams.toString() : ""
   );
 
   const handleSearch = useDebouncedCallback((term) => {
@@ -145,8 +159,8 @@ const FetchProductButton = ({ tonkho, totalPages }: Props) => {
     <div>
       <div style={{ backgroundColor: "#EAEAEA" }}>
         <div className="px-2 py-4 md:px-4" style={{ backgroundColor: "white" }}>
-          <p style={{ fontWeight: "bold", fontSize: 24 }}>Hết hạn</p>
-          <p style={{ marginBottom: 15 }}>Danh sách các thức ăn hết hạn</p>
+          <p style={{ fontWeight: "bold", fontSize: 24 }}>Công nợ</p>
+          <p style={{ marginBottom: 15 }}>Danh sách nợ khách hàng</p>
           <div
             style={{ display: "flex", flexDirection: "row", paddingBottom: 15 }}
           >
@@ -184,38 +198,99 @@ const FetchProductButton = ({ tonkho, totalPages }: Props) => {
                   Mã đơn hàng
                 </TableHead>
 
-                <TableHead>Tên hàng</TableHead>
-                <TableHead>Ngày nhập</TableHead>
-                <TableHead>Hạn sử dụng</TableHead>
-                <TableHead>Số lượng</TableHead>
-                <TableHead>Giá tiền</TableHead>
-                <TableHead>Công ty nhập</TableHead>
+                <TableHead>Mã khách hàng</TableHead>
+                <TableHead>Tên khách hàng</TableHead>
+                <TableHead>Ngày đặt hàng</TableHead>
+                <TableHead>Tổng tiền</TableHead>
+                <TableHead>Trạng thái</TableHead>
+                <TableHead className="text-center">Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {tonkho?.map((item) => (
-                <TableRow
-                  key={item.ma_don_hang + item.ma_hang}
-                  style={{ height: 65 }}
-                >
-                  <TableCell className="font-medium text-center">
-                    {item.ma_don_hang}
+              {vanchuyen?.map((item) => (
+                <TableRow key={item.donhangid} style={{ height: 65 }}>
+                  <TableCell
+                    className="font-medium text-center"
+                    style={{ textDecoration: "underline" }}
+                  >
+                    <Link
+                      href={`/dashboard/nhap-hang/thong-tin-don-hang?id=${item.donhangid}`}
+                    >
+                      {item.donhangid}
+                    </Link>
                   </TableCell>
-                  <TableCell>{item.name}</TableCell>
+                  <TableCell>{item.doitacid}</TableCell>
+                  <TableCell>{item.doitacname}</TableCell>
+
                   <TableCell>
-                    {format(new Date(item.ngay_nhap), "dd/MM/yyyy")}
-                  </TableCell>
-                  <TableCell>
-                    {format(new Date(item.han_su_dung), "dd/MM/yyyy")}
+                    {format(new Date(item.orderdate), "dd/MM/yyyy")}
                   </TableCell>
 
-                  <TableCell>{item.so_luong}</TableCell>
-                  <TableCell>
-                    {item.sell_price
-                      ? formatCurrency(item.sell_price * 1000)
-                      : 0}
+                  <TableCell>{formatCurrency(1000 * item.total)}</TableCell>
+                  <TableCell>{item.status}</TableCell>
+                  <TableCell
+                    style={{ display: "flex", justifyContent: "center" }}
+                  >
+                    {item.status == "Đã thanh toán" ? (
+                      <AiFillDollarCircle
+                        className="hidden md:block"
+                        fontSize={25}
+                        style={{ color: "#dddddd", marginTop: 10 }}
+                      />
+                    ) : (
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <AiFillDollarCircle
+                            className="hidden md:block"
+                            fontSize={25}
+                            style={{ marginTop: 10 }}
+                          />
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[425px]">
+                          <DialogHeader>
+                            <DialogTitle style={{ marginBottom: 10 }}>
+                              Cập nhật trạng thái công nợ
+                            </DialogTitle>
+                            <DialogDescription style={{ marginBottom: 5 }}>
+                              Xác nhận đã nhận được tiền từ nợ khách hàng
+                            </DialogDescription>
+                          </DialogHeader>
+                          <DialogFooter>
+                            <Button
+                              onClick={async () => {
+                                try {
+                                  const res = await fetch(
+                                    "/api/cong-no/da-thanh-toan",
+                                    {
+                                      method: "POST",
+                                      headers: {
+                                        "Content-Type": "application/json",
+                                      },
+                                      body: JSON.stringify({
+                                        doitac: item.doitacid,
+                                        donhang: item.donhangid,
+                                        sotien: item.total,
+                                      }),
+                                    }
+                                  );
+
+                                  if (res.ok) {
+                                    replace(`${pathname}?${params.toString()}`);
+                                    // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
+                                  } else {
+                                  }
+                                } catch (error) {
+                                  console.error("Lỗi khi xóa sản phẩm:", error);
+                                }
+                              }}
+                            >
+                              Xác nhận
+                            </Button>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    )}
                   </TableCell>
-                  <TableCell>{item.company}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
