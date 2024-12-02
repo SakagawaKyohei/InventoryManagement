@@ -89,8 +89,23 @@ const sidebarItemsForRole = {
   ],
 
   ketoan: [
-    { label: "Nhập hàng", href: "/dashboard", icon: <FaHome /> },
-    { label: "Xuất hàng", href: "/dashboard/products", icon: <FaBox /> },
+    {
+      label: "Nhập hàng",
+      icon: <Image src="/import.png" width={20} height={20} alt="return" />,
+      dropdownItems: [
+        {
+          label: "Chờ thanh toán",
+          href: "/dashboard/nhap-hang/cho-thanh-toan",
+        },
+        { label: "Đang nhập kho", href: "/dashboard/nhap-hang/dang-nhap-kho" },
+        { label: "Đã nhập kho", href: "/dashboard/nhap-hang/da-nhap-kho" },
+      ],
+    },
+    {
+      label: "Xuất hàng",
+      href: "/dashboard/xuat-hang",
+      icon: <Image src="/export.png" width={20} height={20} alt="return" />,
+    },
     { label: "Hàng tồn", href: "/dashboard/products", icon: <FaBox /> },
     { label: "Tài khoản", href: "/dashboard/products", icon: <FaBox /> },
   ],
