@@ -29,9 +29,10 @@ import { formatCurrency } from "@/app/lib/utils";
 interface Props {
   product: Product[];
   totalPages: number;
+  uid: number;
 }
 
-const FetchProductButton = ({ product, totalPages }: Props) => {
+const FetchProductButton = ({ product, totalPages, uid }: Props) => {
   const pathname = usePathname();
   const { replace } = useRouter();
   const searchParams = useSearchParams();
@@ -41,7 +42,7 @@ const FetchProductButton = ({ product, totalPages }: Props) => {
     Number(searchParams?.get("itemsPerPage")) || 5
   );
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: string, uid: number) => {
     const params = new URLSearchParams(
       searchParams ? searchParams.toString() : ""
     );
@@ -49,7 +50,7 @@ const FetchProductButton = ({ product, totalPages }: Props) => {
       const res = await fetch("/api/product/delete-product", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id }),
+        body: JSON.stringify({ id, uid }),
       });
       if (res.ok) {
         // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
@@ -255,7 +256,7 @@ const FetchProductButton = ({ product, totalPages }: Props) => {
                       className="hidden md:block"
                       alt="Screenshots of the dashboard project showing desktop version"
                       onClick={() => {
-                        handleDelete(item.id);
+                        handleDelete(item.id, uid);
                       }}
                     />
                   </TableCell>

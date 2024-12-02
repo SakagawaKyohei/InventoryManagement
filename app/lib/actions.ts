@@ -188,20 +188,33 @@ export async function AddUser(user:Users) {
   }
 }
 
-export async function AddProduct(product:Product) {
+export async function AddProduct(product: Product, uid: number) {
   try {
-    await sql`
-      INSERT INTO product (name,company,buy_price,sell_price, description, img_product)
-      VALUES (${product.name},${product.company}, ${product.buy_price},${product.sell_price}, ${product.description},${product.img_product})
+    // Insert the product and get the generated ID.
+    const result = await sql`
+      INSERT INTO product (name, company, buy_price, sell_price, description, img_product)
+      VALUES (${product.name}, ${product.company}, ${product.buy_price}, ${product.sell_price}, ${product.description}, ${product.img_product})
+      RETURNING id
     `;
+    
+    // Extract the generated product id.
+    const productId = result.rows[0].id; // Assuming result is an array with the first row containing the `id`.
+    
+    // Now insert the log with the generated product id.
+    await sql`
+      INSERT INTO logging (time, action, idforlink, user_id)
+      VALUES (now(), 'Tạo sản phẩm', ${productId}, ${uid})
+    `;
+    
   } catch (error) {
     // If a database error occurs, return a more specific error.
-    console.log(error)
+    console.log(error);
     return {
-      message: 'Database Error: Failed to Create Account.',
+      message: 'Database Error: Failed to Create Product.',
     };
   }
 }
+
 
 export async function Soluongbyidhang(id:string) {
   try {
@@ -211,6 +224,7 @@ export async function Soluongbyidhang(id:string) {
     WHERE ma_hang = ${id};
 
     `;
+    
   } catch (error) {
     // If a database error occurs, return a more specific error.
     console.log(error)
@@ -483,7 +497,7 @@ export async function AddDoiTac(doitac: DoiTac) {
 }
 
 
-export async function EditProduct(id:string, product: Product) {
+export async function EditProduct(id:string, product: Product,uid:number) {
   try {
     // Update the product based on its unique ID
     await sql`
@@ -497,6 +511,11 @@ export async function EditProduct(id:string, product: Product) {
         img_product = ${product.img_product}
       WHERE id = ${id}
     `;
+
+    await sql`
+    INSERT INTO logging (time, action, idforlink, user_id)
+    VALUES (now(), 'Chỉnh sửa sản phẩm', ${id}, ${uid})
+  `;
     
     return { message: 'Product updated successfully.' };
   } catch (error) {
@@ -532,14 +551,17 @@ export async function EditPartner(id: string, partner: DoiTac) {
 
 
 
-export async function DeleteProduct(id: string) {
+export async function DeleteProduct(id: string, uid:number) {
   try {
     // Xóa sản phẩm từ cơ sở dữ liệu
     await sql`DELETE FROM product WHERE id = ${id}`;
 
     // Gọi revalidatePath để làm mới dữ liệu cho trang '/product-list'
    
-
+    await sql`
+      INSERT INTO logging (time, action, idforlink, user_id)
+      VALUES (now(), 'Xóa sản phẩm', ${id}, ${uid})
+    `;
     return { message: 'Sản phẩm đã được xóa và cache đã được làm mới.' };
   } catch (error) {
     console.error(error); // Ghi log lỗi
