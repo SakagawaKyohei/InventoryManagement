@@ -13,7 +13,7 @@ export default function SignUp() {
     email: "",
     password: "",
     status: "active", // Default is active
-    role: "admin", // Default is admin
+    role: "kế toán", // Default is admin
     bank: "",
     stk: "",
     ngaysinh: "",
