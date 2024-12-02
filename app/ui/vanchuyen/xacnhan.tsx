@@ -28,9 +28,10 @@ import { useRouter } from "next/navigation";
 interface Props {
   dondathang: DonDatHang;
   vanchuyen: VanChuyen;
+  uid: number;
 }
 
-const FetchProductButton = ({ dondathang, vanchuyen }: Props) => {
+const FetchProductButton = ({ dondathang, vanchuyen, uid }: Props) => {
   const total = dondathang.product?.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
@@ -250,7 +251,7 @@ const FetchProductButton = ({ dondathang, vanchuyen }: Props) => {
                       const res = await fetch("/api/van-chuyen/da-van-chuyen", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ id: dondathang.id }),
+                        body: JSON.stringify({ id: dondathang.id, uid }),
                       });
 
                       if (res.ok) {

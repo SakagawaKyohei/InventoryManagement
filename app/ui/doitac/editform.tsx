@@ -25,8 +25,9 @@ import { useRouter } from "next/navigation";
 
 interface Props {
   doitac1: DoiTac;
+  uid: number;
 }
-export default function EditForm({ doitac1 }: Props) {
+export default function EditForm({ doitac1, uid }: Props) {
   const [doitac, setdoitac] = useState<DoiTac>({
     id: doitac1.id,
     name: doitac1.name,
@@ -98,7 +99,7 @@ export default function EditForm({ doitac1 }: Props) {
       const res = await fetch("/api/doi-tac/edit-partner", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: doitac.id, doitac }),
+        body: JSON.stringify({ id: doitac.id, doitac, uid }),
       });
       console.log(doitac);
 

@@ -31,9 +31,10 @@ import { Underline } from "lucide-react";
 interface Props {
   doitac: DoiTac[];
   totalPages: number;
+  uid: number;
 }
 
-const FetchProductButton = ({ doitac, totalPages }: Props) => {
+const FetchProductButton = ({ doitac, totalPages, uid }: Props) => {
   const pathname = usePathname();
   const { replace } = useRouter();
   const searchParams = useSearchParams();
@@ -50,7 +51,7 @@ const FetchProductButton = ({ doitac, totalPages }: Props) => {
       const res = await fetch("/api/doi-tac/delete", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id }),
+        body: JSON.stringify({ id, uid }),
       });
       if (res.ok) {
         // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu

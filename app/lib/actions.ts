@@ -298,18 +298,35 @@ export async function AddDonDatHang(product: Record<string, unknown>, company: s
 
 //them don dat hang trang thai draft
 
-export async function AddDonDatHang1() {
+export async function AddDonDatHang1(uid: number) {
   const status = 'draft';  // Correct string assignment with single quotes
 
   try {
-    // Using parameterized queries and properly setting 'status' to 'pending'
-    await sql`
+    // Step 1: Update all 'dondathang' records with status 'draft' to 'pending'
+    const result = await sql`
       UPDATE dondathang
       SET status = 'pending' 
-      WHERE status = ${status}; 
+      WHERE status = ${status}
+      RETURNING id;
     `;
     
-    return { message: 'Product added to existing DonDatHang.' };
+    // Step 2: If no records are updated, return a message
+    if (result.rows.length === 0) {
+      return { message: 'No DonDatHang records found with status "draft".' };
+    }
+
+    // Step 3: Insert each updated 'dondathang' id into the 'logging' table
+    for (const row of result.rows) {
+      const updatedId = row.id;
+      
+      // Step 4: Insert into logging table for each updated record
+      await sql`
+        INSERT INTO logging (time, action, idforlink, user_id)
+        VALUES (now(), 'Tạo đơn đặt hàng', ${updatedId}, ${uid});
+      `;
+    }
+    
+    return { message: 'Product added to existing DonDatHang records.' };
   } catch (error) {
     console.error('Database error:', error); // Log the error for debugging
     return {
@@ -317,6 +334,8 @@ export async function AddDonDatHang1() {
     };
   }
 }
+
+
 //them don dat hang trang thai cho thanh toan
 
 export async function CancelDonDatHang() {
@@ -339,7 +358,7 @@ export async function CancelDonDatHang() {
 
 //them don dat hang trang thai cho thanh toan
 
-export async function ThanhToan( donHangId:string, hanSuDung:string, khoXuatHang:string, diaChi:string,id_nguoi_van_chuyen:string ) {
+export async function ThanhToan( donHangId:string, hanSuDung:string, khoXuatHang:string, diaChi:string,id_nguoi_van_chuyen:string, uid:number ) {
   try {
     // Cập nhật trạng thái đơn hàng thành "paid" và cập nhật ngày hết hạn sử dụng
     await sql`
@@ -348,6 +367,10 @@ export async function ThanhToan( donHangId:string, hanSuDung:string, khoXuatHang
     WHERE id = ${donHangId};
   `;
   
+  await sql`
+  INSERT INTO logging (time, action, idforlink, user_id)
+  VALUES (now(), 'Thanh toán', ${donHangId}, ${uid})
+`;
 
     // Thêm thông tin vào bảng vanchuyen
     await sql`
@@ -364,7 +387,7 @@ export async function ThanhToan( donHangId:string, hanSuDung:string, khoXuatHang
 
 
 
-export async function DaVanChuyen(donHangId: string) {
+export async function DaVanChuyen(donHangId: string, uid:number) {
   try {
     // Cập nhật trạng thái đơn hàng trong bảng vanchuyen
     await sql`
@@ -391,6 +414,11 @@ export async function DaVanChuyen(donHangId: string) {
     WHERE 
         v.id_don_hang = ${donHangId};
     `;
+
+    await sql`
+    INSERT INTO logging (time, action, idforlink, user_id)
+    VALUES (now(), 'Đã vận chuyển', ${donHangId}, ${uid})
+  `;
 
     return { message: 'Đơn hàng đã được thanh toán và vận chuyển.' };
   } catch (error) {
@@ -477,17 +505,22 @@ export async function DaXuat(donHang: DonXuatHang, phuongthuc:string, doitac:Doi
 
 
 
-export async function AddDoiTac(doitac: DoiTac) {
+export async function AddDoiTac(doitac: DoiTac,uid:number) {
   try {
     const aonuoiJson = JSON.stringify(doitac.ao_nuoi); // Ensure it's a valid JSON string
 
     console.log('aonuoi JSON:', aonuoiJson); // Log dữ liệu trước khi gửi vào SQL
 
     // Use parameterized query to prevent SQL injection
-    await sql`
+    const result = await sql`
       INSERT INTO doitac (name, email, sdt, dia_chi, ao_nuoi)
       VALUES (${doitac.name}, ${doitac.email}, ${doitac.sdt}, ${doitac.dia_chi}, ARRAY[${aonuoiJson}::jsonb])
-    `;
+      RETURNING id;`;
+    
+    await sql`
+    INSERT INTO logging (time, action, idforlink, user_id)
+    VALUES (now(), 'Thêm đối tác', ${result.rows[0].id}, ${uid})
+  `;
   } catch (error) {
     console.error('Database Error:', error);
     return {
@@ -527,7 +560,7 @@ export async function EditProduct(id:string, product: Product,uid:number) {
   }
 }
 
-export async function EditPartner(id: string, partner: DoiTac) {
+export async function EditPartner(id: string, partner: DoiTac,uid:number) {
 
   try {
     await sql`
@@ -539,6 +572,11 @@ export async function EditPartner(id: string, partner: DoiTac) {
         dia_chi = ${partner.dia_chi}
       WHERE id = ${id}
     `;
+
+    await sql`
+    INSERT INTO logging (time, action, idforlink, user_id)
+    VALUES (now(), 'Sửa đối tác', ${id}, ${uid})
+  `;
     // ao_nuoi = ${partner.ao_nuoi}
     return { message: 'Đối tác đã được cập nhật thành công.' };
   } catch (error) {
@@ -570,10 +608,14 @@ export async function DeleteProduct(id: string, uid:number) {
 }
 
 
-export async function DeletePartner(id: string) {
+export async function DeletePartner(id: string,uid:number) {
   try {
     // Xóa sản phẩm từ cơ sở dữ liệu
     await sql`DELETE FROM doitac WHERE id = ${id}`;
+    await sql`
+    INSERT INTO logging (time, action, idforlink, user_id)
+    VALUES (now(), 'Xóa đối tác', ${id}, ${uid})
+  `;
 
     // Gọi revalidatePath để làm mới dữ liệu cho trang '/product-list'
     revalidatePath('doi-tac/partner-list'); 

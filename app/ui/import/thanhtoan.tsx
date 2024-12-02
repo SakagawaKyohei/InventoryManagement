@@ -37,9 +37,15 @@ interface Props {
   dondathang: DonDatHang;
   ketoan: Users;
   nguoivanchuyen: Users[];
+  uid: number;
 }
 
-const FetchProductButton = ({ dondathang, ketoan, nguoivanchuyen }: Props) => {
+const FetchProductButton = ({
+  dondathang,
+  ketoan,
+  nguoivanchuyen,
+  uid,
+}: Props) => {
   const router = useRouter();
   const handlePay = async () => {
     try {
@@ -52,6 +58,7 @@ const FetchProductButton = ({ dondathang, ketoan, nguoivanchuyen }: Props) => {
           khoXuatHang,
           diaChi,
           id_nguoi_van_chuyen,
+          uid,
         }),
       });
 

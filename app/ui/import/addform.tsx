@@ -171,6 +171,7 @@ const AddForm = (user: Users) => {
       const res = await fetch("/api/don-dat-hang/add1", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ uid: user.manv }),
       });
 
       if (res.ok) {

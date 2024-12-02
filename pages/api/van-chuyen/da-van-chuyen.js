@@ -1,9 +1,9 @@
 import { DaVanChuyen } from "@/app/lib/actions";
 export default async function handler(req, res) {
-  const { id } = req.body;
+  const { id,uid } = req.body;
 
   try {
-    await DaVanChuyen(id);
+    await DaVanChuyen(id,uid);
     res.status(200).json({ message: "Cập nhật trạng thái vận chuyển" });
   } catch (error) {
     console.error("Lỗi khi cập nhật đối tác:", error);

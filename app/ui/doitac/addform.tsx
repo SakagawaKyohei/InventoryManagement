@@ -28,7 +28,11 @@ interface OrderProduct {
   ngaytuoi: number;
 }
 
-const AddForm = () => {
+interface Pros {
+  uid: number;
+}
+
+const AddForm = (pros: Pros) => {
   const router = useRouter();
   const [clientproducts, setClientProducts] = useState<OrderProduct[]>([]);
 
@@ -82,7 +86,7 @@ const AddForm = () => {
       const res = await fetch("/api/doi-tac/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ doitac: doitac }),
+        body: JSON.stringify({ doitac: doitac, uid: pros.uid }),
       });
       if (res.ok) {
         // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
