@@ -640,6 +640,37 @@ export async function DeleteHangTon(donhangid: string, hangid:string) {
 }
 
 
+export async function Unactive(id: string) {
+  try {
+    // Xóa sản phẩm từ cơ sở dữ liệu
+    await sql`      
+    UPDATE users
+    SET status = 'unactive'
+    WHERE id = ${id}`;
+    return { message: 'Sản phẩm đã được xóa và cache đã được làm mới.' };
+  } catch (error) {
+    console.error(error); // Ghi log lỗi
+    return { message: 'Lỗi cơ sở dữ liệu: Không thể xóa sản phẩm.' };
+  }
+}
+
+export async function RestoreAccount(id: string) {
+  try {
+    // Xóa sản phẩm từ cơ sở dữ liệu
+    await sql`      
+    UPDATE users
+    SET status = 'active'
+    WHERE id = ${id}`;
+    return { message: 'Sản phẩm đã được xóa và cache đã được làm mới.' };
+  } catch (error) {
+    console.error(error); // Ghi log lỗi
+    return { message: 'Lỗi cơ sở dữ liệu: Không thể xóa sản phẩm.' };
+  }
+}
+
+
+
+
 export async function DeleteProductFromStock(clientproducts:any, doitac:DoiTac, nguoivanchuyen:Users,thanhtien:number) {
 
   for (const product of clientproducts) {

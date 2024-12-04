@@ -209,6 +209,55 @@ export async function fetchProductsPages(query: string,item_per_page:number) {
   }
 }
 
+export async function fetchAccountActivePages(query: string,item_per_page:number) {
+  try {
+    const count = await sql`SELECT COUNT(*)
+      FROM users
+      WHERE
+      (
+      name ILIKE ${`%${query}%`} OR
+      email ILIKE ${`%${query}%`} OR
+      sdt ILIKE ${`%${query}%`} OR
+      cccd ILIKE ${`%${query}%`} OR
+      role::text ILIKE ${`%${query}%`} OR
+      manv::text ILIKE ${`%${query}%`} 
+    ) and status!='unactive'
+
+  `;
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / item_per_page);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of products.');
+  }
+}
+
+export async function fetchAccountUnactivePages(query: string,item_per_page:number) {
+  try {
+    const count = await sql`SELECT COUNT(*)
+      FROM users
+      WHERE
+      (
+      name ILIKE ${`%${query}%`} OR
+      email ILIKE ${`%${query}%`} OR
+      sdt ILIKE ${`%${query}%`} OR
+      cccd ILIKE ${`%${query}%`} OR
+      role::text ILIKE ${`%${query}%`} OR
+      manv::text ILIKE ${`%${query}%`} 
+    ) and status='unactive'
+
+  `;
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / item_per_page);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of products.');
+  }
+}
+
+
 export async function fetchInvoiceById(id: string) {
   try {
     const data = await sql<InvoiceForm>`
@@ -612,6 +661,70 @@ export async function fetchFilteredProducts(
       id ILIKE ${`%${query}%`} OR
       company::text ILIKE ${`%${query}%`} 
       ORDER BY id ASC
+      LIMIT ${item_per_page} OFFSET ${offset}
+    `;
+
+    const product = data.rows;
+    return product;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all product.');
+  } 
+}
+
+export async function fetchFilteredActiveAccount(
+  query: string,
+  currentPage: number,
+  item_per_page:number
+) {
+  const offset = (currentPage - 1) * item_per_page;
+
+  try {
+    const data = await sql<Users>`
+      SELECT *
+      FROM users
+      WHERE
+      (
+      name ILIKE ${`%${query}%`} OR
+      email ILIKE ${`%${query}%`} OR
+      sdt ILIKE ${`%${query}%`} OR
+      cccd ILIKE ${`%${query}%`} OR
+      role::text ILIKE ${`%${query}%`} OR
+      manv::text ILIKE ${`%${query}%`} 
+    ) and status!='unactive'
+      ORDER BY manv ASC
+      LIMIT ${item_per_page} OFFSET ${offset}
+    `;
+
+    const product = data.rows;
+    return product;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all product.');
+  } 
+}
+
+export async function fetchFilteredUnactiveAccount(
+  query: string,
+  currentPage: number,
+  item_per_page:number
+) {
+  const offset = (currentPage - 1) * item_per_page;
+
+  try {
+    const data = await sql<Users>`
+      SELECT *
+      FROM users
+      WHERE
+      (
+      name ILIKE ${`%${query}%`} OR
+      email ILIKE ${`%${query}%`} OR
+      sdt ILIKE ${`%${query}%`} OR
+      cccd ILIKE ${`%${query}%`} OR
+      role::text ILIKE ${`%${query}%`} OR
+      manv::text ILIKE ${`%${query}%`} 
+    ) and status='unactive'
+      ORDER BY manv ASC
       LIMIT ${item_per_page} OFFSET ${offset}
     `;
 

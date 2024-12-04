@@ -10,6 +10,7 @@ import {
   FaTruckMoving,
   FaFileImport,
   FaFileExport,
+  FaLock,
 } from "react-icons/fa";
 import { auth, signOut } from "@/auth";
 import Image from "next/image";
@@ -85,7 +86,23 @@ const sidebarItemsForRole = {
         { label: "Back-up", href: "/system/option2" },
       ],
     },
-    { label: "Tài khoản", href: "/account", icon: <FaUser /> },
+
+    {
+      label: "Tài khoản",
+      icon: <FaUser />,
+      dropdownItems: [
+        { label: "Đang hoạt động", href: "/dashboard/account/dang-hoat-dong" },
+        {
+          label: "Ngừng hoạt động",
+          href: "/dashboard/account/ngung-hoat-dong",
+        },
+      ],
+    },
+    {
+      label: "Đổi mật khẩu",
+      href: "/dashboard/doi-mat-khau",
+      icon: <FaLock />,
+    },
   ],
 
   ketoan: [
