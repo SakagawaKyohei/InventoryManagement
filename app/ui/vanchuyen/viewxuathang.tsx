@@ -236,103 +236,16 @@ const FetchProductButton = ({ dondathang, vanchuyen, doitac }: Props) => {
       {/* Tổng tiền và Button */}
       <div
         style={{
-          marginTop: "40px", // Tăng khoảng cách với phần trên
           textAlign: "right",
           padding: "0 50px",
           display: "flex",
           flexDirection: "column",
           gap: "15px",
+          marginBottom: 30,
         }}
       >
         <div style={{ fontSize: 20, fontWeight: "bold" }}>
           Tổng tiền: {formatCurrency(dondathang.total * 1000)}
-        </div>
-        <div style={{ display: "flex", justifyContent: "end", gap: "15px" }}>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button
-                style={{
-                  fontSize: 18,
-                  backgroundColor: "#007ACC",
-                  width: 140,
-                  height: 40,
-                  marginBottom: 30,
-                }}
-              >
-                Xác nhận
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle style={{ marginBottom: 10 }}>
-                  Cập nhật trạng thái vận chuyển
-                </DialogTitle>
-                <DialogDescription style={{ marginBottom: 5 }}>
-                  Xác nhận bạn đã vận chuyển thành công đơn hàng.
-                </DialogDescription>
-                <div>
-                  <Label htmlFor="username">Hình thức thanh toán</Label>
-
-                  <select
-                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                    style={{
-                      borderRadius: 5,
-                      padding: "4px 8px",
-                      marginTop: 15,
-                      marginBottom: 10,
-                    }}
-                    onChange={handleSelectChange}
-                  >
-                    <option value="" disabled>
-                      Chọn phương thức thanh toán
-                    </option>
-                    <option value="Trực tiếp">Trực tiếp</option>
-                    <option value="Chuyển khoản">Chuyển khoản</option>
-                  </select>
-                </div>
-              </DialogHeader>
-              <DialogFooter>
-                <Button
-                  onClick={async () => {
-                    try {
-                      const res = await fetch("/api/van-chuyen/da-xuat", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                          donHang: dondathang,
-                          phuongthuc,
-                          doitac,
-                        }),
-                      });
-
-                      if (res.ok) {
-                        // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
-                        router.push("/dashboard/van-chuyen/dang-van-chuyen");
-                      } else {
-                      }
-                    } catch (error) {
-                      console.error("Lỗi khi xóa sản phẩm:", error);
-                    }
-                  }}
-                >
-                  Cập nhật
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-
-          <Link href={"/dashboard/products"}>
-            <Button
-              style={{
-                fontSize: 18,
-                backgroundColor: "#A30D11",
-                width: 140,
-                height: 40,
-              }}
-            >
-              Hủy bỏ
-            </Button>
-          </Link>
         </div>
       </div>
     </div>

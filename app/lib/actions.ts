@@ -177,7 +177,7 @@ export async function AddUser(user:Users) {
   try {
     await sql`
       INSERT INTO users (name,email,password,status, role, bank, stk, ngay_sinh,sdt, cccd,dia_chi)
-      VALUES (${user.name},${user.email}, ${user.password},${user.status}, ${user.role},${user.bank}, ${user.stk}, ${user.ngaysinh},${user.sdt},${user.cccd},${user.dia_chi})
+      VALUES (${user.name},${user.email}, ${user.password},${user.status}, ${user.role},${user.bank}, ${user.stk}, ${user.ngay_sinh},${user.sdt},${user.cccd},${user.dia_chi})
     `;
   } catch (error) {
     // If a database error occurs, return a more specific error.
@@ -548,6 +548,37 @@ export async function EditProduct(id:string, product: Product,uid:number) {
     await sql`
     INSERT INTO logging (time, action, idforlink, user_id)
     VALUES (now(), 'Chỉnh sửa sản phẩm', ${id}, ${uid})
+  `;
+    
+    return { message: 'Product updated successfully.' };
+  } catch (error) {
+    // If a database error occurs, return a more specific error.
+    console.log(error);
+    return {
+      message: 'Database Error: Failed to Update Product.',
+    };
+  }
+}
+
+export async function EditUser(id:number, product: Users,uid:number) {
+  try {
+    // Update the product based on its unique ID
+    await sql`
+      UPDATE users
+      SET 
+        name = ${product.name},
+        bank = ${product.bank},
+        stk = ${product.stk},
+        ngay_sinh = ${product.ngay_sinh},
+        sdt = ${product.sdt},
+        cccd = ${product.cccd},
+        dia_chi = ${product.dia_chi}
+        where manv=${id}
+    `;
+
+    await sql`
+    INSERT INTO logging (time, action, idforlink, user_id)
+    VALUES (now(), 'Chỉnh sửa người dùng', ${id}, ${uid})
   `;
     
     return { message: 'Product updated successfully.' };

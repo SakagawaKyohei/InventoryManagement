@@ -11,7 +11,7 @@ export type Users = {
   role: string;
   bank:string;
   stk: string;
-  ngaysinh:string;
+  ngay_sinh:string;
   sdt:string;
   cccd:string;
   dia_chi:string;
@@ -107,6 +107,7 @@ export type Logging = {
   user_id:string;
   time:string;
   action:string;
+  idforlink:string;
 };
 export type Invoice = {
   id: string;

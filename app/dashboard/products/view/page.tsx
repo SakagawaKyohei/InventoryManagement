@@ -1,10 +1,6 @@
-import {
-  fetchProductById,
-  fetchUserByID,
-  getUserByEmail,
-} from "@/app/lib/data";
-import { Product, Users } from "@/app/lib/definitions";
-import EditForm from "@/app/ui/account/ediform";
+import { fetchProductById, getUserByEmail } from "@/app/lib/data";
+import { Product } from "@/app/lib/definitions";
+import EditForm from "@/app/ui/product/viewform";
 import { auth } from "@/auth";
 
 export default async function EditProduct(props: {
@@ -14,7 +10,7 @@ export default async function EditProduct(props: {
 }) {
   const searchParams = await props.searchParams;
   const id = searchParams?.id || "";
-  const product: Users = await fetchUserByID(parseInt(id));
+  const product: Product = await fetchProductById(id);
   const session = await auth();
   const user = await getUserByEmail(
     session?.user?.email ? session?.user?.email : ""

@@ -9,6 +9,7 @@ import {
   InvoiceForm,
   InvoicesTable,
   LatestInvoiceRaw,
+  Logging,
   Product,
   Revenue,
   TonKho,
@@ -303,6 +304,26 @@ export async function fetchProductById(id: string) {
   }
 }
 
+export async function fetchAccountById(id: string) {
+  try {
+    const data = await sql<Users>`
+      SELECT
+       *
+      FROM users
+      WHERE users.id = ${id};
+    `;
+
+    const product = data.rows.map((product) => ({
+      ...product,
+    }));
+
+    return product[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch product.');
+  }
+}
+
 
 export async function fetchPartnerById(id: string) {
   try {
@@ -502,6 +523,20 @@ export async function getUserByEmail(email: string) {
   }
 }
 
+export async function getUser() {
+  try {
+    const data = await sql<Users>`
+      SELECT *
+      FROM users
+    `;
+
+    const dondathang = data.rows;
+    return dondathang;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all product.');
+  } 
+}
 // Lấy mã thông báo đặt lại theo mã
 export async function getResetToken(token: string) {
   try {
@@ -815,6 +850,33 @@ export async function fetchFilteredDoiTac(
       sdt::text ILIKE ${`%${query}%`} 
       ORDER BY 
       id ASC
+      LIMIT ${item_per_page} OFFSET ${offset}
+    `;
+
+    const dondathang = data.rows;
+    return dondathang;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all product.');
+  } 
+}
+
+export async function fetchFilteredLogging(
+  query: string,
+  currentPage: number,
+  item_per_page:number
+) {
+  const offset = (currentPage - 1) * item_per_page;
+
+  try {
+    const data = await sql<Logging>`
+      SELECT *
+      FROM logging
+      WHERE
+      action ILIKE ${`%${query}%`} OR
+      idforlink ILIKE ${`%${query}%`} OR
+      user_id::text ILIKE ${`%${query}%`} 
+      ORDER BY time ASC
       LIMIT ${item_per_page} OFFSET ${offset}
     `;
 

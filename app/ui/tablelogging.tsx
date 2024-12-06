@@ -1,8 +1,9 @@
 "use client";
 import React, { useState } from "react";
-import { Product } from "../../lib/definitions";
+
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { format } from "date-fns";
 import {
   Pagination,
   PaginationContent,
@@ -25,29 +26,31 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import { formatCurrency } from "@/app/lib/utils";
+import { Underline } from "lucide-react";
+import { DoiTac, Logging, Users } from "../lib/definitions";
 
 interface Props {
-  product: Product[];
+  logging: Logging[];
   totalPages: number;
   uid: number;
+  users: Users[];
 }
 
-const FetchProductButton = ({ product, totalPages, uid }: Props) => {
+const FetchProductButton = ({ logging, totalPages, uid, users }: Props) => {
   const pathname = usePathname();
   const { replace } = useRouter();
   const searchParams = useSearchParams();
-  const [message, setMessage] = useState("");
   const currentPage = (searchParams && Number(searchParams.get("page"))) || 1;
   const [item_per_page, setItemPerPage] = useState(
     Number(searchParams?.get("itemsPerPage")) || 5
   );
 
-  const handleDelete = async (id: string, uid: number) => {
+  const handleDelete = async (id: string) => {
     const params = new URLSearchParams(
       searchParams ? searchParams.toString() : ""
     );
     try {
-      const res = await fetch("/api/product/delete-product", {
+      const res = await fetch("/api/doi-tac/delete", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, uid }),
@@ -56,11 +59,9 @@ const FetchProductButton = ({ product, totalPages, uid }: Props) => {
         // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
         replace(`${pathname}?${params.toString()}`);
       } else {
-        setMessage("Không thể xóa sản phẩm");
       }
     } catch (error) {
       console.error("Lỗi khi xóa sản phẩm:", error);
-      setMessage("Lỗi khi xóa sản phẩm. Vui lòng thử lại.");
     }
   };
 
@@ -166,8 +167,8 @@ const FetchProductButton = ({ product, totalPages, uid }: Props) => {
     <div>
       <div style={{ backgroundColor: "#EAEAEA" }}>
         <div className="px-2 py-4 md:px-4" style={{ backgroundColor: "white" }}>
-          <p style={{ fontWeight: "bold", fontSize: 24 }}>Sản phẩm</p>
-          <p style={{ marginBottom: 15 }}>Danh sách các loại thức ăn</p>
+          <p style={{ fontWeight: "bold", fontSize: 24 }}>Đối tác</p>
+          <p style={{ marginBottom: 15 }}>Danh sách các đối tác</p>
           <div
             style={{ display: "flex", flexDirection: "row", paddingBottom: 15 }}
           >
@@ -201,72 +202,39 @@ const FetchProductButton = ({ product, totalPages, uid }: Props) => {
           <Table>
             <TableHeader>
               <TableRow style={{ height: 65 }}>
-                <TableHead className="w-[150px] text-center">
-                  Mã sản phẩm
-                </TableHead>
-                <TableHead className="w-[275px]">Tên sản phẩm</TableHead>
-                <TableHead className="w-[125px]">Giá mua</TableHead>
-                <TableHead className="w-[125px]">Giá bán</TableHead>
-                <TableHead className="w-[300px]">Công ty sản xuất</TableHead>
-                <TableHead className="text-center">Action</TableHead>
+                <TableHead>Thời gian</TableHead>
+
+                <TableHead>Mã nhân viên</TableHead>
+                <TableHead>Tên nhân viên</TableHead>
+                <TableHead>Hoạt động</TableHead>
+                <button
+                  onClick={() => {
+                    console.log(users);
+                  }}
+                >
+                  a
+                </button>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {product?.map((item) => (
-                <TableRow key={item.id} style={{ height: 65 }}>
-                  <TableCell
-                    className="font-medium text-center"
-                    style={{ textDecoration: "underline" }}
-                  >
-                    <Link href={`/dashboard/products/view?id=${item.id}`}>
-                      {item.id}
-                    </Link>
-                  </TableCell>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>
-                    {formatCurrency(item.buy_price ? item.buy_price * 1000 : 0)}
-                  </TableCell>
-                  <TableCell>
-                    {" "}
-                    {formatCurrency(
-                      item.sell_price ? item.sell_price * 1000 : 0
-                    )}
-                  </TableCell>
-                  <TableCell>{item.company}</TableCell>
-                  <TableCell
-                    style={{
-                      display: "flex",
+              {logging?.map((item) => {
+                // Tìm nhân viên có mã nhân viên tương ứng với item.user_id
+                const user = users.find(
+                  (u) => u.manv === parseInt(item.user_id)
+                );
 
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {" "}
-                    <Link
-                      href={`/dashboard/products/edit-product?id=${item.id}`}
-                    >
-                      <Image
-                        src="/edit.png"
-                        style={{ marginRight: 15 }}
-                        width={25}
-                        height={25}
-                        className="hidden md:block"
-                        alt="Screenshots of the dashboard project showing desktop version"
-                      />
-                    </Link>
-                    <Image
-                      src="/delete.png"
-                      width={30}
-                      height={40}
-                      className="hidden md:block"
-                      alt="Screenshots of the dashboard project showing desktop version"
-                      onClick={() => {
-                        handleDelete(item.id, uid);
-                      }}
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
+                return (
+                  <TableRow key={item.time} style={{ height: 65 }}>
+                    <TableCell>
+                      {format(new Date(item.time), "dd/MM/yyyy")}
+                    </TableCell>
+                    <TableCell>{item.user_id}</TableCell>
+                    {/* Hiển thị tên nhân viên nếu tìm thấy */}
+                    <TableCell>{user ? user.name : "Không tìm thấy"}</TableCell>
+                    <TableCell>{item.action}</TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
 
@@ -299,7 +267,7 @@ const FetchProductButton = ({ product, totalPages, uid }: Props) => {
           marginTop: 30,
         }}
       >
-        <Link href={"/dashboard/products/create-product"}>
+        <Link href={"/dashboard/doi-tac/them-moi"}>
           <Button
             style={{
               marginRight: 15,
@@ -312,18 +280,6 @@ const FetchProductButton = ({ product, totalPages, uid }: Props) => {
             Thêm mới
           </Button>
         </Link>
-        <Button
-          style={{
-            marginRight: 15,
-            fontSize: 18,
-            backgroundColor: "#A30D11",
-            width: 140,
-            height: 40,
-            marginBottom: 20,
-          }}
-        >
-          Xóa bỏ
-        </Button>
       </div>
     </div>
   );

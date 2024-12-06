@@ -17,11 +17,7 @@ interface Props {
   newPassword: string;
 }
 
-export default function CreateProduct({
-  uid,
-  hashedPassword,
-  newPassword,
-}: Props) {
+export default function CreateProduct({ hashedPassword, newPassword }: Props) {
   const [product, setProduct] = useState<Users>({
     id: "",
     name: "",
@@ -31,7 +27,7 @@ export default function CreateProduct({
     role: "",
     bank: "",
     stk: "",
-    ngaysinh: "",
+    ngay_sinh: "",
     sdt: "",
     cccd: "",
     dia_chi: "",
@@ -209,9 +205,9 @@ export default function CreateProduct({
               <label htmlFor="buy_price">Ngày sinh:</label>
               <input
                 type="date"
-                id="ngaysinh"
-                name="ngaysinh"
-                value={product.ngaysinh}
+                id="ngay_sinh"
+                name="ngay_sinh"
+                value={product.ngay_sinh}
                 onChange={handleChange}
                 style={{ width: 425, marginTop: 5 }}
                 className="h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"

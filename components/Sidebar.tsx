@@ -82,7 +82,7 @@ const sidebarItemsForRole = {
       label: "Hệ thống",
       icon: <FaCog />,
       dropdownItems: [
-        { label: "Logging", href: "/system/option1" },
+        { label: "Logging", href: "/dashboard/logging" },
         { label: "Back-up", href: "/system/option2" },
       ],
     },

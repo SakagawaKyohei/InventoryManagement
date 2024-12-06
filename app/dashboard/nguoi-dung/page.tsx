@@ -4,7 +4,7 @@ import {
   getUserByEmail,
 } from "@/app/lib/data";
 import { Product, Users } from "@/app/lib/definitions";
-import EditForm from "@/app/ui/account/ediform";
+import EditForm from "@/app/ui/viewnguoidung";
 import { auth } from "@/auth";
 
 export default async function EditProduct(props: {
@@ -22,7 +22,7 @@ export default async function EditProduct(props: {
 
   return (
     <div className="register-container">
-      <EditForm product1={product} uid={user.manv} />
+      <EditForm product={product} uid={user.manv} />
     </div>
   );
 }

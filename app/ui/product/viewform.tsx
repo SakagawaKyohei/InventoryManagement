@@ -13,6 +13,7 @@ import Link from "next/link";
 import { Textarea } from "@/components/ui/textarea";
 import { redirect } from "next/navigation";
 import { Product } from "@/app/lib/definitions";
+import { formatCurrency } from "@/app/lib/utils";
 
 interface Props {
   product1: Product;
@@ -241,7 +242,6 @@ export default function EditForm({ product1, uid }: Props) {
     //   </form>
     // </div>
     <>
-      {" "}
       <Link href={"/dashboard/products"}>
         {" "}
         <div style={{ display: "flex" }}>
@@ -256,6 +256,7 @@ export default function EditForm({ product1, uid }: Props) {
           <p style={{ marginTop: 25, fontSize: 20 }}>Quay lại</p>{" "}
         </div>
       </Link>
+
       <div style={{ marginLeft: 50, marginRight: 50 }}>
         <form onSubmit={handleSubmit}>
           <div
@@ -272,6 +273,7 @@ export default function EditForm({ product1, uid }: Props) {
               listType="picture-card"
               className="avatar-uploader"
               showUploadList={false}
+              disabled
               onChange={handleImageChange}
               style={{
                 display: "flex",
@@ -327,7 +329,12 @@ export default function EditForm({ product1, uid }: Props) {
                 name="name"
                 value={product.name}
                 onChange={handleChange}
-                style={{ width: 375, marginTop: 10 }}
+                disabled
+                style={{
+                  width: 375,
+                  marginTop: 10,
+                  backgroundColor: "#dddddd",
+                }}
               />
               {errors.name && <div style={{ color: "red" }}>{errors.name}</div>}
             </div>
@@ -339,8 +346,13 @@ export default function EditForm({ product1, uid }: Props) {
                 id="company"
                 name="company"
                 value={product.company}
+                disabled
                 onChange={handleChange}
-                style={{ width: 375, marginTop: 10 }}
+                style={{
+                  width: 375,
+                  marginTop: 10,
+                  backgroundColor: "#dddddd",
+                }}
               />
               {errors.company && (
                 <div style={{ color: "red" }}>{errors.company}</div>
@@ -357,28 +369,42 @@ export default function EditForm({ product1, uid }: Props) {
             }}
           >
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <label htmlFor="buy_price">Giá mua (Nghìn VNĐ):</label>
+              <label htmlFor="buy_price">Giá mua:</label>
               <Input
-                type="number"
+                type="text"
                 id="buy_price"
                 name="buy_price"
-                value={product.buy_price ? product.buy_price : ""}
+                disabled
+                value={
+                  product.buy_price
+                    ? formatCurrency(1000 * product.buy_price)
+                    : ""
+                }
                 onChange={handleChange}
-                style={{ width: 375, marginTop: 5 }}
+                style={{ width: 375, marginTop: 5, backgroundColor: "#dddddd" }}
               />
               {errors.buy_price && (
                 <div style={{ color: "red" }}>{errors.buy_price}</div>
               )}
             </div>
             <div>
-              <label htmlFor="sell_price">Giá bán (Nghìn VNĐ):</label>
+              <label htmlFor="sell_price">Giá bán:</label>
               <Input
-                type="number"
+                type="text"
+                disabled
                 id="sell_price"
                 name="sell_price"
-                value={product.sell_price ? product.sell_price : ""}
+                value={
+                  product.sell_price
+                    ? formatCurrency(1000 * product.sell_price)
+                    : ""
+                }
                 onChange={handleChange}
-                style={{ width: 375, marginTop: 10 }}
+                style={{
+                  width: 375,
+                  marginTop: 10,
+                  backgroundColor: "#dddddd",
+                }}
               />
               {errors.sell_price && (
                 <div style={{ color: "red" }}>{errors.sell_price}</div>
@@ -392,41 +418,14 @@ export default function EditForm({ product1, uid }: Props) {
               name="description"
               value={product.description}
               onChange={handleChange}
-              style={{ width: "100%", marginTop: 10, height: "20vh" }}
-            />
-          </div>
-
-          <div
-            style={{
-              marginTop: 25,
-              display: "flex",
-              justifyContent: "end",
-            }}
-          >
-            <Button
+              disabled
               style={{
-                fontSize: 18,
-                backgroundColor: "#007ACC",
-                width: 140,
-                height: 40,
-                marginRight: 15,
+                width: "100%",
+                marginTop: 10,
+                height: "20vh",
+                backgroundColor: "#dddddd",
               }}
-              type="submit"
-            >
-              Chỉnh sửa
-            </Button>
-            <Link href={"/dashboard/products"}>
-              <Button
-                style={{
-                  fontSize: 18,
-                  backgroundColor: "#A30D11",
-                  width: 140,
-                  height: 40,
-                }}
-              >
-                Hủy bỏ
-              </Button>
-            </Link>
+            />
           </div>
         </form>
       </div>

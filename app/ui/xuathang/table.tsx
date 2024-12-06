@@ -240,7 +240,7 @@ const FetchProductButton = ({
                     style={{ textDecoration: "underline" }}
                   >
                     <Link
-                      href={`/dashboard/nhap-hang/thong-tin-don-hang?id=${item.xuatid}`}
+                      href={`/dashboard/xuat-hang/thong-tin-don-hang?id=${item.xuatid}`}
                     >
                       {item.xuatid}
                     </Link>
