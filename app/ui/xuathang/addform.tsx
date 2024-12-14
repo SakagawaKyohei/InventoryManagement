@@ -34,6 +34,14 @@ interface Props {
 }
 export default function AddForm({ doitac, nguoivanchuyen }: Props) {
   const router = useRouter();
+
+  const handleGoBack = () => {
+    if (window.history.length > 2) {
+      window.history.back(); // Quay lại trang trước trong lịch sử trình duyệt
+    } else {
+      router.push("/"); // Nếu không có lịch sử, điều hướng về trang chủ
+    }
+  };
   const [products, setProducts] = useState<any[]>();
   const [clientproducts, setClientProducts] = useState<OrderProduct[]>([]);
   const [product, setProduct] = useState({
@@ -266,19 +274,20 @@ export default function AddForm({ doitac, nguoivanchuyen }: Props) {
     //   {message && <p>{message}</p>}
     // </div>
     <div className="register-container">
-      <div style={{ display: "flex" }}>
-        <Image
-          src="/return.png"
-          width={45}
-          height={45}
-          className="hidden md:block"
-          alt="return"
-          style={{ marginRight: 15, marginLeft: 20, marginTop: 20 }}
-        />
-        <Link href={"/dashboard/products"}>
+      <Link href={""}>
+        <div style={{ display: "flex" }} onClick={handleGoBack}>
+          <Image
+            src="/return.png"
+            width={45}
+            height={45}
+            className="hidden md:block"
+            alt="return"
+            style={{ marginRight: 15, marginLeft: 20, marginTop: 20 }}
+          />
+
           <p style={{ marginTop: 25, fontSize: 20 }}>Quay lại</p>
-        </Link>
-      </div>
+        </div>
+      </Link>
       <div style={{ marginLeft: 50, marginRight: 50 }}>
         <div
           style={{

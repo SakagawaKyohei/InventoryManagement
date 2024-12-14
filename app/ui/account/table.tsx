@@ -216,8 +216,13 @@ const FetchProductButton = ({ product, totalPages, uid }: Props) => {
             <TableBody>
               {product?.map((item) => (
                 <TableRow key={item.manv} style={{ height: 65 }}>
-                  <TableCell className="font-medium text-center">
-                    {item.manv}
+                  <TableCell
+                    className="font-medium text-center"
+                    style={{ textDecoration: "underline" }}
+                  >
+                    <Link href={`/dashboard/account/edit?id=${item.manv}`}>
+                      {item.manv}
+                    </Link>
                   </TableCell>
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.email}</TableCell>
@@ -232,9 +237,7 @@ const FetchProductButton = ({ product, totalPages, uid }: Props) => {
                     }}
                   >
                     {" "}
-                    <Link
-                      href={`/dashboard/products/edit-product?id=${item.id}`}
-                    >
+                    <Link href={`/dashboard/account/edit?id=${item.manv}`}>
                       <Image
                         src="/edit.png"
                         style={{ marginRight: 15 }}

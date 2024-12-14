@@ -223,10 +223,10 @@ const FetchProductButton = ({
                 <TableHead className="w-[150px] text-center">
                   Mã xuất hàng
                 </TableHead>
-
+                <TableHead>Mã đối tác</TableHead>
                 <TableHead>Tên đối tác</TableHead>
                 <TableHead>Số điện thoại</TableHead>
-                <TableHead>Địa chỉ</TableHead>
+
                 <TableHead>Ngày đặt</TableHead>
 
                 <TableHead>Trạng thái</TableHead>
@@ -244,14 +244,15 @@ const FetchProductButton = ({
                     >
                       {item.xuatid}
                     </Link>
+                  </TableCell>{" "}
+                  <TableCell>
+                    <TableCell>{item.id}</TableCell>
                   </TableCell>
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.sdt}</TableCell>
                   <TableCell>
                     {format(new Date(item.ngayxuat), "dd/MM/yyyy")}
                   </TableCell>
-
-                  <TableCell>{formatCurrency(item.total * 1000)}</TableCell>
                   <TableCell>
                     {item.status == "đang vận chuyển"
                       ? "Đang vận chuyển"

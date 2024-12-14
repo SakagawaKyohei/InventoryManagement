@@ -47,6 +47,14 @@ const FetchProductButton = ({
   uid,
 }: Props) => {
   const router = useRouter();
+
+  const handleGoBack = () => {
+    if (window.history.length > 2) {
+      window.history.back(); // Quay lại trang trước trong lịch sử trình duyệt
+    } else {
+      router.push("/"); // Nếu không có lịch sử, điều hướng về trang chủ
+    }
+  };
   const handlePay = async () => {
     try {
       const res = await fetch("/api/don-dat-hang/pay", {
@@ -94,9 +102,9 @@ const FetchProductButton = ({
 
   return (
     <div className="register-container">
-      <Link href={"/dashboard/nhap-hang/cho-thanh-toan"}>
+      <Link href={""}>
         {" "}
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex" }} onClick={handleGoBack}>
           {" "}
           <Image
             src="/return.png"

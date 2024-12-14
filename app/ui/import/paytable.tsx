@@ -194,8 +194,15 @@ const FetchProductButton = ({ dondathang, totalPages }: Props) => {
             <TableBody>
               {dondathang?.map((item) => (
                 <TableRow key={item.id} style={{ height: 65 }}>
-                  <TableCell className="font-medium text-center">
-                    {item.id}
+                  <TableCell
+                    className="font-medium text-center"
+                    style={{ textDecoration: "underline" }}
+                  >
+                    <Link
+                      href={`/dashboard/nhap-hang/thanh-toan?id=${item.id}`}
+                    >
+                      {item.id}
+                    </Link>
                   </TableCell>
                   <TableCell>{item.company}</TableCell>
                   <TableCell>

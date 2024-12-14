@@ -197,10 +197,10 @@ const FetchProductButton = ({ vanchuyen, totalPages }: Props) => {
                     className="font-medium text-center"
                     style={{ textDecoration: "underline" }}
                   >
-                    {item.id.startsWith("DH") ? (
+                    {item.id_don_hang.startsWith("DH") ? (
                       <>
                         <Link
-                          href={`/dashboard/nhap-hang/thong-tin-don-hang?id=${item.id_don_hang}`}
+                          href={`/dashboard/van-chuyen/dang-van-chuyen/xac-nhan?id=${item.id_don_hang}`}
                         >
                           {item.id_don_hang}
                         </Link>

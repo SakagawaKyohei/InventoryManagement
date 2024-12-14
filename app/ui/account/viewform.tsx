@@ -13,18 +13,13 @@ import Link from "next/link";
 import { Textarea } from "@/components/ui/textarea";
 import { redirect, useRouter } from "next/navigation";
 import { Product, Users } from "@/app/lib/definitions";
-import { formatCurrency } from "@/app/lib/utils";
 import { format } from "date-fns";
 
 interface Props {
-  product: Users;
+  product1: Users;
   uid: number;
 }
-export default function EditForm({ product, uid }: Props) {
-  const capitalizeFirstLetter = (str: string) => {
-    if (!str) return str; // Kiểm tra nếu chuỗi rỗng hoặc null
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  };
+export default function EditForm({ product1, uid }: Props) {
   const router = useRouter();
 
   const handleGoBack = () => {
@@ -34,6 +29,63 @@ export default function EditForm({ product, uid }: Props) {
       router.push("/"); // Nếu không có lịch sử, điều hướng về trang chủ
     }
   };
+  const [product, setProduct] = useState<Users>({
+    id: product1.id,
+    name: product1.name,
+    email: product1.email,
+    password: product1.password,
+    status: product1.status,
+    role: product1.role,
+    bank: product1.bank,
+    stk: product1.stk,
+    ngay_sinh: product1.ngay_sinh,
+    sdt: product1.sdt,
+    cccd: product1.cccd,
+    dia_chi: product1.dia_chi,
+    manv: product1.manv,
+  });
+
+  const handleChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      [name]: value,
+    }));
+  };
+
+  const [error, setError] = useState<string>("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      // Proceed with the API call to edit the product
+      const res = await fetch("/api/auth/edit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: product.manv, product, uid }),
+      });
+
+      // Check if the API call was successful
+      if (res.ok) {
+        alert("Product updated successfully");
+        // Use a proper redirection method based on your framework (e.g., React Router)
+        redirect("/dashboard");
+      } else {
+        const data = await res.json();
+        setError(data.message || "Error updating product");
+      }
+    } catch (error) {
+      // Catch any unexpected errors
+      console.error("An error occurred:", error);
+      setError("Something went wrong. Please try again.");
+    }
+  };
+
   return (
     // <div className="register-container">
     //   <h2>Edit Product</h2>
@@ -103,6 +155,7 @@ export default function EditForm({ product, uid }: Props) {
     //   </form>
     // </div>
     <>
+      {" "}
       <Link href={""}>
         <div style={{ display: "flex" }} onClick={handleGoBack}>
           <Image
@@ -116,15 +169,8 @@ export default function EditForm({ product, uid }: Props) {
           <p style={{ marginTop: 25, fontSize: 20 }}>Quay lại</p>{" "}
         </div>
       </Link>
-
-      <div
-        style={{
-          marginLeft: 50,
-          marginRight: 50,
-          marginTop: 40,
-        }}
-      >
-        <form>
+      <div style={{ marginLeft: 50, marginRight: 50 }}>
+        <form onSubmit={handleSubmit}>
           <div
             style={{
               display: "flex",
@@ -140,29 +186,36 @@ export default function EditForm({ product, uid }: Props) {
                   type="text"
                   id="name"
                   name="name"
-                  value={35}
                   disabled
+                  value={product.manv}
+                  onChange={handleChange}
                   style={{
                     width: 140,
-                    marginRight: 15,
                     marginTop: 10,
                     backgroundColor: "#dddddd",
                   }}
                 />
-              </div>
-              <div style={{ display: "flex", flexDirection: "column" }}>
+              </div>{" "}
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  marginLeft: 10,
+                }}
+              >
                 <label htmlFor="name">Họ tên:</label>
                 <Input
                   type="text"
                   id="name"
                   name="name"
                   value={product.name}
-                  disabled
+                  onChange={handleChange}
                   style={{
-                    width: 220,
+                    width: 275,
                     marginTop: 10,
                     backgroundColor: "#dddddd",
                   }}
+                  disabled
                 />
               </div>
             </div>
@@ -171,12 +224,13 @@ export default function EditForm({ product, uid }: Props) {
               <label htmlFor="company">Email:</label>
               <Input
                 type="text"
-                id="company"
-                name="company"
-                value={product.email}
+                id="email"
+                name="email"
                 disabled
+                value={product.email}
+                onChange={handleChange}
                 style={{
-                  width: 375,
+                  width: 425,
                   marginTop: 10,
                   backgroundColor: "#dddddd",
                 }}
@@ -187,34 +241,41 @@ export default function EditForm({ product, uid }: Props) {
             style={{
               display: "flex",
               flexDirection: "row",
-              marginTop: 25,
+              marginTop: 30,
               justifyContent: "space-between",
             }}
           >
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <label htmlFor="buy_price">SĐT:</label>
+              <label htmlFor="name">Số điện thoại:</label>
               <Input
                 type="text"
-                id="buy_price"
-                name="buy_price"
+                id="sdt"
+                name="sdt"
                 disabled
                 value={product.sdt}
-                style={{ width: 375, marginTop: 5, backgroundColor: "#dddddd" }}
-              />
-            </div>
-            <div>
-              <label htmlFor="sell_price">CCCD:</label>
-              <Input
-                type="text"
-                disabled
-                id="sell_price"
-                name="sell_price"
+                onChange={handleChange}
                 style={{
-                  width: 375,
+                  width: 425,
                   marginTop: 10,
                   backgroundColor: "#dddddd",
                 }}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="company">Căn cước công dân:</label>
+              <Input
+                type="text"
+                id="cccd"
+                name="cccd"
                 value={product.cccd}
+                onChange={handleChange}
+                disabled
+                style={{
+                  width: 425,
+                  marginTop: 10,
+                  backgroundColor: "#dddddd",
+                }}
               />
             </div>
           </div>
@@ -222,48 +283,56 @@ export default function EditForm({ product, uid }: Props) {
             style={{
               display: "flex",
               flexDirection: "row",
-              marginTop: 25,
+              marginTop: 30,
               justifyContent: "space-between",
             }}
           >
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <label htmlFor="buy_price">Ngày sinh:</label>
+              <label htmlFor="name">Ngày sinh:</label>
               <Input
-                type="text"
-                id="buy_price"
-                name="buy_price"
+                type="date"
+                id="ngay_sinh"
+                name="ngay_sinh"
                 disabled
-                value={format(new Date(product.ngay_sinh), "dd/MM/yyyy")}
-                style={{ width: 375, marginTop: 5, backgroundColor: "#dddddd" }}
+                value={format(new Date(product.ngay_sinh), "yyyy-MM-dd")} // Correct date format for <input type="date">
+                onChange={handleChange}
+                style={{
+                  width: 425,
+                  marginTop: 10,
+                  display: "block",
+                  backgroundColor: "#dddddd",
+                }}
               />
             </div>
-            <div style={{ display: "flex" }}>
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                <label htmlFor="name">Ngân hàng:</label>
+
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <div style={{ marginRight: 20 }}>
+                <label htmlFor="sell_price">Ngân hàng:</label>
                 <Input
-                  type="text"
-                  id="name"
-                  name="name"
+                  type="bank"
+                  id="bank"
+                  name="bank"
                   value={product.bank}
+                  onChange={handleChange}
                   disabled
                   style={{
-                    width: 140,
-                    marginRight: 15,
+                    width: 150,
                     marginTop: 10,
                     backgroundColor: "#dddddd",
                   }}
                 />
               </div>
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                <label htmlFor="name">Số tài khoản:</label>
+              <div>
+                <label htmlFor="sell_price">Số tài khoản:</label>
                 <Input
                   type="text"
-                  id="name"
-                  name="name"
+                  id="stk"
+                  name="stk"
                   value={product.stk}
                   disabled
+                  onChange={handleChange}
                   style={{
-                    width: 220,
+                    width: 255,
                     marginTop: 10,
                     backgroundColor: "#dddddd",
                   }}
@@ -271,12 +340,14 @@ export default function EditForm({ product, uid }: Props) {
               </div>
             </div>
           </div>
+
           <div style={{ marginTop: 25 }}>
             <label htmlFor="description">Địa chỉ:</label>
             <Textarea
-              id="description"
-              name="description"
+              id="dia_chi"
+              name="dia_chi"
               value={product.dia_chi}
+              onChange={handleChange}
               disabled
               style={{
                 width: "100%",
@@ -286,12 +357,6 @@ export default function EditForm({ product, uid }: Props) {
               }}
             />
           </div>
-          <p
-            style={{ fontWeight: "bold", fontSize: 20, marginTop: 50 }}
-            className="text-right"
-          >
-            Chức vụ: {capitalizeFirstLetter(product.role)}
-          </p>
         </form>
       </div>
     </>

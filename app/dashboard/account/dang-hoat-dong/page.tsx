@@ -1,6 +1,6 @@
 import Table from "@/app/ui/account/table";
 import {
-  fetchAccountActivePages,
+    fetchAccountActivePages,
   fetchFilteredActiveAccount,
   fetchFilteredProducts,
   fetchProductsPages,

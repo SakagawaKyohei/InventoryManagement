@@ -214,8 +214,13 @@ const FetchProductButton = ({ doitac, totalPages, uid }: Props) => {
             <TableBody>
               {doitac?.map((item) => (
                 <TableRow key={item.id} style={{ height: 65 }}>
-                  <TableCell className="font-medium text-center">
-                    {item.id}
+                  <TableCell
+                    className="font-medium text-center"
+                    style={{ textDecoration: "underline" }}
+                  >
+                    <Link href={`/dashboard/doi-tac/view?id=${item.id}`}>
+                      {item.id}
+                    </Link>
                   </TableCell>
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.dia_chi}</TableCell>

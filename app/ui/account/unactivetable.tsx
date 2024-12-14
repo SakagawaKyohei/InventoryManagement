@@ -166,9 +166,9 @@ const FetchProductButton = ({ product, totalPages, uid }: Props) => {
     <div>
       <div style={{ backgroundColor: "#EAEAEA" }}>
         <div className="px-2 py-4 md:px-4" style={{ backgroundColor: "white" }}>
-          <p style={{ fontWeight: "bold", fontSize: 24 }}>Đang hoạt động</p>
+          <p style={{ fontWeight: "bold", fontSize: 24 }}>Ngừng hoạt động</p>
           <p style={{ marginBottom: 15 }}>
-            Danh sách các tài khoản đang hoạt động
+            Danh sách các tài khoản ngừng hoạt động
           </p>
           <div
             style={{ display: "flex", flexDirection: "row", paddingBottom: 15 }}
@@ -268,40 +268,6 @@ const FetchProductButton = ({ product, totalPages, uid }: Props) => {
             )}
           </Pagination>
         </div>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "end",
-          marginRight: 25,
-          marginTop: 30,
-        }}
-      >
-        <Link href={"/dashboard/account/create"}>
-          <Button
-            style={{
-              marginRight: 15,
-              fontSize: 18,
-              backgroundColor: "#007ACC",
-              width: 140,
-              height: 40,
-            }}
-          >
-            Thêm mới
-          </Button>
-        </Link>
-        <Button
-          style={{
-            marginRight: 15,
-            fontSize: 18,
-            backgroundColor: "#A30D11",
-            width: 140,
-            height: 40,
-            marginBottom: 20,
-          }}
-        >
-          Xóa bỏ
-        </Button>
       </div>
     </div>
   );

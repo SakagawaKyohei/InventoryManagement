@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Textarea } from "@/components/ui/textarea";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { Product } from "@/app/lib/definitions";
 
 interface Props {
@@ -37,6 +37,16 @@ export default function EditForm({ product1 }: Props) {
   const handleImageChange = (e: any) => {
     const file = e.file;
     setImage(file.originFileObj); // Cập nhật trạng thái ảnh
+  };
+
+  const router = useRouter();
+
+  const handleGoBack = () => {
+    if (window.history.length > 2) {
+      window.history.back(); // Quay lại trang trước trong lịch sử trình duyệt
+    } else {
+      router.push("/"); // Nếu không có lịch sử, điều hướng về trang chủ
+    }
   };
 
   const [errors, setErrors] = useState({
@@ -240,19 +250,20 @@ export default function EditForm({ product1 }: Props) {
     //   </form>
     // </div>
     <>
-      <div style={{ display: "flex" }}>
-        <Image
-          src="/return.png"
-          width={45}
-          height={45}
-          className="hidden md:block"
-          alt="return"
-          style={{ marginRight: 15, marginLeft: 20, marginTop: 20 }}
-        />
-        <Link href={"/dashboard/products"}>
+      <Link href={""}>
+        <div style={{ display: "flex" }} onClick={handleGoBack}>
+          <Image
+            src="/return.png"
+            width={45}
+            height={45}
+            className="hidden md:block"
+            alt="return"
+            style={{ marginRight: 15, marginLeft: 20, marginTop: 20 }}
+          />
+
           <p style={{ marginTop: 25, fontSize: 20 }}>Quay lại</p>
-        </Link>
-      </div>
+        </div>{" "}
+      </Link>
       <div style={{ marginLeft: 50, marginRight: 50 }}>
         <form onSubmit={handleSubmit}>
           <div

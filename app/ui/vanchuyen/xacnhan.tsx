@@ -43,6 +43,14 @@ const FetchProductButton = ({ dondathang, vanchuyen, uid }: Props) => {
   };
   const router = useRouter();
 
+  const handleGoBack = () => {
+    if (window.history.length > 2) {
+      window.history.back(); // Quay lại trang trước trong lịch sử trình duyệt
+    } else {
+      router.push("/"); // Nếu không có lịch sử, điều hướng về trang chủ
+    }
+  };
+
   return (
     <div
       className="register-container"
@@ -54,8 +62,8 @@ const FetchProductButton = ({ dondathang, vanchuyen, uid }: Props) => {
       }}
     >
       {/* Header */}
-      <Link href={"/dashboard/van-chuyen/dang-van-chuyen"}>
-        <div style={{ display: "flex" }}>
+      <Link href={""}>
+        <div style={{ display: "flex" }} onClick={handleGoBack}>
           <Image
             src="/return.png"
             width={45}

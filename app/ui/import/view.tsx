@@ -41,6 +41,14 @@ interface Props {
 
 const FetchProductButton = ({ dondathang, ketoan, nguoivanchuyen }: Props) => {
   const router = useRouter();
+
+  const handleGoBack = () => {
+    if (window.history.length > 2) {
+      window.history.back(); // Quay lại trang trước trong lịch sử trình duyệt
+    } else {
+      router.push("/"); // Nếu không có lịch sử, điều hướng về trang chủ
+    }
+  };
   const handlePay = async () => {
     try {
       const res = await fetch("/api/don-dat-hang/pay", {
@@ -87,8 +95,8 @@ const FetchProductButton = ({ dondathang, ketoan, nguoivanchuyen }: Props) => {
   return (
     <div className="register-container">
       <div style={{ display: "flex" }}>
-        <Link href={"/dashboard/nhap-hang"}>
-          <div style={{ display: "flex" }}>
+        <Link href={""}>
+          <div style={{ display: "flex" }} onClick={handleGoBack}>
             {" "}
             <Image
               src="/return.png"

@@ -145,8 +145,8 @@ const FetchProductButton = ({ tonkho, totalPages }: Props) => {
     <div>
       <div style={{ backgroundColor: "#EAEAEA" }}>
         <div className="px-2 py-4 md:px-4" style={{ backgroundColor: "white" }}>
-          <p style={{ fontWeight: "bold", fontSize: 24 }}>Hết hạn</p>
-          <p style={{ marginBottom: 15 }}>Danh sách các thức ăn hết hạn</p>
+          <p style={{ fontWeight: "bold", fontSize: 24 }}>Còn hạn</p>
+          <p style={{ marginBottom: 15 }}>Danh sách các thức ăn còn hạn</p>
           <div
             style={{ display: "flex", flexDirection: "row", paddingBottom: 15 }}
           >
@@ -184,11 +184,12 @@ const FetchProductButton = ({ tonkho, totalPages }: Props) => {
                   Mã đơn hàng
                 </TableHead>
 
+                <TableHead>Mã hàng</TableHead>
                 <TableHead>Tên hàng</TableHead>
                 <TableHead>Ngày nhập</TableHead>
                 <TableHead>Hạn sử dụng</TableHead>
                 <TableHead>Số lượng</TableHead>
-                <TableHead>Giá tiền</TableHead>
+
                 <TableHead>Công ty nhập</TableHead>
               </TableRow>
             </TableHeader>
@@ -198,8 +199,25 @@ const FetchProductButton = ({ tonkho, totalPages }: Props) => {
                   key={item.ma_don_hang + item.ma_hang}
                   style={{ height: 65 }}
                 >
-                  <TableCell className="font-medium text-center">
-                    {item.ma_don_hang}
+                  <TableCell
+                    className="font-medium text-center"
+                    style={{ textDecoration: "underline" }}
+                  >
+                    <Link
+                      href={`/dashboard/nhap-hang/thong-tin-don-hang?id=${item.ma_don_hang}`}
+                    >
+                      {" "}
+                      {item.ma_don_hang}
+                    </Link>
+                  </TableCell>
+
+                  <TableCell
+                    style={{ textDecoration: "underline" }}
+                    className="font-medium"
+                  >
+                    <Link href={`/dashboard/products/view?id=${item.ma_hang}`}>
+                      {item.ma_hang}
+                    </Link>
                   </TableCell>
                   <TableCell>{item.name}</TableCell>
                   <TableCell>
@@ -210,11 +228,7 @@ const FetchProductButton = ({ tonkho, totalPages }: Props) => {
                   </TableCell>
 
                   <TableCell>{item.so_luong}</TableCell>
-                  <TableCell>
-                    {item.sell_price
-                      ? formatCurrency(item.sell_price * 1000)
-                      : 0}
-                  </TableCell>
+
                   <TableCell>{item.company}</TableCell>
                 </TableRow>
               ))}

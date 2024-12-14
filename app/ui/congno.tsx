@@ -214,12 +214,16 @@ const FetchProductButton = ({ vanchuyen, totalPages }: Props) => {
                     style={{ textDecoration: "underline" }}
                   >
                     <Link
-                      href={`/dashboard/nhap-hang/thong-tin-don-hang?id=${item.donhangid}`}
+                      href={`/dashboard/xuat-hang/thong-tin-don-hang?id=${item.donhangid}`}
                     >
                       {item.donhangid}
                     </Link>
                   </TableCell>
-                  <TableCell>{item.doitacid}</TableCell>
+                  <TableCell style={{ textDecoration: "underline" }}>
+                    <Link href={`/dashboard/doi-tac/view?id=${item.doitacid}`}>
+                      {item.doitacid}
+                    </Link>
+                  </TableCell>
                   <TableCell>{item.doitacname}</TableCell>
 
                   <TableCell>

@@ -185,7 +185,7 @@ const FetchProductButton = ({ dondathang, totalPages }: Props) => {
                   Mã đặt hàng
                 </TableHead>
 
-                <TableHead>Kho xuất hàng</TableHead>
+                <TableHead>Công ty nhập</TableHead>
                 <TableHead>Địa chỉ</TableHead>
                 <TableHead>Ngày thanh toán</TableHead>
                 <TableHead>Mã người vận chuyển</TableHead>
@@ -202,7 +202,7 @@ const FetchProductButton = ({ dondathang, totalPages }: Props) => {
                       {item.id_don_hang}
                     </Link>
                   </TableCell>
-                  <TableCell>{item.kho_xuat_hang}</TableCell>
+                  <TableCell>{item.company}</TableCell>
                   <TableCell>{item.dia_chi_kho}</TableCell>
 
                   <TableCell>

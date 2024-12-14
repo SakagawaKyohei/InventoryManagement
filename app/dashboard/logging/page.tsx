@@ -5,6 +5,7 @@ import {
   fetchFilteredDonDatHang,
   fetchFilteredLogging,
   fetchFilteredProducts,
+  fetchLoggingPages,
   fetchProductsPages,
   getUser,
   getUserByEmail,
@@ -29,7 +30,7 @@ const FetchProductButton = async (props: {
   const query = searchParams?.query || "";
   const currentPage = Number(searchParams?.page) || 1;
   const item_per_page = Number(searchParams?.itemsPerPage) || 5;
-  const totalPages = await fetchDoiTacPages(query, item_per_page);
+  const totalPages = await fetchLoggingPages(query, item_per_page);
   const session = await auth();
   const user = await getUserByEmail(
     session?.user?.email ? session?.user?.email : ""

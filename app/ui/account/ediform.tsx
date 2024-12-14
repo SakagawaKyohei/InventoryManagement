@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Textarea } from "@/components/ui/textarea";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { Product, Users } from "@/app/lib/definitions";
 import { format } from "date-fns";
 
@@ -49,7 +49,15 @@ export default function EditForm({ product1, uid }: Props) {
   };
 
   const [error, setError] = useState<string>("");
+  const router = useRouter();
 
+  const handleGoBack = () => {
+    if (window.history.length > 2) {
+      window.history.back(); // Quay lại trang trước trong lịch sử trình duyệt
+    } else {
+      router.push("/"); // Nếu không có lịch sử, điều hướng về trang chủ
+    }
+  };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -147,9 +155,9 @@ export default function EditForm({ product1, uid }: Props) {
     // </div>
     <>
       {" "}
-      <Link href={"/dashboard/products"}>
+      <Link href={""}>
         {" "}
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex" }} onClick={handleGoBack}>
           <Image
             src="/return.png"
             width={45}

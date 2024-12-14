@@ -28,7 +28,17 @@ import { useDebouncedCallback } from "use-debounce";
 import { formatCurrency } from "@/app/lib/utils";
 import { Underline } from "lucide-react";
 import { DoiTac, Logging, Users } from "../lib/definitions";
+import { toZonedTime } from "date-fns-tz";
 
+// Múi giờ Việt Nam
+const vietnamTimeZone = "Asia/Ho_Chi_Minh";
+
+// Thời gian của item
+const formattedDate = (time: any) => {
+  const utcTime = new Date(time); // Thời gian gốc UTC
+  const zonedTime = toZonedTime(utcTime, vietnamTimeZone); // Chuyển sang giờ Việt Nam
+  return format(zonedTime, "dd/MM/yyyy HH:mm:ss"); // Hiển thị dd/MM/yyyy HH:mm:ss
+};
 interface Props {
   logging: Logging[];
   totalPages: number;
@@ -44,6 +54,9 @@ const FetchProductButton = ({ logging, totalPages, uid, users }: Props) => {
   const [item_per_page, setItemPerPage] = useState(
     Number(searchParams?.get("itemsPerPage")) || 5
   );
+
+  const now = new Date(); // Server-side time
+  console.log("Server giờ UTC:", now.toISOString());
 
   const handleDelete = async (id: string) => {
     const params = new URLSearchParams(
@@ -167,8 +180,18 @@ const FetchProductButton = ({ logging, totalPages, uid, users }: Props) => {
     <div>
       <div style={{ backgroundColor: "#EAEAEA" }}>
         <div className="px-2 py-4 md:px-4" style={{ backgroundColor: "white" }}>
-          <p style={{ fontWeight: "bold", fontSize: 24 }}>Đối tác</p>
-          <p style={{ marginBottom: 15 }}>Danh sách các đối tác</p>
+          <p style={{ fontWeight: "bold", fontSize: 24 }}>Logging</p>
+          <p
+            style={{ marginBottom: 15 }}
+            onClick={() => {
+              // Test với giờ server (UTC)
+              const serverTimeUTC = "2024-12-14T11:08:13.701Z";
+              console.log("Giờ UTC server:", serverTimeUTC); // In ra giờ UTC
+              console.log("Giờ Việt Nam:", formattedDate(serverTimeUTC)); // Chuyển sang giờ Việt Nam
+            }}
+          >
+            Danh sách các hoạt động của người dùng
+          </p>
           <div
             style={{ display: "flex", flexDirection: "row", paddingBottom: 15 }}
           >
@@ -202,36 +225,124 @@ const FetchProductButton = ({ logging, totalPages, uid, users }: Props) => {
           <Table>
             <TableHeader>
               <TableRow style={{ height: 65 }}>
-                <TableHead>Thời gian</TableHead>
+                <TableHead className="text-center">Thời gian</TableHead>
 
                 <TableHead>Mã nhân viên</TableHead>
                 <TableHead>Tên nhân viên</TableHead>
                 <TableHead>Hoạt động</TableHead>
-                <button
-                  onClick={() => {
-                    console.log(users);
-                  }}
-                >
-                  a
-                </button>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {logging?.map((item) => {
+              {logging?.map((item, index) => {
                 // Tìm nhân viên có mã nhân viên tương ứng với item.user_id
                 const user = users.find(
                   (u) => u.manv === parseInt(item.user_id)
                 );
 
                 return (
-                  <TableRow key={item.time} style={{ height: 65 }}>
-                    <TableCell>
-                      {format(new Date(item.time), "dd/MM/yyyy")}
+                  <TableRow key={index} style={{ height: 65 }}>
+                    <TableCell className="text-center">
+                      {formattedDate(item.time)}
                     </TableCell>
-                    <TableCell>{item.user_id}</TableCell>
+                    <TableCell style={{ textDecoration: "underline" }}>
+                      <Link href={`/dashboard/account/view?id=${item.user_id}`}>
+                        {item.user_id}
+                      </Link>
+                    </TableCell>
                     {/* Hiển thị tên nhân viên nếu tìm thấy */}
                     <TableCell>{user ? user.name : "Không tìm thấy"}</TableCell>
-                    <TableCell>{item.action}</TableCell>
+                    <TableCell>
+                      {item.action === "Tạo sản phẩm" ? (
+                        <div>
+                          Đã thêm mới sản phẩm mã{" "}
+                          <Link href={""} style={{ fontWeight: "bold" }}>
+                            {item.idforlink}
+                          </Link>{" "}
+                        </div>
+                      ) : null}
+
+                      {item.action === "Chỉnh sửa sản phẩm" ? (
+                        <div>
+                          Đã cập nhật thông tin sản phẩm mã{" "}
+                          <Link href={""} style={{ fontWeight: "bold" }}>
+                            {item.idforlink}
+                          </Link>
+                        </div>
+                      ) : null}
+
+                      {item.action === "Xóa sản phẩm" ? (
+                        <div>
+                          Đã xóa thông tin sản phẩm mã{" "}
+                          <Link href={""} style={{ fontWeight: "bold" }}>
+                            {item.idforlink}
+                          </Link>{" "}
+                          khỏi hệ thống
+                        </div>
+                      ) : null}
+
+                      {item.action === "Tạo đơn đặt hàng" ? (
+                        <div>
+                          Đã tạo yêu cầu đặt hàng mã{" "}
+                          <Link style={{ fontWeight: "bold" }} href={""}>
+                            {item.idforlink}
+                          </Link>
+                        </div>
+                      ) : null}
+
+                      {item.action === "Thanh toán" ? (
+                        <div>
+                          Đã thanh toán cho đơn đặt hàng mã{" "}
+                          <Link href={""} style={{ fontWeight: "bold" }}>
+                            {item.idforlink}
+                          </Link>
+                        </div>
+                      ) : null}
+
+                      {item.action === "Xóa đối tác" ? (
+                        <div>
+                          Đã xóa thông tin đối tác mã{" "}
+                          <Link href={""} style={{ fontWeight: "bold" }}>
+                            {item.idforlink}
+                          </Link>
+                        </div>
+                      ) : null}
+
+                      {item.action === "Đã vận chuyển" ? (
+                        <div>
+                          Đã vận chuyển thành công đơn hàng mã{" "}
+                          <Link href={""} style={{ fontWeight: "bold" }}>
+                            {item.idforlink}
+                          </Link>
+                        </div>
+                      ) : null}
+
+                      {item.action === "Thêm đối tác" ? (
+                        <div>
+                          Đã thêm mới thông tin đối tác mã{" "}
+                          <Link href={""} style={{ fontWeight: "bold" }}>
+                            {item.idforlink}
+                          </Link>{" "}
+                        </div>
+                      ) : null}
+
+                      {item.action === "Sửa đối tác" ? (
+                        <div>
+                          Đã cập nhật thông tin đối tác mã{" "}
+                          <Link href={""} style={{ fontWeight: "bold" }}>
+                            {item.idforlink}
+                          </Link>
+                        </div>
+                      ) : null}
+
+                      {item.action === "Chỉnh sửa người dùng" ? (
+                        <div>
+                          Đã đã cập nhật thông tin người dùng mã{" "}
+                          <Link href={""} style={{ fontWeight: "bold" }}>
+                            {item.idforlink}
+                          </Link>
+                        </div>
+                      ) : null}
+                    </TableCell>
                   </TableRow>
                 );
               })}
@@ -258,28 +369,6 @@ const FetchProductButton = ({ logging, totalPages, uid, users }: Props) => {
             )}
           </Pagination>
         </div>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "end",
-          marginRight: 25,
-          marginTop: 30,
-        }}
-      >
-        <Link href={"/dashboard/doi-tac/them-moi"}>
-          <Button
-            style={{
-              marginRight: 15,
-              fontSize: 18,
-              backgroundColor: "#007ACC",
-              width: 140,
-              height: 40,
-            }}
-          >
-            Thêm mới
-          </Button>
-        </Link>
       </div>
     </div>
   );

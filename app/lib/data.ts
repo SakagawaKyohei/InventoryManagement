@@ -889,6 +889,26 @@ export async function fetchFilteredLogging(
 }
 
 
+export async function fetchLoggingPages(query: string,item_per_page:number) {
+  try {
+    const count = await sql`SELECT COUNT(*)
+      FROM logging
+      WHERE
+      action ILIKE ${`%${query}%`} OR
+      idforlink ILIKE ${`%${query}%`} OR
+      user_id::text ILIKE ${`%${query}%`} 
+  `;
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / item_per_page);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of products.');
+  }
+}
+
+
+
 export async function fetchFilteredCongNo(
   query: string,
   currentPage: number,

@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Textarea } from "@/components/ui/textarea";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { Product } from "@/app/lib/definitions";
 
 interface Props {
@@ -58,7 +58,15 @@ export default function EditForm({ product1, uid }: Props) {
       }));
     }
   }, [id_anhbia, image]);
+  const router = useRouter();
 
+  const handleGoBack = () => {
+    if (window.history.length > 2) {
+      window.history.back(); // Quay lại trang trước trong lịch sử trình duyệt
+    } else {
+      router.push("/"); // Nếu không có lịch sử, điều hướng về trang chủ
+    }
+  };
   const handleChange = (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -242,9 +250,9 @@ export default function EditForm({ product1, uid }: Props) {
     // </div>
     <>
       {" "}
-      <Link href={"/dashboard/products"}>
+      <Link href={""}>
         {" "}
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex" }} onClick={handleGoBack}>
           <Image
             src="/return.png"
             width={45}
