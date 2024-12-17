@@ -336,6 +336,8 @@ export async function AddDonDatHang1(uid: number) {
 }
 
 
+
+
 //them don dat hang trang thai cho thanh toan
 
 export async function CancelDonDatHang() {
@@ -344,6 +346,26 @@ export async function CancelDonDatHang() {
     await sql`
       DELETE FROM dondathang
       WHERE status = 'draft';
+    `;
+
+    // If you're using caching or page revalidation:
+    // revalidatePath('/product-list'); 
+
+    return { message: 'Đơn hàng đã được hủy thành công.' };
+  } catch (error) {
+    console.error('Database error:', error);  // Log the error for debugging
+    return { message: 'Lỗi cơ sở dữ liệu: Không thể hủy đơn hàng.' };
+  }
+}
+
+
+export async function TerminateProcess() {
+  try {
+
+    await sql`
+    SELECT pg_terminate_backend(pid)
+    FROM pg_stat_activity
+    WHERE datname = 'neon-yellow-school';
     `;
 
     // If you're using caching or page revalidation:
@@ -453,6 +475,8 @@ export async function DaThanhToan(doitacid: string, donhangid:string, sotien:num
     return { message: 'Lỗi cơ sở dữ liệu: Không thể xử lý đơn hàng.' };
   }
 }
+
+
 
 export async function DaXuat(donHang: DonXuatHang, phuongthuc:string, doitac:DoiTac) {
   try {

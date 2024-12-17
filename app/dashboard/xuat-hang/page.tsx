@@ -7,6 +7,7 @@ import {
   fetchNguoiVanChuyen,
   fetchPartner,
   fetchProductsPages,
+  fetchXuatHangPages,
 } from "@/app/lib/data";
 import {
   DoiTac,
@@ -29,7 +30,7 @@ const FetchProductButton = async (props: {
   const currentPage = Number(searchParams?.page) || 1;
   const item_per_page = Number(searchParams?.itemsPerPage) || 5;
   type XuatHangWithDoiTac = DonXuatHang & DoiTac;
-  const totalPages = await fetchDonDatHangPages(query, item_per_page);
+  const totalPages = await fetchXuatHangPages(query, item_per_page);
   const dondathang: XuatHangWithDoiTac[] = await fetchFilteredXuatHang(
     query,
     currentPage,

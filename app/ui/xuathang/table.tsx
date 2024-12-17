@@ -244,10 +244,8 @@ const FetchProductButton = ({
                     >
                       {item.xuatid}
                     </Link>
-                  </TableCell>{" "}
-                  <TableCell>
-                    <TableCell>{item.id}</TableCell>
                   </TableCell>
+                  <TableCell>{item.id}</TableCell>
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.sdt}</TableCell>
                   <TableCell>

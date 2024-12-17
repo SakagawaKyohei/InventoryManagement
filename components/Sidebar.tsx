@@ -83,7 +83,7 @@ const sidebarItemsForRole = {
       icon: <FaCog />,
       dropdownItems: [
         { label: "Logging", href: "/dashboard/logging" },
-        { label: "Back-up", href: "/system/option2" },
+        { label: "Back-up", href: "/dashboard/back-up" },
       ],
     },
 

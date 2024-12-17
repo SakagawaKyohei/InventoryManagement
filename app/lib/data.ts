@@ -62,6 +62,9 @@ export async function fetchLatestInvoices() {
   }
 }
 
+
+
+
 export async function fetchCardData() {
   try {
     // You can probably combine these into a single SQL query
@@ -163,6 +166,23 @@ export async function fetchFilteredInvoices(
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
 
+    return invoices.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch invoices.');
+  }
+}
+
+
+
+export async function fetchLatestDoanhThu(
+
+) {
+  try {
+    const invoices = await sql<any>`
+      SELECT *
+      FROM doanhthu
+      LIMIT 12`;
     return invoices.rows;
   } catch (error) {
     console.error('Database Error:', error);
@@ -1172,6 +1192,25 @@ export async function fetchDonDatHangPages(query: string,item_per_page:number) {
         product::text ILIKE ${`%${query}%`} OR
         status::text ILIKE ${`%${query}%`} OR
         ngay_dat::text ILIKE ${`%${query}%`} 
+  `;
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / item_per_page);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of products.');
+  }
+}
+
+export async function fetchXuatHangPages(query: string,item_per_page:number) {
+  try {
+    const count = await sql`SELECT COUNT(*)
+     FROM donxuathang
+    JOIN doitac ON doitac.id = donxuathang.ma_doi_tac
+    WHERE
+      (doitac.id::text ILIKE '%' || ${query} || '%' OR
+      donxuathang.ma_doi_tac::text ILIKE '%' || ${query} || '%' OR
+      donxuathang.status::text ILIKE '%' || ${query} || '%')
   `;
 
     const totalPages = Math.ceil(Number(count.rows[0].count) / item_per_page);
