@@ -1,7 +1,9 @@
 import { generateYAxis } from "@/app/lib/utils";
 import { CalendarIcon } from "@heroicons/react/24/outline";
 import { lusitana } from "@/app/ui/fonts";
-import { fetchRevenue } from "@/app/lib/data";
+import { fetchLatestDoanhThu, fetchRevenue } from "@/app/lib/data";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 // This component is representational only.
 // For data visualization UI, check out:
@@ -11,7 +13,7 @@ import { fetchRevenue } from "@/app/lib/data";
 
 export default async function RevenueChart() {
   // Make component async, remove the props
-  const revenue = await fetchRevenue(); // Fetch data inside the component
+  const revenue = await fetchLatestDoanhThu(); // Fetch data inside the component
   const chartHeight = 350;
   // NOTE: Uncomment this code in Chapter 7
 
@@ -25,6 +27,20 @@ export default async function RevenueChart() {
     <div className="w-full md:col-span-4">
       <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
         Doanh thu hiện tại
+        <Link href={"/dashboard/forecast"} style={{ marginLeft: 280 }}>
+          <Button
+            style={{
+              fontSize: 15,
+              backgroundColor: "black",
+              color: "white",
+
+              width: 60,
+              height: 40,
+            }}
+          >
+            Dự báo
+          </Button>
+        </Link>
       </h2>
       {/* NOTE: Uncomment this code in Chapter 7 */}
 

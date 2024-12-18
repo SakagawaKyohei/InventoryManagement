@@ -10,7 +10,7 @@ from flask import Flask, jsonify
 load_dotenv()
 
 # Lấy thông tin kết nối từ các biến môi trường
-POSTGRES_HOST = os.getenv('POSTGRES_HOST')
+POSTGRES_HOST = os.getenv('POSTGRES_HOST1')
 POSTGRES_PORT = os.getenv('POSTGRES_PORT', 5432)  # Cổng mặc định PostgreSQL là 5432
 POSTGRES_DATABASE = os.getenv('POSTGRES_DATABASE')
 POSTGRES_USER = os.getenv('POSTGRES_USER')

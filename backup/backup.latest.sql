@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 15.10
+-- Dumped from database version 16.6
 -- Dumped by pg_dump version 17.0
 
 SET statement_timeout = 0;
@@ -544,8 +544,6 @@ COPY public.doanhthu (month, year, revenue) FROM stdin;
 COPY public.doitac (name, email, sdt, dia_chi, ao_nuoi, id) FROM stdin;
 Trần Thị B	tranthib@example.com	0912345678	Số 20, Cầu Giấy	{"[{\\"stt\\": 1, \\"soluong\\": 4000, \\"thuysan\\": \\"Cá chép\\", \\"dientich\\": 30000, \\"ngaytuoi\\": 20}, {\\"stt\\": 2, \\"soluong\\": 200, \\"thuysan\\": \\"Cá tra\\", \\"dientich\\": 5000, \\"ngaytuoi\\": 30}]"}	KH_000019
 Nguyễn Văn 	nguyenvana@gmail.co	098675637	Số 10, Phố Lê Văn Lương, Quận Thanh Xuân, Hà Nội, Việt Nam	{"[{\\"stt\\": 1, \\"soluong\\": 3000, \\"thuysan\\": \\"Tôm\\", \\"dientich\\": 10000, \\"ngaytuoi\\": 30}, {\\"stt\\": 2, \\"soluong\\": 2000, \\"thuysan\\": \\"Cá tra\\", \\"dientich\\": 5000, \\"ngaytuoi\\": 80}]"}	KH_000018
-a	3	3	3	{"[{\\"stt\\": 1, \\"soluong\\": 3, \\"thuysan\\": \\"3\\", \\"dientich\\": 3, \\"ngaytuoi\\": 3}]"}	KH_000024
-1	1	1	1	{"[{\\"stt\\": 1, \\"soluong\\": 1, \\"thuysan\\": \\"1\\", \\"dientich\\": 1, \\"ngaytuoi\\": 1}]"}	KH_000025
 \.
 
 
@@ -608,6 +606,9 @@ cf2ea2d0-5f37-43db-8c1c-181ecaf1eef4	13d07535-c59e-4157-a011-f8d2ef4e0cbb	8546	p
 
 COPY public.logging ("time", action, idforlink, user_id) FROM stdin;
 2024-12-16 16:04:04.739145	Thanh toán	DH_000130	35
+2024-12-17 05:58:38.308635	Xóa đối tác	KH_000024	35
+2024-12-17 05:58:39.244005	Xóa đối tác	KH_000025	35
+2024-12-17 07:27:28.486786	Xóa sản phẩm	TA000047	35
 \.
 
 
@@ -619,7 +620,6 @@ COPY public.product (buy_price, sell_price, company, img_product, description, i
 5000	600	Công ty TNHH thức ăn ABC	https://zrhhzqtaizoqtwmnzzbi.supabase.co/storage/v1/object/public/avt/public/6bad15b2-5807-4c57-90e4-d6e48dae08ea.jpg	kkk	TA000038	T502TĂ cá tra UP số 2/10KG 
 300	400	Công ty TNHH thức ăn ABC	https://zrhhzqtaizoqtwmnzzbi.supabase.co/storage/v1/object/public/avt/public/f9298e20-1741-4c8c-9dc5-192782b4717e.jpg		TA000040	Công ty TNHH thức ăn ABC
 80	9	k	https://zrhhzqtaizoqtwmnzzbi.supabase.co/storage/v1/object/public/avt/public/3241f0c9-8795-42ce-bf17-f0dc01e1df9b.jpg		TA000039	k
-1	1	1	https://zrhhzqtaizoqtwmnzzbi.supabase.co/storage/v1/object/public/avt/public/95bb0052-40d5-47a9-820a-02c5c665b694.jpg		TA000047	k
 \.
 
 
