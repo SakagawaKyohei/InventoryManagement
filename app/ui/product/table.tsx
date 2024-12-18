@@ -204,10 +204,10 @@ const FetchProductButton = ({ product, totalPages, uid }: Props) => {
                 <TableHead className="w-[150px] text-center">
                   Mã sản phẩm
                 </TableHead>
-                <TableHead className="w-[275px]">Tên sản phẩm</TableHead>
+                <TableHead>Tên sản phẩm</TableHead>
                 <TableHead className="w-[125px]">Giá mua</TableHead>
                 <TableHead className="w-[125px]">Giá bán</TableHead>
-                <TableHead className="w-[300px]">Công ty sản xuất</TableHead>
+                <TableHead>Công ty sản xuất</TableHead>
                 <TableHead className="text-center">Action</TableHead>
               </TableRow>
             </TableHeader>

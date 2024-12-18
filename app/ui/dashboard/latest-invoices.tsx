@@ -2,11 +2,12 @@ import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import Image from "next/image";
 import { lusitana } from "@/app/ui/fonts";
-import { fetchLatestInvoices } from "@/app/lib/data";
+import { fetchLatestHanTon, fetchLatestInvoices } from "@/app/lib/data";
+import { formatCurrency } from "@/app/lib/utils";
 
 export default async function LatestInvoices() {
   // Remove props
-  const latestInvoices = await fetchLatestInvoices();
+  const latestInvoices = await fetchLatestHanTon();
   return (
     <div className="flex w-full flex-col md:col-span-4">
       <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
@@ -28,10 +29,9 @@ export default async function LatestInvoices() {
                 )}
               >
                 <div className="flex items-center">
-                  <Image
-                    src={invoice.image_url}
-                    alt={`${invoice.name}'s profile picture`}
-                    className="mr-4 rounded-full"
+                  <img
+                    src={invoice.img_product}
+                    className="mr-4"
                     width={32}
                     height={32}
                   />
@@ -40,14 +40,15 @@ export default async function LatestInvoices() {
                       {invoice.name}
                     </p>
                     <p className="hidden text-sm text-gray-500 sm:block">
-                      {invoice.email}
+                      Còn lại:{" "}
+                      {invoice.tong_so_luong ? invoice.tong_so_luong : 0} bao
                     </p>
                   </div>
                 </div>
                 <p
                   className={`${lusitana.className} truncate text-sm font-medium md:text-base`}
                 >
-                  {invoice.amount}
+                  {formatCurrency(1000 * invoice.buy_price)}
                 </p>
               </div>
             );

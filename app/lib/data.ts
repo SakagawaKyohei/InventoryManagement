@@ -63,6 +63,27 @@ export async function fetchLatestInvoices() {
 }
 
 
+export async function fetchLatestHanTon() {
+    try {
+      const data = await sql<any>`
+        SELECT product.id, product.name, product.company, product.buy_price, product.img_product,
+               COALESCE(SUM(tonkho.so_luong), 0) AS tong_so_luong
+        FROM product
+        LEFT JOIN tonkho 
+          ON product.id = tonkho.ma_hang
+          AND tonkho.han_su_dung >= NOW()
+        GROUP BY product.id, product.name, product.company
+        order by tong_so_luong asc
+        limit 5
+      `;
+      return data.rows;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+}
+
+
 
 
 export async function fetchCardData() {
