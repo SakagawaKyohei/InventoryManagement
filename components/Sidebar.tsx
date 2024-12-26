@@ -111,8 +111,8 @@ const sidebarItemsForRole = {
       icon: <Image src="/import.png" width={20} height={20} alt="return" />,
       dropdownItems: [
         {
-          label: "Chờ thanh toán",
-          href: "/dashboard/nhap-hang/cho-thanh-toan",
+          label: "Danh sách đơn hàng",
+          href: "/dashboard/nhap-hang",
         },
         { label: "Đang nhập kho", href: "/dashboard/nhap-hang/dang-nhap-kho" },
         { label: "Đã nhập kho", href: "/dashboard/nhap-hang/da-nhap-kho" },
@@ -123,7 +123,17 @@ const sidebarItemsForRole = {
       href: "/dashboard/xuat-hang",
       icon: <Image src="/export.png" width={20} height={20} alt="return" />,
     },
-    { label: "Hàng tồn", href: "/dashboard/products", icon: <FaBox /> },
+    {
+      label: "Hàng tồn",
+      icon: <Image src="/import.png" width={20} height={20} alt="return" />,
+      dropdownItems: [
+        {
+          label: "Còn hạn",
+          href: "/dashboard/hang-ton/con-han",
+        },
+        { label: "Hết hạn", href: "/dashboard/hang-ton/het-han" },
+      ],
+    },
     { label: "Tài khoản", href: "/dashboard/products", icon: <FaBox /> },
   ],
 

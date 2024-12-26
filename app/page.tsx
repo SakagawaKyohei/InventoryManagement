@@ -1,92 +1,158 @@
-// import AcmeLogo from "@/app/ui/acme-logo";
-// import { ArrowRightIcon } from "@heroicons/react/24/outline";
-// import Link from "next/link";
-// import Image from "next/image";
-// export default function Page() {
-//   return (
-//     <main className="flex min-h-screen flex-col p-6">
-//       <div className="flex h-20 shrink-0 items-end rounded-lg bg-blue-500 p-4 md:h-52">
-//         <AcmeLogo />
-//       </div>
-//       <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
-//         <div className="flex flex-col justify-center gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-2/5 md:px-20">
-//           <p className={`text-xl text-gray-800 md:text-3xl md:leading-normal`}>
-//             <strong>Welcome to Acme.</strong> This is the example for the{" "}
-//             <a href="https://nextjs.org/learn/" className="text-blue-500">
-//               Next.js Learn Course
-//             </a>
-//             , brought to you by Vercel.
-//           </p>
-//           <Link
-//             href="/login"
-//             className="flex items-center gap-5 self-start rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-400 md:text-base"
-//           >
-//             <span>Đăng nhập</span> <ArrowRightIcon className="w-5 md:w-6" />
-//           </Link>
-//         </div>
-//         <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
-//           {/* Add Hero Images Here */}
-//           <Image
-//             src="/hero-desktop.png"
-//             width={1000}
-//             height={760}
-//             className="hidden md:block"
-//             alt="Screenshots of the dashboard project showing desktop version"
-//           />
-//         </div>
-//       </div>
-//     </main>
-//   );
-// }
-
 "use client";
-export default function EditProduct() {
-  const handleSubmit = async () => {
-    try {
-      // Gửi yêu cầu POST tới API /api/back-up
-      const res = await fetch("/api/back-up", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
+import React from "react";
 
-      // Kiểm tra nếu yêu cầu thành công
-      if (res.ok) {
-        alert("Backup successful");
-      } else {
-        // Nếu có lỗi, hiển thị thông báo lỗi
-        const data = await res.json();
-        alert(`Backup failed: ${data.error || "Unknown error"}`);
-      }
-    } catch (error) {
-      // Xử lý lỗi khi gửi yêu cầu (kết nối mạng, lỗi server, ...)
-    }
-  };
+const PrintBill: React.FC = () => {
+  const handlePrint = () => {
+    const printWindow = window.open("", "_blank");
+    if (printWindow) {
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>In Hóa Đơn</title>
+            <style>
+              body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 20px;
+              }
+              .invoice {
+                width: 80%;
+                margin: auto;
+                border: 1px solid #ddd;
+                padding: 20px;
+              }
+              table {
+                width: 100%;
+                border-collapse: collapse;
+              }
+              th, td {
+                border: 1px solid #ddd;
+                text-align: center;
+                padding: 8px;
+              }
+              th {
+                background-color: #f2f2f2;
+              }
+              h1, h3, h4 {
+                text-align: center;
+              }           
+              .center{
+                text-align: center;
+              }
+              .total {
+                margin-top: 10px;
+                text-align: right;
+                font-size: 18px;
+              }
+              .footer {
+                margin-top: 20px;
+                display: flex;
+                justify-content: space-between;
+                font-size: 14px;
+              }
+            </style>
+          </head>
+          <body onload="window.print(); window.close();">
+            <div class="invoice">
+              <h3>ĐẠI LÝ THỨC ĂN</h1>
+              <h3>CheQuePot</h4>
+              <h3>HÓA ĐƠN BÁN HÀNG</h3>
+              <p><strong>Tên khách hàng:</strong> Nguyễn Văn A</p>
+              <p><strong>Số điện thoại:</strong> 0932870398</p>
+              <p><strong>Địa chỉ:</strong> 039, đường Hùng Vương, khu vực 3, phường Ngãy Bảy, thành phố Ngã Bảy, tỉnh Hậu Giang</p>
 
-  const handleSubmit1 = async () => {
-    try {
-      // Gửi yêu cầu POST tới API /api/back-up
-      const res = await fetch("/api/restore", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
-
-      // Kiểm tra nếu yêu cầu thành công
-      if (res.ok) {
-        alert("Restore successful");
-      } else {
-        // Nếu có lỗi, hiển thị thông báo lỗi
-        const data = await res.json();
-        alert(`Restore failed: ${data.error || "Unknown error"}`);
-      }
-    } catch (error) {
-      // Xử lý lỗi khi gửi yêu cầu (kết nối mạng, lỗi server, ...)
+              
+              <table>
+                <thead>
+                  <tr>
+                    <th>STT</th>
+                    <th>Tên hàng</th>
+                    <th>ĐVT</th>
+                    <th>Số lượng</th>
+                    <th>Đơn giá</th>
+                    <th>Thành tiền</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>01</td>
+                    <td>Sản phẩm A</td>
+                    <td>Kg</td>
+                    <td>2</td>
+                    <td>50.000</td>
+                    <td>100.000</td>
+                  </tr>
+                  <tr>
+                    <td>02</td>
+                    <td>Sản phẩm B</td>
+                    <td>Kg</td>
+                    <td>3</td>
+                    <td>40.000</td>
+                    <td>120.000</td>
+                  </tr>                  
+                  <tr>
+                  <td style="color: transparent;">a</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                    <tr>
+                   <td style="color: transparent;">a</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>  
+                  <tr>
+                    <td style="color: transparent;">a</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                                   <tr>
+                    <td style="color: transparent;">a</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+       
+                </tbody>
+              </table>
+              <p class="total"><strong>CỘNG: 220.000đ</strong></p>
+              <div class="footer">
+                <div><div style="display: flex; flex-direction: column;"><strong style="margin-top:15">Người mua hàng</strong><strong style="margin-top:100 ;text-align: center">Nguyễn Văn A</strong></div></div>
+                <div>
+                  <strong>Ngày ... tháng ... năm 2024</strong><br />
+                 <div style="display: flex; flex-direction: column;">
+         <strong style="text-align: center; display: block; ">Người tạo phiếu</strong><div/>
+                  <strong style="text-align: center; display: block;margin-top:100">Lâm Gia Bảo</strong><div/>
+                </div>
+              </div>
+            </div>
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
     }
   };
 
   return (
-    <div className="register-container">
-      <button onClick={handleSubmit}>Start Backup</button>
-      <button onClick={handleSubmit1}>Start Restore</button>
+    <div>
+      <button
+        onClick={handlePrint}
+        style={{ padding: "10px 20px", margin: "20px" }}
+      >
+        In Hóa Đơn
+      </button>
     </div>
   );
-}
+};
+
+export default PrintBill;

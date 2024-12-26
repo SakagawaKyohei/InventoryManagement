@@ -312,18 +312,6 @@ const FetchProductButton = ({ product, totalPages, uid }: Props) => {
             Thêm mới
           </Button>
         </Link>
-        <Button
-          style={{
-            marginRight: 15,
-            fontSize: 18,
-            backgroundColor: "#A30D11",
-            width: 140,
-            height: 40,
-            marginBottom: 20,
-          }}
-        >
-          Xóa bỏ
-        </Button>
       </div>
     </div>
   );

@@ -375,7 +375,7 @@ const FetchProductButton = ({
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button onClick={handlePay}>Save changes</Button>
+                  <Button onClick={handlePay}>Xác nhận</Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>

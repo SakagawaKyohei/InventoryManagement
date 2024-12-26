@@ -33,7 +33,7 @@ export default function CreateProduct({ hashedPassword, newPassword }: Props) {
     email: "",
     password: "",
     status: "",
-    role: "",
+    role: "người vận chuyển",
     bank: "",
     stk: "",
     ngay_sinh: "",
@@ -99,6 +99,15 @@ export default function CreateProduct({ hashedPassword, newPassword }: Props) {
       const data = await res.json();
       alert(data.message || "Lỗi tạo sản phẩm");
     }
+  };
+
+  const handleItemsPerPageChange = (e: any) => {
+    const { name, value } = e.target;
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      [name]: value,
+    }));
+    console.log(product);
   };
 
   return (
@@ -211,17 +220,36 @@ export default function CreateProduct({ hashedPassword, newPassword }: Props) {
               justifyContent: "space-between",
             }}
           >
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <label htmlFor="buy_price">Ngày sinh:</label>
-              <input
-                type="date"
-                id="ngay_sinh"
-                name="ngay_sinh"
-                value={product.ngay_sinh}
-                onChange={handleChange}
-                style={{ width: 425, marginTop: 5 }}
-                className="h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-              />
+            <div style={{ display: "flex" }}>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <label htmlFor="buy_price">Role:</label>
+
+                <select
+                  className="h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                  defaultValue={"Người vận chuyển"}
+                  style={{ width: 175, marginTop: 5, marginRight: 25 }}
+                  onChange={handleItemsPerPageChange}
+                  id="role"
+                  name="role"
+                >
+                  {" "}
+                  <option value="người vận chuyển">Người vận chuyển</option>
+                  <option value="kế toán">Kế toán</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <label htmlFor="buy_price">Ngày sinh:</label>
+                <input
+                  type="date"
+                  id="ngay_sinh"
+                  name="ngay_sinh"
+                  value={product.ngay_sinh}
+                  onChange={handleChange}
+                  style={{ width: 225, marginTop: 5 }}
+                  className="h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                />
+              </div>
             </div>
             <div style={{ display: "flex", flexDirection: "row" }}>
               <div style={{ marginRight: 20 }}>
@@ -238,7 +266,7 @@ export default function CreateProduct({ hashedPassword, newPassword }: Props) {
               <div>
                 <label htmlFor="sell_price">Số tài khoản:</label>
                 <Input
-                  type="number"
+                  type="text"
                   id="stk"
                   name="stk"
                   value={product.stk}

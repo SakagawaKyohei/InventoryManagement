@@ -70,11 +70,6 @@ export default function LoginForm() {
           )}
         </Button>
       </div>
-      <Link href="/sign-up">
-        <Button className="w-full mt-4" variant="outline">
-          Đăng ký
-        </Button>
-      </Link>
     </form>
   );
 }

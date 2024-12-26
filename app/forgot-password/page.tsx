@@ -124,12 +124,6 @@ export default function ForgotPassword() {
             <ArrowLeft className="mr-2 h-4 w-4" />
             Quay lại đăng nhập
           </Link>
-          <p className="text-sm text-center w-full text-gray-600">
-            Không có tài khoản?{" "}
-            <Link href="/signup" className="text-blue-600 hover:underline">
-              Đăng ký
-            </Link>
-          </p>
         </CardFooter>
       </Card>
     </div>
