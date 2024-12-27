@@ -491,7 +491,7 @@ export default function AddForm({ doitac, nguoivanchuyen }: Props) {
                               key={product.id}
                               value={JSON.stringify(product)}
                             >
-                              {product.name} - Còn {product.tong_so_luong}
+                              {product.name} - Còn {product.tong_so_luong} bao
                             </option>
                           ))}
                       </select>

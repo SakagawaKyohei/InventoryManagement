@@ -31,9 +31,10 @@ import { VanChuyen } from "@/app/lib/definitions";
 interface Props {
   vanchuyen: VanChuyen[];
   totalPages: number;
+  user: any;
 }
 
-const FetchProductButton = ({ vanchuyen, totalPages }: Props) => {
+const FetchProductButton = ({ vanchuyen, totalPages, user }: Props) => {
   const pathname = usePathname();
   const { replace } = useRouter();
   const searchParams = useSearchParams();
@@ -187,7 +188,11 @@ const FetchProductButton = ({ vanchuyen, totalPages }: Props) => {
                 <TableHead>Địa chỉ</TableHead>
                 <TableHead>Thời gian</TableHead>
                 <TableHead>Nhập/Xuất</TableHead>
-                <TableHead className="text-center">Action</TableHead>
+                {user.role == "admin" ? (
+                  <></>
+                ) : (
+                  <TableHead className="text-center">Action</TableHead>
+                )}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -224,24 +229,13 @@ const FetchProductButton = ({ vanchuyen, totalPages }: Props) => {
                   <TableCell
                     style={{ display: "flex", justifyContent: "center" }}
                   >
-                    {item.id_don_hang.startsWith("DH") ? (
-                      <>
-                        <Link
-                          href={`/dashboard/van-chuyen/dang-van-chuyen/xac-nhan?id=${item.id_don_hang}`}
-                        >
-                          <Image
-                            src="/done.jpg"
-                            style={{ marginRight: 15 }}
-                            width={25}
-                            height={25}
-                            className="hidden md:block"
-                            alt="Screenshots of the dashboard project showing desktop version"
-                          />
-                        </Link>
-                      </>
-                    ) : (
+                    {user.role !== "admin" && (
                       <Link
-                        href={`/dashboard/van-chuyen/dang-van-chuyen/xuat-hang/xac-nhan?id=${item.id_don_hang}`}
+                        href={
+                          item.id_don_hang.startsWith("DH")
+                            ? `/dashboard/van-chuyen/dang-van-chuyen/xac-nhan?id=${item.id_don_hang}`
+                            : `/dashboard/van-chuyen/dang-van-chuyen/xuat-hang/xac-nhan?id=${item.id_don_hang}`
+                        }
                       >
                         <Image
                           src="/done.jpg"
@@ -249,7 +243,7 @@ const FetchProductButton = ({ vanchuyen, totalPages }: Props) => {
                           width={25}
                           height={25}
                           className="hidden md:block"
-                          alt="Screenshots of the dashboard project showing desktop version"
+                          alt="Done icon"
                         />
                       </Link>
                     )}

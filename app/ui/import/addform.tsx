@@ -30,7 +30,7 @@ interface OrderProduct {
 
 const AddForm = (user: Users) => {
   const router = useRouter();
-  const [products, setProducts] = useState<Product[]>();
+  const [products, setProducts] = useState<any[]>();
   const [clientproducts, setClientProducts] = useState<OrderProduct[]>([]);
   const [product, setProduct] = useState({
     id: "",
@@ -473,7 +473,7 @@ const AddForm = (user: Users) => {
                             key={product.id}
                             value={JSON.stringify(product)}
                           >
-                            {product.name}
+                            {product.name} - Còn {product.tong_so_luong} bao
                           </option>
                         ))}
                       </select>

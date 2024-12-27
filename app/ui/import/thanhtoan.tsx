@@ -83,7 +83,7 @@ const FetchProductButton = ({
   const [hanSuDung, setHanSuDung] = useState("");
   const [diaChi, setDiaChi] = useState("");
   const [khoXuatHang, setKhoXuathang] = useState("");
-  const [id_nguoi_van_chuyen, setId] = useState("");
+  const [id_nguoi_van_chuyen, setId] = useState(0);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("abc");
@@ -92,7 +92,7 @@ const FetchProductButton = ({
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedNguoiVanChuyen = JSON.parse(event.target.value) as Users;
     console.log("Selected product:", selectedNguoiVanChuyen);
-    setId(selectedNguoiVanChuyen.id);
+    setId(selectedNguoiVanChuyen.manv);
     console.log("abc");
   };
   const total = dondathang.product?.reduce(

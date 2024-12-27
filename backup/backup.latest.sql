@@ -274,7 +274,9 @@ CREATE TABLE public.donxuathang (
     product jsonb[],
     status character varying,
     total numeric,
-    ngayxuat timestamp without time zone
+    ngayxuat timestamp without time zone,
+    done character varying,
+    dain character varying
 );
 
 
@@ -487,7 +489,7 @@ ALTER TABLE ONLY public.reset_tokens ALTER COLUMN id SET DEFAULT nextval('public
 
 COPY public.congno (donhangid, doitacname, doitacid, orderdate, total, status) FROM stdin;
 XH_000021	Nguyễn Văn 	KH_000018	2024-12-04 20:18:01.303	15000	Chưa thanh toán
-XH_000023	Nguyễn Văn 	KH_000018	2024-12-15 09:37:47.96	15000	Chưa thanh toán
+XH_000023	Nguyễn Văn 	KH_000018	2024-12-15 09:37:47.96	15000	Đã thanh toán
 \.
 
 
@@ -533,7 +535,7 @@ COPY public.doanhthu (month, year, revenue) FROM stdin;
 9	2024	20698
 10	2024	45348
 11	2024	16183
-12	2024	41446
+12	2024	56446
 \.
 
 
@@ -554,6 +556,8 @@ Nguyễn Văn 	nguyenvana@gmail.co	098675637	Số 10, Phố Lê Văn Lương, Qu
 COPY public.dondathang (id, company, product, status, han_su_dung, ngay_dat, manv, total) FROM stdin;
 DH_000132	Công ty TNHH thức ăn ABC	{"{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG \\", \\"price\\": \\"5000\\", \\"quantity\\": 300}","{\\"id\\": \\"TA000040\\", \\"name\\": \\"T538 TĂ tôm sú UP số 2/20KG\\", \\"price\\": \\"500\\", \\"quantity\\": 50}"}	paid	2025-02-28 00:00:00	2024-12-18 08:13:04.726087	35	1525000
 DH_000134	Công ty TNHH XYZ	{"{\\"id\\": \\"TA000039\\", \\"name\\": \\"T510 TĂ cá chẽm UP số 2/50KG\\", \\"price\\": \\"80\\", \\"quantity\\": 200}"}	paid	2025-01-10 00:00:00	2024-12-18 08:13:12.193617	35	16000
+DH_000140	Công ty TNHH thức ăn ABC	{"{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG \\", \\"price\\": \\"5000\\", \\"quantity\\": 4}","{\\"id\\": \\"TA000040\\", \\"name\\": \\"T538 TĂ tôm sú UP số 2/20KG\\", \\"price\\": \\"500\\", \\"quantity\\": 5}"}	paid	2024-12-21 00:00:00	2024-12-22 08:55:48.978619	35	22500
+DH_000138	Công ty TNHH XYZ	{"{\\"id\\": \\"TA000039\\", \\"name\\": \\"T510 TĂ cá chẽm UP số 2/50KG\\", \\"price\\": \\"80\\", \\"quantity\\": 3}"}	paid	2025-01-24 00:00:00	2024-12-22 08:55:43.650064	35	240
 \.
 
 
@@ -561,21 +565,21 @@ DH_000134	Công ty TNHH XYZ	{"{\\"id\\": \\"TA000039\\", \\"name\\": \\"T510 TĂ
 -- Data for Name: donxuathang; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.donxuathang (id, ma_doi_tac, product, status, total, ngayxuat) FROM stdin;
-XH_000005	KH_000018	{"[{\\"id\\": \\"TA000039\\", \\"name\\": \\"k\\", \\"dongia\\": \\"80.000 ₫\\", \\"soluong\\": 20, \\"thanhtien\\": \\"1.600.000 ₫\\"}]"}	đang vận chuyển	1600	\N
-XH_000006	KH_000019	{"[{\\"id\\": \\"TA000039\\", \\"name\\": \\"k\\", \\"dongia\\": \\"80.000 ₫\\", \\"soluong\\": 20, \\"thanhtien\\": \\"1.600.000 ₫\\"}]"}	đang vận chuyển	1600	\N
-XH_000007	KH_000018	{"[{\\"id\\": \\"TA000039\\", \\"name\\": \\"k\\", \\"dongia\\": \\"80.000 ₫\\", \\"soluong\\": 3, \\"thanhtien\\": \\"240.000 ₫\\"}]"}	đang vận chuyển	240	2024-11-30 14:48:39.151306
-XH_000008	KH_000018	{"[{\\"id\\": \\"TA000039\\", \\"name\\": \\"k\\", \\"dongia\\": \\"80.000 ₫\\", \\"soluong\\": 3, \\"thanhtien\\": \\"240.000 ₫\\"}]"}	đang vận chuyển	240	2024-11-30 14:51:52.935856
-XH_000010	KH_000018	{"[{\\"id\\": \\"TA000039\\", \\"name\\": \\"k\\", \\"dongia\\": \\"80.000 ₫\\", \\"soluong\\": 3, \\"thanhtien\\": \\"240.000 ₫\\"}]"}	đang vận chuyển	240	2024-12-01 06:49:46.901899
-XH_000009	KH_000018	{"[{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG \\", \\"dongia\\": \\"5.000.000 ₫\\", \\"soluong\\": 20, \\"thanhtien\\": \\"100.000.000 ₫\\"}]"}	Đã vận chuyển	100000	2024-12-01 06:32:45.601319
-XH_000011	KH_000018	{"[{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG \\", \\"dongia\\": \\"5.000.000 ₫\\", \\"soluong\\": 3, \\"thanhtien\\": \\"15.000.000 ₫\\"}, {\\"id\\": \\"TA000039\\", \\"name\\": \\"k\\", \\"dongia\\": \\"80.000 ₫\\", \\"soluong\\": 3, \\"thanhtien\\": \\"240.000 ₫\\"}]"}	Đã vận chuyển	15240	2024-12-01 10:37:07.775708
-XH_000012	KH_000019	{"[{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG \\", \\"dongia\\": \\"5.000.000 ₫\\", \\"soluong\\": 3, \\"thanhtien\\": \\"15.000.000 ₫\\"}]"}	Đã vận chuyển	15000	2024-12-01 10:44:40.586052
-XH_000013	KH_000018	{"[{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG \\", \\"dongia\\": \\"5.000.000 ₫\\", \\"soluong\\": 4, \\"thanhtien\\": \\"20.000.000 ₫\\"}]"}	Đã vận chuyển	20000	2024-12-01 13:42:14.035744
-XH_000014	KH_000018	{"[{\\"id\\": \\"TA000039\\", \\"name\\": \\"k\\", \\"dongia\\": \\"80.000 ₫\\", \\"soluong\\": 2, \\"thanhtien\\": \\"160.000 ₫\\"}]"}	Đã vận chuyển	160	2024-12-01 13:43:12.063504
-XH_000022	KH_000018	{"[{\\"id\\": \\"TA000039\\", \\"name\\": \\"k\\", \\"dongia\\": \\"80.000 ₫\\", \\"soluong\\": 3, \\"thanhtien\\": \\"240.000 ₫\\"}, {\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG \\", \\"dongia\\": \\"5.000.000 ₫\\", \\"soluong\\": 4, \\"thanhtien\\": \\"20.000.000 ₫\\"}]"}	đang vận chuyển	20240	2024-12-05 03:55:48.501284
-XH_000024	KH_000018	{"[{\\"id\\": \\"TA000039\\", \\"name\\": \\"k\\", \\"dongia\\": \\"80.000 ₫\\", \\"soluong\\": 3, \\"thanhtien\\": \\"240.000 ₫\\"}]"}	đang vận chuyển	240	2024-12-15 16:41:38.301877
-XH_000021	KH_000018	{"[{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG \\", \\"dongia\\": \\"5.000.000 ₫\\", \\"soluong\\": 3, \\"thanhtien\\": \\"15.000.000 ₫\\"}]"}	Đã vận chuyển	15000	2024-12-05 03:18:01.303175
-XH_000023	KH_000018	{"[{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG \\", \\"dongia\\": \\"5.000.000 ₫\\", \\"soluong\\": 3, \\"thanhtien\\": \\"15.000.000 ₫\\"}]"}	Đã vận chuyển	15000	2024-12-15 16:37:47.960316
+COPY public.donxuathang (id, ma_doi_tac, product, status, total, ngayxuat, done, dain) FROM stdin;
+XH_000005	KH_000018	{"[{\\"id\\": \\"TA000039\\", \\"name\\": \\"k\\", \\"dongia\\": \\"80.000 ₫\\", \\"soluong\\": 20, \\"thanhtien\\": \\"1.600.000 ₫\\"}]"}	đang vận chuyển	1600	\N	\N	\N
+XH_000006	KH_000019	{"[{\\"id\\": \\"TA000039\\", \\"name\\": \\"k\\", \\"dongia\\": \\"80.000 ₫\\", \\"soluong\\": 20, \\"thanhtien\\": \\"1.600.000 ₫\\"}]"}	đang vận chuyển	1600	\N	\N	\N
+XH_000007	KH_000018	{"[{\\"id\\": \\"TA000039\\", \\"name\\": \\"k\\", \\"dongia\\": \\"80.000 ₫\\", \\"soluong\\": 3, \\"thanhtien\\": \\"240.000 ₫\\"}]"}	đang vận chuyển	240	2024-11-30 14:48:39.151306	\N	\N
+XH_000008	KH_000018	{"[{\\"id\\": \\"TA000039\\", \\"name\\": \\"k\\", \\"dongia\\": \\"80.000 ₫\\", \\"soluong\\": 3, \\"thanhtien\\": \\"240.000 ₫\\"}]"}	đang vận chuyển	240	2024-11-30 14:51:52.935856	\N	\N
+XH_000010	KH_000018	{"[{\\"id\\": \\"TA000039\\", \\"name\\": \\"k\\", \\"dongia\\": \\"80.000 ₫\\", \\"soluong\\": 3, \\"thanhtien\\": \\"240.000 ₫\\"}]"}	đang vận chuyển	240	2024-12-01 06:49:46.901899	\N	\N
+XH_000013	KH_000018	{"[{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG \\", \\"dongia\\": \\"5.000.000 ₫\\", \\"soluong\\": 4, \\"thanhtien\\": \\"20.000.000 ₫\\"}]"}	Đã vận chuyển	20000	2024-12-01 13:42:14.035744	\N	\N
+XH_000014	KH_000018	{"[{\\"id\\": \\"TA000039\\", \\"name\\": \\"k\\", \\"dongia\\": \\"80.000 ₫\\", \\"soluong\\": 2, \\"thanhtien\\": \\"160.000 ₫\\"}]"}	Đã vận chuyển	160	2024-12-01 13:43:12.063504	\N	\N
+XH_000022	KH_000018	{"[{\\"id\\": \\"TA000039\\", \\"name\\": \\"k\\", \\"dongia\\": \\"80.000 ₫\\", \\"soluong\\": 3, \\"thanhtien\\": \\"240.000 ₫\\"}, {\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG \\", \\"dongia\\": \\"5.000.000 ₫\\", \\"soluong\\": 4, \\"thanhtien\\": \\"20.000.000 ₫\\"}]"}	đang vận chuyển	20240	2024-12-05 03:55:48.501284	\N	\N
+XH_000024	KH_000018	{"[{\\"id\\": \\"TA000039\\", \\"name\\": \\"k\\", \\"dongia\\": \\"80.000 ₫\\", \\"soluong\\": 3, \\"thanhtien\\": \\"240.000 ₫\\"}]"}	đang vận chuyển	240	2024-12-15 16:41:38.301877	\N	\N
+XH_000021	KH_000018	{"[{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG \\", \\"dongia\\": \\"5.000.000 ₫\\", \\"soluong\\": 3, \\"thanhtien\\": \\"15.000.000 ₫\\"}]"}	Đã vận chuyển	15000	2024-12-05 03:18:01.303175	\N	\N
+XH_000023	KH_000018	{"[{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG \\", \\"dongia\\": \\"5.000.000 ₫\\", \\"soluong\\": 3, \\"thanhtien\\": \\"15.000.000 ₫\\"}]"}	Đã vận chuyển	15000	2024-12-15 16:37:47.960316	\N	\N
+XH_000009	KH_000018	{"[{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG \\", \\"dongia\\": \\"5.000.000 ₫\\", \\"soluong\\": 20, \\"thanhtien\\": \\"100.000.000 ₫\\"}]"}	Đã vận chuyển	100000	2024-12-01 06:32:45.601319	\N	d
+XH_000011	KH_000018	{"[{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG \\", \\"dongia\\": \\"5.000.000 ₫\\", \\"soluong\\": 3, \\"thanhtien\\": \\"15.000.000 ₫\\"}, {\\"id\\": \\"TA000039\\", \\"name\\": \\"k\\", \\"dongia\\": \\"80.000 ₫\\", \\"soluong\\": 3, \\"thanhtien\\": \\"240.000 ₫\\"}]"}	Đã vận chuyển	15240	2024-12-01 10:37:07.775708	\N	d
+XH_000012	KH_000019	{"[{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG \\", \\"dongia\\": \\"5.000.000 ₫\\", \\"soluong\\": 3, \\"thanhtien\\": \\"15.000.000 ₫\\"}]"}	Đã vận chuyển	15000	2024-12-01 10:44:40.586052	\N	d
 \.
 
 
@@ -634,6 +638,14 @@ COPY public.logging ("time", action, idforlink, user_id) FROM stdin;
 2024-12-18 08:15:36.513673	Thanh toán	DH_000134	35
 2024-12-18 08:16:15.714926	Đã vận chuyển	DH_000132	35
 2024-12-18 08:16:31.548769	Đã vận chuyển	DH_000134	35
+2024-12-22 08:55:56.47331	Tạo đơn đặt hàng	DH_000138	35
+2024-12-22 08:55:56.520664	Tạo đơn đặt hàng	DH_000140	35
+2024-12-22 09:07:46.38063	Thanh toán	DH_000140	35
+2024-12-22 09:22:12.575926	Thanh toán	DH_000138	35
+2024-12-27 04:01:00.434131	Chỉnh sửa sản phẩm	\N	\N
+2024-12-27 04:01:11.499404	Chỉnh sửa sản phẩm	\N	\N
+2024-12-27 09:12:12.955434	Chỉnh sửa người dùng	35	35
+2024-12-27 09:12:22.461491	Chỉnh sửa người dùng	35	35
 \.
 
 
@@ -684,6 +696,7 @@ COPY public.reset_tokens (id, user_id, token, expiry) FROM stdin;
 31	5c4a8b76-45a6-41a9-beac-25a09713b12d	447f0372ffae855516b1db403f10582dd68223b494141a740d2d86d3db34f54b	1730714619494
 32	5c4a8b76-45a6-41a9-beac-25a09713b12d	bf935dc0dbb29f70afdef555b1037eebc77ab58b04eb2b3d91baa3a34b31cb5d	1730715050023
 33	5c4a8b76-45a6-41a9-beac-25a09713b12d	ea6ea6ade2dbe8cd7a128ab5a7fe20a038d32020e956371b7921f9163a320cbf	1730715050578
+34	5c4a8b76-45a6-41a9-beac-25a09713b12d	bc20c8e468e2cbcc5ae517da8a6e38b7cb541b5e1b5c82bf470c41a5eda10504	1734863819709
 \.
 
 
@@ -732,11 +745,11 @@ COPY public.tonkho (han_su_dung, ngay_nhap, so_luong, ma_don_hang, ma_hang) FROM
 --
 
 COPY public.users (id, name, email, password, status, role, bank, stk, ngay_sinh, sdt, cccd, dia_chi, manv) FROM stdin;
-5c4a8b76-45a6-41a9-beac-25a09713b12d	Lâm Gia Bảo	lamgiabao1039@gmail.com	$2b$10$kBAhvxhb1bcXJoGYUqThp.NfYYzRPanJSTeeIO7ej6dDBCPqQfeY2	active	admin	3	3	2024-12-13	093287039	093203007764	Đường Tạ Quang Bửu, Khu phố 6, phường Linh Trung, thành phố Thủ Đức, Thành phố Hồ Chí Minh	35
 0af81105-6041-4038-a8a8-42ab34956f29	Lâm Gia Bảo	folayib669@bflcafe.com	$2a$10$FlMcg3gzvu3K6NqyDOUzK.ZeRTu98aS63jJXb.5ea3HFoYH9zgwga	unactive		3	3	2024-12-14	0932870398	093203007764	Đường Tạ Quang Bửu, Khu phố 6, phường Linh Trung, thành phố Thủ Đức, Thành phố Hồ Chí Minh	52
 28f8a1a7-0d11-43ba-bf6c-44d3ad711451	Lê Hoàng B	sakagawakyohei@gmail.com	$2a$10$/eKOxuOEvR/jeOu9Z8AW0OCjUZ1713nuaR5.CVea4/eV7QTIw8AMm	active	người vận chuyển	3	3	2024-12-14	0932870398	093203007764	Đường Tạ Quang Bửu, Khu phố 6, phường Linh Trung, thành phố Thủ Đức, Thành phố Hồ Chí Minh	50
 e1a84556-0b25-4404-a580-7e47816e3195	Nguyễn Văn A	senkiwasona@gmail.com	$2a$10$4.seAZWEbWTMyCmV9gxdN.won/s5ifWafpKsYucGzXwXmS0q4Vg3O	active	kế toán	3	3	2024-12-14	0932870398	093203007764	Đường Tạ Quang Bửu, Khu phố 6, phường Linh Trung, thành phố Thủ Đức, Thành phố Hồ Chí Minh	51
 7a16e642-0316-48d0-bb00-24cbbaca2e59	21520607@gm.uit.edu.vn	21520607@gm.uit.edu.vn	$2a$10$IrBfg/8uMtGrCFJH3fD5m.O1B89/YeM88ox6VQXsdsz7zU1YnTTem	unactive	kế toán	21520607@gm.uit.edu.vn	8	2024-12-03	21520607@gm.uit.edu.vn	21520607@gm.uit.edu.vn	21520607@gm.uit.edu.vn	60
+5c4a8b76-45a6-41a9-beac-25a09713b12d	Lâm Gia Bảo	lamgiabao1039@gmail.com	$2b$10$kBAhvxhb1bcXJoGYUqThp.NfYYzRPanJSTeeIO7ej6dDBCPqQfeY2	active	admin	3	3	2024-12-11	093287039	093203007764	Đường Tạ Quang Bửu, Khu phố 6, phường Linh Trung, thành phố Thủ Đức, Thành phố Hồ Chí Minh	35
 \.
 
 
@@ -751,20 +764,15 @@ e6e1fa8d-b62d-4181-aa8d-82f7b0da2a52	XH_000011	Đã vận chuyển	Xuất	2024-1
 cf4796fd-486d-4d03-b091-71ed1dcbe135	XH_000012	Đã vận chuyển	Xuất	2024-12-01 10:44:40.633586	2024-12-01 10:44:54.810378	Trần Thị B	Số 20, Cầu Giấy	28f8a1a7-0d11-43ba-bf6c-44d3ad711451	KH_000019
 0679dc13-7380-471d-9714-6742642e5153	XH_000013	Đã vận chuyển	Xuất	2024-12-01 13:42:14.092526	2024-12-01 13:42:44.572414	Nguyễn Văn 	Số 10, Phố Lê Văn Lương, Quận Thanh Xuân, Hà Nội, Việt Na	28f8a1a7-0d11-43ba-bf6c-44d3ad711451	KH_000018
 fff269a4-c49b-4291-ba2f-13c6c25c99ba	XH_000014	Đã vận chuyển	Xuất	2024-12-01 13:43:12.101123	2024-12-01 13:43:24.463326	Nguyễn Văn 	Số 10, Phố Lê Văn Lương, Quận Thanh Xuân, Hà Nội, Việt Na	28f8a1a7-0d11-43ba-bf6c-44d3ad711451	KH_000018
-4710f3b7-d39d-4423-b79f-cfcfc3a15c1b	DH_000126	đang vận chuyển	Nhập	2024-12-02 12:41:33.546922	\N	3	3	28f8a1a7-0d11-43ba-bf6c-44d3ad711451	\N
-b1ad1afc-62c8-4233-a8d8-1fd9a3fdb9ab	DH_000124	Đã vận chuyển	Nhập	2024-12-02 05:32:25.983009	2024-12-02 12:43:15.038671	3	3		\N
 177d432f-5a21-496e-b652-7f5f0c93bedb	XH_000022	đang vận chuyển	Xuất	2024-12-05 03:55:48.57306	\N	Nguyễn Văn 	Số 10, Phố Lê Văn Lương, Quận Thanh Xuân, Hà Nội, Việt Nam	28f8a1a7-0d11-43ba-bf6c-44d3ad711451	KH_000018
 fb3821e6-ef63-47bd-928c-7bf45d1884c6	XH_000005	Đã vận chuyển	Xuất	2024-11-30 08:45:54.989277	2024-11-30 14:40:15.151725	Nguyễn Văn 	Số 10, Phố Lê Văn Lương, Quận Thanh Xuân, Hà Nội, Việt Na	28f8a1a7-0d11-43ba-bf6c-44d3ad711451	KH_000018
 c23232a6-6881-4cc9-9602-b158077631cf	XH_000006	Đã vận chuyển	Xuất	2024-11-30 14:46:37.492117	2024-11-30 14:47:04.535264	Trần Thị B	Số 20, Cầu Giấy	28f8a1a7-0d11-43ba-bf6c-44d3ad711451	KH_000019
 6a98fdf5-e9ac-4442-9bda-21c0fd57da6e	XH_000007	Đã vận chuyển	Xuất	2024-11-30 14:48:39.185851	2024-11-30 14:49:10.090485	Nguyễn Văn 	Số 10, Phố Lê Văn Lương, Quận Thanh Xuân, Hà Nội, Việt Na	28f8a1a7-0d11-43ba-bf6c-44d3ad711451	KH_000018
 894499f5-f563-47ee-929d-b49208d68be8	XH_000008	Đã vận chuyển	Xuất	2024-11-30 14:51:52.973569	2024-11-30 14:52:02.040402	Nguyễn Văn 	Số 10, Phố Lê Văn Lương, Quận Thanh Xuân, Hà Nội, Việt Na	28f8a1a7-0d11-43ba-bf6c-44d3ad711451	KH_000018
-8bafb77d-f3db-44a7-bf01-f455a02b5cb0	DH_000118	Đã vận chuyển	Nhập	2024-12-01 05:34:00.513842	2024-12-01 05:38:21.734158	nhk	k	28f8a1a7-0d11-43ba-bf6c-44d3ad711451	\N
 3516bdcb-9502-46c7-affa-9a5892fbea24	XH_000024	đang vận chuyển	Xuất	2024-12-15 16:41:38.349438	\N	Nguyễn Văn 	Số 10, Phố Lê Văn Lương, Quận Thanh Xuân, Hà Nội, Việt Nam	28f8a1a7-0d11-43ba-bf6c-44d3ad711451	KH_000018
 3a2b1bd1-898c-40bc-adc6-bd45fc3eb20d	XH_000021	Đã vận chuyển	Xuất	2024-12-05 03:18:01.372303	2024-12-16 16:03:27.866796	Nguyễn Văn 	Số 10, Phố Lê Văn Lương, Quận Thanh Xuân, Hà Nội, Việt Nam	28f8a1a7-0d11-43ba-bf6c-44d3ad711451	KH_000018
 8079e9e3-7833-4767-a24c-7d0c6a82f416	XH_000023	Đã vận chuyển	Xuất	2024-12-15 16:37:48.01023	2024-12-16 16:03:36.97841	Nguyễn Văn 	Số 10, Phố Lê Văn Lương, Quận Thanh Xuân, Hà Nội, Việt Nam	28f8a1a7-0d11-43ba-bf6c-44d3ad711451	KH_000018
-f99d1867-9f39-4149-8279-446d30ff55a1	DH_000130	đang vận chuyển	Nhập	2024-12-16 16:04:04.778459	\N	a	a	28f8a1a7-0d11-43ba-bf6c-44d3ad711451	\N
-cb569dd7-f13d-4747-bb2a-dc100d2b65bf	DH_000132	Đã vận chuyển	Nhập	2024-12-18 08:14:46.379936	2024-12-18 08:16:15.5189	Kho thành phẩm ABC	109, phường Linh Trung, thành phố Thủ Đức, thành phố Hồ Chí Minh	28f8a1a7-0d11-43ba-bf6c-44d3ad711451	\N
-1d86d8d4-1ee5-4a86-9a8c-991d4e9d54dd	DH_000134	Đã vận chuyển	Nhập	2024-12-18 08:15:36.554017	2024-12-18 08:16:31.312799	Kho thành phẩm KLM	10, phường ABC, xã XYZ, thành phố MNQ	28f8a1a7-0d11-43ba-bf6c-44d3ad711451	\N
+55d8c8f1-10f9-49e2-8ebe-a0992f2521b9	DH_000138	đang vận chuyển	Nhập	2024-12-22 09:22:12.629572	\N	Kho thành phẩm XYZ	Đường 10, xã X, phường ANB	28f8a1a7-0d11-43ba-bf6c-44d3ad711451	\N
 \.
 
 
@@ -793,14 +801,14 @@ SELECT pg_catalog.setval('public.dondathang_id_seqq', 1, false);
 -- Name: dondathang_id_seqqq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.dondathang_id_seqqq', 134, true);
+SELECT pg_catalog.setval('public.dondathang_id_seqqq', 140, true);
 
 
 --
 -- Name: donxuathang_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.donxuathang_id_seq', 24, true);
+SELECT pg_catalog.setval('public.donxuathang_id_seq', 27, true);
 
 
 --
@@ -828,7 +836,7 @@ SELECT pg_catalog.setval('public.product_code_seq', 49, true);
 -- Name: reset_tokens_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.reset_tokens_id_seq', 33, true);
+SELECT pg_catalog.setval('public.reset_tokens_id_seq', 34, true);
 
 
 --

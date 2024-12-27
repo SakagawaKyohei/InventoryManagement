@@ -7,14 +7,7 @@ import { Product, Users } from "@/app/lib/definitions";
 import EditForm from "@/app/ui/account/ediform";
 import { auth } from "@/auth";
 
-export default async function EditProduct(props: {
-  searchParams?: Promise<{
-    id?: string;
-  }>;
-}) {
-  const searchParams = await props.searchParams;
-  const id = searchParams?.id || "";
-  const product: Users = await fetchUserByID(parseInt(id));
+export default async function EditProduct() {
   const session = await auth();
   const user = await getUserByEmail(
     session?.user?.email ? session?.user?.email : ""
@@ -22,7 +15,7 @@ export default async function EditProduct(props: {
 
   return (
     <div className="register-container">
-      <EditForm product1={product} uid={user.manv} />
+      <EditForm product1={user} uid={user.manv} />
     </div>
   );
 }

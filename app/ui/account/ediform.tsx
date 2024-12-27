@@ -16,7 +16,7 @@ import { Product, Users } from "@/app/lib/definitions";
 import { format } from "date-fns";
 
 interface Props {
-  product1: Users;
+  product1: any;
   uid: number;
 }
 export default function EditForm({ product1, uid }: Props) {
@@ -339,24 +339,11 @@ export default function EditForm({ product1, uid }: Props) {
                 backgroundColor: "#007ACC",
                 width: 140,
                 height: 40,
-                marginRight: 15,
               }}
               type="submit"
             >
               Chỉnh sửa
             </Button>
-            <Link href={"/dashboard/products"}>
-              <Button
-                style={{
-                  fontSize: 18,
-                  backgroundColor: "#A30D11",
-                  width: 140,
-                  height: 40,
-                }}
-              >
-                Hủy bỏ
-              </Button>
-            </Link>
           </div>
         </form>
       </div>

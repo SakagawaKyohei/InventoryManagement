@@ -21,7 +21,7 @@ const AddProductToOrder = async () => {
         role={user.role}
         bank={user.bank}
         stk={user.stk}
-        ngaysinh={user.ngaysinh}
+        ngay_sinh={user.ngaysinh}
         sdt={user.sdt}
         cccd={user.cccd}
         dia_chi={user.dia_chi}

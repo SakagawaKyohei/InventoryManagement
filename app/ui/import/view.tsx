@@ -49,30 +49,7 @@ const FetchProductButton = ({ dondathang, ketoan, nguoivanchuyen }: Props) => {
       router.push("/"); // Nếu không có lịch sử, điều hướng về trang chủ
     }
   };
-  const handlePay = async () => {
-    try {
-      const res = await fetch("/api/don-dat-hang/pay", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          donHangId: dondathang.id,
-          hanSuDung,
-          khoXuatHang,
-          diaChi,
-          id_nguoi_van_chuyen,
-        }),
-      });
 
-      if (res.ok) {
-        // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
-        alert("Thanh toán thành công, đã cập nhật nhiệm vụ người vận chuyển");
-        router.push("/dashboard/nhap-hang/cho-thanh-toan");
-      } else {
-      }
-    } catch (error) {
-      console.error("Lỗi khi xóa sản phẩm:", error);
-    }
-  };
   const [hanSuDung, setHanSuDung] = useState("");
   const [diaChi, setDiaChi] = useState("");
   const [khoXuatHang, setKhoXuathang] = useState("");

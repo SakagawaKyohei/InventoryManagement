@@ -643,6 +643,35 @@ export async function fetchProduct() {
   }
 }
 
+export async function fetchProduct1() {
+  try {
+    const data = await sql<Product>`
+SELECT 
+    product.id, 
+    product.name, 
+    product.company, 
+    product.buy_price, 
+    COALESCE(SUM(tonkho.so_luong), 0) AS tong_so_luong
+FROM 
+    product
+LEFT JOIN 
+    tonkho ON product.id = tonkho.ma_hang 
+    AND tonkho.han_su_dung >= NOW()
+GROUP BY 
+    product.id, product.name, product.company;
+
+    `;
+    const product = data.rows;
+    return product;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all product.');
+  }
+}
+
+
+
+
 export async function fetchConHan(query: string, currentPage: number, itemsPerPage: number) {
   try {
     const offset = (currentPage - 1) * itemsPerPage;
@@ -827,9 +856,9 @@ export async function fetchFilteredDonDatHang(
       id ILIKE ${`%${query}%`} OR
       company::text ILIKE ${`%${query}%`} OR
       product::text ILIKE ${`%${query}%`} 
-      ORDER BY 
-      status asc,
-      id ASC
+ORDER BY
+    status DESC, 
+    id ASC
       LIMIT ${item_per_page} OFFSET ${offset}
     `;
 
@@ -858,6 +887,70 @@ export async function fetchFilteredXuatHang(
       (doitac.id::text ILIKE '%' || ${query} || '%' OR
       donxuathang.ma_doi_tac::text ILIKE '%' || ${query} || '%' OR
       donxuathang.status::text ILIKE '%' || ${query} || '%')
+    ORDER BY 
+      donxuathang.status ASC,
+      donxuathang.id ASC
+    LIMIT ${item_per_page} OFFSET ${offset};
+
+    `;
+
+    const dondathang = data.rows;
+    return dondathang;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all product.');
+  } 
+}
+
+export async function fetchFilteredXuatHangChuaIn(
+  query: string,
+  currentPage: number,
+  item_per_page:number
+) {
+  const offset = (currentPage - 1) * item_per_page;
+
+  try {
+    const data = await sql<DonXuatHang&DoiTac>`
+    SELECT *, donxuathang.id as xuatid
+    FROM donxuathang
+    JOIN doitac ON doitac.id = donxuathang.ma_doi_tac
+    WHERE
+      (doitac.id::text ILIKE '%' || ${query} || '%' OR
+      donxuathang.ma_doi_tac::text ILIKE '%' || ${query} || '%' OR
+      donxuathang.status::text ILIKE '%' || ${query} || '%')
+      and dain is null
+    ORDER BY 
+      donxuathang.status ASC,
+      donxuathang.id ASC
+    LIMIT ${item_per_page} OFFSET ${offset};
+
+    `;
+
+    const dondathang = data.rows;
+    return dondathang;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all product.');
+  } 
+}
+
+export async function fetchFilteredXuatHangDaIn(
+  query: string,
+  currentPage: number,
+  item_per_page:number
+) {
+  const offset = (currentPage - 1) * item_per_page;
+
+  try {
+    const data = await sql<DonXuatHang&DoiTac>`
+    SELECT *, donxuathang.id as xuatid
+    FROM donxuathang
+    JOIN doitac ON doitac.id = donxuathang.ma_doi_tac
+    WHERE
+      (doitac.id::text ILIKE '%' || ${query} || '%' OR
+      donxuathang.ma_doi_tac::text ILIKE '%' || ${query} || '%' OR
+      donxuathang.status::text ILIKE '%' || ${query} || '%')
+      and dain='d'
     ORDER BY 
       donxuathang.status ASC,
       donxuathang.id ASC
@@ -1232,6 +1325,43 @@ export async function fetchXuatHangPages(query: string,item_per_page:number) {
       (doitac.id::text ILIKE '%' || ${query} || '%' OR
       donxuathang.ma_doi_tac::text ILIKE '%' || ${query} || '%' OR
       donxuathang.status::text ILIKE '%' || ${query} || '%')
+  `;
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / item_per_page);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of products.');
+  }
+}
+
+export async function fetchXuatHangChuaInPages(query: string,item_per_page:number) {
+  try {
+    const count = await sql`SELECT COUNT(*)
+     FROM donxuathang
+    JOIN doitac ON doitac.id = donxuathang.ma_doi_tac
+    WHERE
+      (doitac.id::text ILIKE '%' || ${query} || '%' OR
+      donxuathang.ma_doi_tac::text ILIKE '%' || ${query} || '%' OR
+      donxuathang.status::text ILIKE '%' || ${query} || '%') and dain is null
+  `;
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / item_per_page);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of products.');
+  }
+}
+export async function fetchXuatHangDaInPages(query: string,item_per_page:number) {
+  try {
+    const count = await sql`SELECT COUNT(*)
+     FROM donxuathang
+    JOIN doitac ON doitac.id = donxuathang.ma_doi_tac
+    WHERE
+      (doitac.id::text ILIKE '%' || ${query} || '%' OR
+      donxuathang.ma_doi_tac::text ILIKE '%' || ${query} || '%' OR
+      donxuathang.status::text ILIKE '%' || ${query} || '%') and dain='d'
   `;
 
     const totalPages = Math.ceil(Number(count.rows[0].count) / item_per_page);

@@ -88,7 +88,7 @@ const sidebarItemsForRole = {
     },
 
     {
-      label: "Tài khoản",
+      label: "Người dùng",
       icon: <FaUser />,
       dropdownItems: [
         { label: "Đang hoạt động", href: "/dashboard/account/dang-hoat-dong" },
@@ -99,8 +99,8 @@ const sidebarItemsForRole = {
       ],
     },
     {
-      label: "Đổi mật khẩu",
-      href: "/dashboard/doi-mat-khau",
+      label: "Tài khoản",
+      href: "/dashboard/account/edit",
       icon: <FaLock />,
     },
   ],
@@ -108,21 +108,18 @@ const sidebarItemsForRole = {
   ketoan: [
     {
       label: "Nhập hàng",
-      icon: <Image src="/import.png" width={20} height={20} alt="return" />,
-      dropdownItems: [
-        {
-          label: "Danh sách đơn hàng",
-          href: "/dashboard/nhap-hang",
-        },
-        { label: "Đang nhập kho", href: "/dashboard/nhap-hang/dang-nhap-kho" },
-        { label: "Đã nhập kho", href: "/dashboard/nhap-hang/da-nhap-kho" },
-      ],
+      href: "/dashboard/nhap-hang",
+      icon: <Image src="/export.png" width={20} height={20} alt="return" />,
     },
     {
       label: "Xuất hàng",
-      href: "/dashboard/xuat-hang",
-      icon: <Image src="/export.png" width={20} height={20} alt="return" />,
+      icon: <Image src="/import.png" width={20} height={20} alt="return" />,
+      dropdownItems: [
+        { label: "Chưa in", href: "/dashboard/xuat-hang/chua-in" },
+        { label: "Đã in", href: "/dashboard/xuat-hang/da-in" },
+      ],
     },
+
     {
       label: "Hàng tồn",
       icon: <Image src="/import.png" width={20} height={20} alt="return" />,
@@ -134,7 +131,7 @@ const sidebarItemsForRole = {
         { label: "Hết hạn", href: "/dashboard/hang-ton/het-han" },
       ],
     },
-    { label: "Tài khoản", href: "/dashboard/products", icon: <FaBox /> },
+    { label: "Tài khoản", href: "/dashboard/account/edit", icon: <FaBox /> },
   ],
 
   nguoivanchuyen: [
@@ -150,7 +147,7 @@ const sidebarItemsForRole = {
       ],
     },
 
-    { label: "Tài khoản", href: "/account", icon: <FaUser /> },
+    { label: "Tài khoản", href: "/dashboard/account/edit", icon: <FaUser /> },
   ],
 };
 

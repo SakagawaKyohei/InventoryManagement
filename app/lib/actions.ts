@@ -584,6 +584,26 @@ export async function EditProduct(id:string, product: Product,uid:number) {
   }
 }
 
+export async function InBill(id:string) {
+  try {
+    // Update the product based on its unique ID
+    await sql`
+      UPDATE donxuathang
+      SET 
+        dain='d'
+      WHERE id = ${id}
+  `;
+    
+    return { message: 'Product updated successfully.' };
+  } catch (error) {
+    // If a database error occurs, return a more specific error.
+    console.log(error);
+    return {
+      message: 'Database Error: Failed to Update Product.',
+    };
+  }
+}
+
 export async function EditUser(id:number, product: Users,uid:number) {
   try {
     // Update the product based on its unique ID
@@ -789,7 +809,7 @@ export async function DeleteProductFromStock(clientproducts:any, doitac:DoiTac, 
   // Chèn vào bảng vanchuyen với id vừa lấy từ donxuathang
   await sql`
     INSERT INTO vanchuyen (id_don_hang, status, nhapxuat, start_time,id_nguoi_van_chuyen,id_doi_tac, kho_xuat_hang, dia_chi_kho) 
-    VALUES (${donxuatId}, 'đang vận chuyển', 'Xuất', now(), ${nguoivanchuyen.id}, ${doitac.id}, ${doitac.name}, ${doitac.dia_chi});`;
+    VALUES (${donxuatId}, 'đang vận chuyển', 'Xuất', now(), ${nguoivanchuyen.manv}, ${doitac.id}, ${doitac.name}, ${doitac.dia_chi});`;
 
   console.log(productJson);
 }
