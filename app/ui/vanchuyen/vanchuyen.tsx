@@ -183,11 +183,16 @@ const FetchProductButton = ({ vanchuyen, totalPages, user }: Props) => {
                 <TableHead className="w-[150px] text-center">
                   Mã đơn hàng
                 </TableHead>
+                {user.role == "admin" ? (
+                  <TableHead>Mã nhân viên</TableHead>
+                ) : (
+                  <></>
+                )}
 
                 <TableHead>Tên kho nhập hàng/đối tác</TableHead>
                 <TableHead>Địa chỉ</TableHead>
                 <TableHead>Thời gian</TableHead>
-                <TableHead>Nhập/Xuất</TableHead>
+                <TableHead className="text-center">Nhập/Xuất</TableHead>
                 {user.role == "admin" ? (
                   <></>
                 ) : (
@@ -219,13 +224,28 @@ const FetchProductButton = ({ vanchuyen, totalPages, user }: Props) => {
                       </Link>
                     )}
                   </TableCell>
+                  {user.role == "admin" ? (
+                    <TableCell
+                      style={{ textDecoration: "underline" }}
+                      className="text-center"
+                    >
+                      {" "}
+                      <Link
+                        href={`/dashboard/account/view?id=${item.id_nguoi_van_chuyen}`}
+                      >
+                        {item.id_nguoi_van_chuyen}
+                      </Link>
+                    </TableCell>
+                  ) : (
+                    <></>
+                  )}
                   <TableCell>{item.kho_xuat_hang}</TableCell>
                   <TableCell>{item.dia_chi_kho}</TableCell>
 
                   <TableCell>
                     {format(new Date(item.start_time), "dd/MM/yyyy")}
                   </TableCell>
-                  <TableCell>{item.nhapxuat}</TableCell>
+                  <TableCell className="text-center">{item.nhapxuat}</TableCell>
                   <TableCell
                     style={{ display: "flex", justifyContent: "center" }}
                   >

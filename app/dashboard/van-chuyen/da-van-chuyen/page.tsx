@@ -4,9 +4,11 @@ import {
   fetchPendingDonDatHangPages,
   fetchVanChuyenDonePage,
   fetchVanChuyenPage,
+  getUserByEmail,
 } from "@/app/lib/data";
 import { DonDatHang, VanChuyen } from "@/app/lib/definitions";
 import VanChuyenComponent from "@/app/ui/vanchuyen/davanchuyen";
+import { auth } from "@/auth";
 const FetchProductButton = async (props: {
   searchParams?: Promise<{
     query?: string;
@@ -24,10 +26,18 @@ const FetchProductButton = async (props: {
     currentPage,
     item_per_page
   );
+  const session = await auth();
+  const user = await getUserByEmail(
+    session?.user?.email ? session?.user?.email : ""
+  );
 
   return (
     <div>
-      <VanChuyenComponent vanchuyen={vanchuyen} totalPages={totalPages} />
+      <VanChuyenComponent
+        vanchuyen={vanchuyen}
+        totalPages={totalPages}
+        user={user}
+      />
     </div>
   );
 };

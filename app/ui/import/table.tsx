@@ -207,7 +207,7 @@ const FetchProductButton = ({ dondathang, totalPages }: Props) => {
                     {format(new Date(item.ngay_dat), "dd/MM/yyyy")}
                   </TableCell>
 
-                  <TableCell>500.000đ</TableCell>
+                  <TableCell>{formatCurrency(item.total * 1000)}</TableCell>
                   <TableCell>
                     {item.status == "paid" ? "Đã thanh toán" : "Chờ thanh toán"}
                   </TableCell>

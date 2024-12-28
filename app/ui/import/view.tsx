@@ -167,7 +167,7 @@ const FetchProductButton = ({ dondathang, ketoan, nguoivanchuyen }: Props) => {
               <div>
                 <label htmlFor="sell_price">Số điện thoại:</label>
                 <Input
-                  type="number"
+                  type="text"
                   id="sell_price"
                   name="sell_price"
                   disabled

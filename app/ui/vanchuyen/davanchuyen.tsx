@@ -31,9 +31,10 @@ import { VanChuyen } from "@/app/lib/definitions";
 interface Props {
   vanchuyen: VanChuyen[];
   totalPages: number;
+  user: any;
 }
 
-const FetchProductButton = ({ vanchuyen, totalPages }: Props) => {
+const FetchProductButton = ({ vanchuyen, totalPages, user }: Props) => {
   const pathname = usePathname();
   const { replace } = useRouter();
   const searchParams = useSearchParams();
@@ -179,14 +180,16 @@ const FetchProductButton = ({ vanchuyen, totalPages }: Props) => {
           <Table>
             <TableHeader>
               <TableRow style={{ height: 65 }}>
-                <TableHead className="w-[150px] text-center">
-                  Mã đơn hàng
-                </TableHead>
-
+                <TableHead className="text-center">Mã đơn hàng</TableHead>
+                {user.role == "admin" ? (
+                  <TableHead>Mã nhân viên</TableHead>
+                ) : (
+                  <></>
+                )}
                 <TableHead>Tên kho nhập hàng/đối tác</TableHead>
                 <TableHead>Địa chỉ</TableHead>
-                <TableHead>Thời gian hoàn thành</TableHead>
-                <TableHead>Nhập/Xuất</TableHead>
+
+                <TableHead className="text-center">Nhập/Xuất</TableHead>
                 <TableHead>Trạng thái</TableHead>
               </TableRow>
             </TableHeader>
@@ -203,13 +206,25 @@ const FetchProductButton = ({ vanchuyen, totalPages }: Props) => {
                       {item.id_don_hang}
                     </Link>
                   </TableCell>
+                  {user.role == "admin" ? (
+                    <TableCell
+                      style={{ textDecoration: "underline" }}
+                      className="text-center"
+                    >
+                      {" "}
+                      <Link
+                        href={`/dashboard/account/view?id=${item.id_nguoi_van_chuyen}`}
+                      >
+                        {item.id_nguoi_van_chuyen}
+                      </Link>
+                    </TableCell>
+                  ) : (
+                    <></>
+                  )}
                   <TableCell>{item.kho_xuat_hang}</TableCell>
                   <TableCell>{item.dia_chi_kho}</TableCell>
 
-                  <TableCell>
-                    {format(new Date(item.start_time), "dd/MM/yyyy")}
-                  </TableCell>
-                  <TableCell>{item.nhapxuat}</TableCell>
+                  <TableCell className="text-center">{item.nhapxuat}</TableCell>
                   <TableCell>Đúng hạn</TableCell>
                 </TableRow>
               ))}

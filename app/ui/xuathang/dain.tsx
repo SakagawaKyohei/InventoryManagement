@@ -395,7 +395,13 @@ const FetchProductButton = ({
                       {item.xuatid}
                     </Link>
                   </TableCell>
-                  <TableCell>{item.id}</TableCell>
+
+                  <TableCell style={{ textDecoration: "underline" }}>
+                    {" "}
+                    <Link href={`/dashboard/doi-tac/view?id=${item.id}`}>
+                      {item.id}
+                    </Link>
+                  </TableCell>
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.sdt}</TableCell>
                   <TableCell>

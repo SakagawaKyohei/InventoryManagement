@@ -30,6 +30,7 @@ export type Product = {
 
 export type VanChuyen={
   id:string
+  id_nguoi_van_chuyen:string
   id_don_hang: string
   status:string;
   nhapxuat:string
