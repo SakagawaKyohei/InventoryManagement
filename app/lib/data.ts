@@ -426,6 +426,48 @@ export async function fetchDonXuatHangById(id: string) {
   }
 }
 
+export async function fetchDonXuatHangByIdDoiTacPages(query: string,item_per_page:number, id:any) {
+  try {
+    const count = await sql`SELECT COUNT(*)
+
+FROM donxuathang
+JOIN vanchuyen ON donxuathang.id = vanchuyen.id_don_hang
+WHERE donxuathang.ma_doi_tac = ${id}
+
+
+  `;
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / item_per_page);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of products.');
+  }
+}
+
+export async function fetchDonXuatHangByIdDoiTac(id:any,   
+  query: string,
+  currentPage: number,
+  item_per_page:number) {
+  const offset = (currentPage - 1) * item_per_page;
+  try {
+    const data = await sql<DonXuatHang & VanChuyen>`
+SELECT *
+FROM donxuathang
+JOIN vanchuyen ON donxuathang.id = vanchuyen.id_don_hang
+WHERE donxuathang.ma_doi_tac = ${id}
+LIMIT ${item_per_page} OFFSET ${offset};
+
+    `;
+
+    const product = data.rows;
+    return product;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch nguoi van chuyen.');
+  }
+}
+
 export async function fetchVanChuyenById(id: string) {
   try {
     const data = await sql<VanChuyen>`

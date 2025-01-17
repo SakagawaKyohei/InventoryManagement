@@ -1,9 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import { DoiTac, DonDatHang, Product } from "../../lib/definitions";
+import { DonXuatHang, Product, Users } from "../../lib/definitions";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { format } from "date-fns";
 import {
   Pagination,
   PaginationContent,
@@ -22,44 +21,48 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { FaSearch } from "react-icons/fa";
-import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
+import { format } from "date-fns";
 import { formatCurrency } from "@/app/lib/utils";
-import { Underline } from "lucide-react";
+import Link from "next/link";
 
 interface Props {
-  doitac: DoiTac[];
+  product: any[];
   totalPages: number;
   uid: number;
+  cusid: string;
 }
 
-const FetchProductButton = ({ doitac, totalPages, uid }: Props) => {
+const FetchProductButton = ({ product, totalPages, uid, cusid }: Props) => {
   const pathname = usePathname();
   const { replace } = useRouter();
   const searchParams = useSearchParams();
+  const [message, setMessage] = useState("");
   const currentPage = (searchParams && Number(searchParams.get("page"))) || 1;
   const [item_per_page, setItemPerPage] = useState(
     Number(searchParams?.get("itemsPerPage")) || 5
   );
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: string, uid: number) => {
     const params = new URLSearchParams(
       searchParams ? searchParams.toString() : ""
     );
     try {
-      const res = await fetch("/api/doi-tac/delete", {
+      const res = await fetch("/api/auth/restore", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, uid }),
+        body: JSON.stringify({ id }),
       });
       if (res.ok) {
         // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
         replace(`${pathname}?${params.toString()}`);
       } else {
+        setMessage("Không thể xóa sản phẩm");
       }
     } catch (error) {
       console.error("Lỗi khi xóa sản phẩm:", error);
+      setMessage("Lỗi khi xóa sản phẩm. Vui lòng thử lại.");
     }
   };
 
@@ -165,8 +168,10 @@ const FetchProductButton = ({ doitac, totalPages, uid }: Props) => {
     <div>
       <div style={{ backgroundColor: "#EAEAEA" }}>
         <div className="px-2 py-4 md:px-4" style={{ backgroundColor: "white" }}>
-          <p style={{ fontWeight: "bold", fontSize: 24 }}>Đối tác</p>
-          <p style={{ marginBottom: 15 }}>Danh sách các đối tác</p>
+          <p style={{ fontWeight: "bold", fontSize: 24 }}>Lịch sử đặt hàng</p>
+          <p style={{ marginBottom: 15 }}>
+            Lịch sử đặt hàng của khách hàng <b>{cusid}</b>
+          </p>
           <div
             style={{ display: "flex", flexDirection: "row", paddingBottom: 15 }}
           >
@@ -201,72 +206,45 @@ const FetchProductButton = ({ doitac, totalPages, uid }: Props) => {
             <TableHeader>
               <TableRow style={{ height: 65 }}>
                 <TableHead className="w-[150px] text-center">
-                  Mã đối tác
+                  Mã đơn hàng
                 </TableHead>
-
-                <TableHead>Tên đối tác</TableHead>
-                <TableHead>Địa chỉ</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>SĐT</TableHead>
-                <TableHead className="text-center">Action</TableHead>
+                <TableHead className="font-medium text-center">
+                  Mã nhân viên
+                </TableHead>
+                <TableHead>Ngày xuất hàng</TableHead>
+                <TableHead>Tổng tiền</TableHead>
+                <TableHead>Trạng thái</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {doitac?.map((item) => (
-                <TableRow key={item.id} style={{ height: 65 }}>
+              {product?.map((item) => (
+                <TableRow key={item.id_don_hang} style={{ height: 65 }}>
                   <TableCell
                     className="font-medium text-center"
                     style={{ textDecoration: "underline" }}
                   >
-                    <Link href={`/dashboard/doi-tac/view?id=${item.id}`}>
-                      {item.id}
+                    <Link
+                      href={`/dashboard/xuat-hang/thong-tin-don-hang?id=${item.id_don_hang}`}
+                    >
+                      {item.id_don_hang}
                     </Link>
                   </TableCell>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.dia_chi}</TableCell>
-                  <TableCell>{item.email}</TableCell>
-                  <TableCell>{item.sdt}</TableCell>
                   <TableCell
-                    style={{
-                      marginTop: 10,
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
+                    style={{ textDecoration: "underline" }}
+                    className="text-center"
                   >
-                    <Link href={`/dashboard/doi-tac/edit?id=${item.id}`}>
-                      <Image
-                        src="/edit.png"
-                        width={25}
-                        height={25}
-                        className="hidden md:block"
-                        alt="Screenshots of the dashboard project showing desktop version"
-                        style={{ marginRight: 10 }}
-                      />
-                    </Link>{" "}
+                    {" "}
                     <Link
-                      href={`/dashboard/doi-tac/lich-su-don-hang?id=${item.id}`}
+                      href={`/dashboard/account/view?id=${item.id_nguoi_van_chuyen}`}
                     >
-                      <Image
-                        src="/history1.png"
-                        width={40}
-                        height={40}
-                        className="hidden md:block"
-                        alt="Screenshots of the dashboard project showing desktop version"
-                        style={{ marginRight: 10 }}
-                      />
-                    </Link>{" "}
-                    <Image
-                      src="/delete.png"
-                      width={30}
-                      height={40}
-                      className="hidden md:block"
-                      alt="Screenshots of the dashboard project showing desktop version"
-                      onClick={() => {
-                        handleDelete(item.id);
-                      }}
-                    />
+                      {item.id_nguoi_van_chuyen}
+                    </Link>
                   </TableCell>
+                  <TableCell>
+                    {format(new Date(item.ngayxuat), "dd/MM/yyyy")}
+                  </TableCell>
+                  <TableCell>{formatCurrency(item.total * 1000)}</TableCell>
+                  <TableCell>{item.status}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -291,29 +269,27 @@ const FetchProductButton = ({ doitac, totalPages, uid }: Props) => {
               <></>
             )}
           </Pagination>
-        </div>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "end",
-          marginRight: 25,
-          marginTop: 30,
-        }}
-      >
-        <Link href={"/dashboard/doi-tac/them-moi"}>
-          <Button
+          <div
             style={{
-              marginRight: 15,
-              fontSize: 18,
-              backgroundColor: "#007ACC",
-              width: 140,
-              height: 40,
+              marginTop: 25,
+              display: "flex",
+              justifyContent: "end",
             }}
           >
-            Thêm mới
-          </Button>
-        </Link>
+            <Link href={"/dashboard/doi-tac"}>
+              <Button
+                style={{
+                  fontSize: 18,
+                  backgroundColor: "#A30D11",
+                  width: 140,
+                  height: 40,
+                }}
+              >
+                Quay lại
+              </Button>
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );
