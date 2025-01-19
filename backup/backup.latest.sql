@@ -196,7 +196,8 @@ CREATE TABLE public.doitac (
     sdt character varying,
     dia_chi character varying,
     ao_nuoi jsonb[],
-    id character varying NOT NULL
+    id character varying NOT NULL,
+    lichsu jsonb[]
 );
 
 
@@ -543,10 +544,10 @@ COPY public.doanhthu (month, year, revenue) FROM stdin;
 -- Data for Name: doitac; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.doitac (name, email, sdt, dia_chi, ao_nuoi, id) FROM stdin;
-Trần Thị B	tranthib@example.com	0912345678	Số 20, Cầu Giấy	{"[{\\"stt\\": 1, \\"soluong\\": 4000, \\"thuysan\\": \\"Cá chép\\", \\"dientich\\": 30000, \\"ngaytuoi\\": 20}, {\\"stt\\": 2, \\"soluong\\": 200, \\"thuysan\\": \\"Cá tra\\", \\"dientich\\": 5000, \\"ngaytuoi\\": 30}]"}	KH_000019
-Nguyễn Văn 	nguyenvana@gmail.co	098675637	Số 10, Phố Lê Văn Lương, Quận Thanh Xuân, Hà Nội, Việt Nam	{"[{\\"stt\\": 1, \\"soluong\\": 3000, \\"thuysan\\": \\"Tôm\\", \\"dientich\\": 10000, \\"ngaytuoi\\": 30}, {\\"stt\\": 2, \\"soluong\\": 2000, \\"thuysan\\": \\"Cá tra\\", \\"dientich\\": 5000, \\"ngaytuoi\\": 80}]"}	KH_000018
-Nguyên 	nguyen@gmail.com	097866392	10, Thủ Đức, HCM	{"[{\\"stt\\": 1, \\"soluong\\": 10, \\"thuysan\\": \\"Cá tra\\", \\"dientich\\": 100, \\"ngaytuoi\\": 20}]"}	KH_000026
+COPY public.doitac (name, email, sdt, dia_chi, ao_nuoi, id, lichsu) FROM stdin;
+Trần Thị B	tranthib@example.com	0912345678	Số 20, Cầu Giấy	{"[{\\"stt\\": 1, \\"soluong\\": 4000, \\"thuysan\\": \\"Cá chép\\", \\"dientich\\": 30000, \\"ngaytuoi\\": 20}, {\\"stt\\": 2, \\"soluong\\": 200, \\"thuysan\\": \\"Cá tra\\", \\"dientich\\": 5000, \\"ngaytuoi\\": 30}]"}	KH_000019	\N
+Nguyễn Văn 	nguyenvana@gmail.co	098675637	Số 10, Phố Lê Văn Lương, Quận Thanh Xuân, Hà Nội, Việt Nam	{"[{\\"stt\\": 1, \\"soluong\\": 3000, \\"thuysan\\": \\"Tôm\\", \\"dientich\\": 10000, \\"ngaytuoi\\": 30}, {\\"stt\\": 2, \\"soluong\\": 2000, \\"thuysan\\": \\"Cá tra\\", \\"dientich\\": 5000, \\"ngaytuoi\\": 80}]"}	KH_000018	\N
+Nguyên 	nguyen@gmail.com	097866392	10, Thủ Đức, HCM	{"[{\\"stt\\": 1, \\"soluong\\": 10, \\"thuysan\\": \\"Cá tra\\", \\"dientich\\": 100, \\"ngaytuoi\\": 20}]"}	KH_000026	\N
 \.
 
 

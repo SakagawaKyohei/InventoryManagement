@@ -2,16 +2,16 @@ import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import Image from "next/image";
 import { lusitana } from "@/app/ui/fonts";
-import { fetchLatestHanTon, fetchLatestInvoices } from "@/app/lib/data";
+import { fetchTop5, fetchLatestInvoices } from "@/app/lib/data";
 import { formatCurrency } from "@/app/lib/utils";
 
 export default async function LatestInvoices() {
   // Remove props
-  const latestInvoices = await fetchLatestHanTon();
+  const latestInvoices = await fetchTop5();
   return (
     <div className="flex w-full flex-col md:col-span-4">
       <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
-        Gợi ý nhập hàng
+        Top sản phẩm bán chạy
       </h2>
       <div className="flex grow flex-col justify-between rounded-xl bg-gray-50 p-4">
         {/* NOTE: Uncomment this code in Chapter 7 */}
@@ -20,7 +20,7 @@ export default async function LatestInvoices() {
           {latestInvoices.map((invoice, i) => {
             return (
               <div
-                key={invoice.id}
+                key={invoice.product_id}
                 className={clsx(
                   "flex flex-row items-center justify-between py-4",
                   {
@@ -37,11 +37,11 @@ export default async function LatestInvoices() {
                   />
                   <div className="min-w-0">
                     <p className="truncate text-sm font-semibold md:text-base">
-                      {invoice.name}
+                      {invoice.product_name}
                     </p>
-                    <p className="hidden text-sm text-gray-500 sm:block">
-                      Còn lại:{" "}
-                      {invoice.tong_so_luong ? invoice.tong_so_luong : 0} bao
+                    <p className="hproduct_idden text-sm text-gray-500 sm:block">
+                      Đã bán:{" "}
+                      {invoice.total_quantity ? invoice.total_quantity : 0} bao
                     </p>
                   </div>
                 </div>

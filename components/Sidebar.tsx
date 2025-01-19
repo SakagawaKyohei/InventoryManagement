@@ -73,6 +73,7 @@ const sidebarItemsForRole = {
       icon: <FaBox />,
       dropdownItems: [
         { label: "Còn hạn", href: "/dashboard/hang-ton/con-han" },
+        { label: "Sắp hết hạn", href: "/dashboard/hang-ton/sap-het-han" },
         { label: "Hết hạn", href: "/dashboard/hang-ton/het-han" },
       ],
     },

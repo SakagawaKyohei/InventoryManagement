@@ -468,14 +468,16 @@ const AddForm = (user: Users) => {
                           Chọn thức ăn
                         </option>
 
-                        {availableProducts?.map((product) => (
-                          <option
-                            key={product.id}
-                            value={JSON.stringify(product)}
-                          >
-                            {product.name} - Còn {product.tong_so_luong} bao
-                          </option>
-                        ))}
+                        {availableProducts
+                          ?.sort((a, b) => a.tong_so_luong - b.tong_so_luong) // Sắp xếp tăng dần theo tong_so_luong
+                          .map((product) => (
+                            <option
+                              key={product.id}
+                              value={JSON.stringify(product)}
+                            >
+                              {product.name} - Còn {product.tong_so_luong} bao
+                            </option>
+                          ))}
                       </select>
                     </TableCell>
                     <TableCell>
