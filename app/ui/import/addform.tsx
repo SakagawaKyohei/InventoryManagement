@@ -27,6 +27,11 @@ interface OrderProduct {
   dongia: string;
   thanhtien: string;
 }
+interface ForecastResult {
+  product_name: string;
+  forecast_result?: number;
+  error?: string;
+}
 
 const AddForm = (user: Users) => {
   const router = useRouter();
@@ -63,6 +68,47 @@ const AddForm = (user: Users) => {
       router.push("/"); // Nếu không có lịch sử, điều hướng về trang chủ
     }
   };
+
+  const [forecastResults, setForecastResults] = useState<ForecastResult[]>([]); // Forecast results with defined structure
+
+  const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
+
+  // Kiểm tra trước khi lọc sản phẩm
+  const availableProducts =
+    products?.filter(
+      (product) => !selectedProducts.includes(product.name) // Loại bỏ sản phẩm đã chọn
+    ) || []; // Nếu `products` là undefined, gán mảng rỗng cho `availableProducts`
+
+  // Tạo một mảng với các tên sản phẩm từ availableProducts
+  const productNames = availableProducts.map((product) => product.name);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch("/api/demand", {
+          method: "POST", // POST request
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ product_names: productNames }), // Send product_names as an array
+        });
+
+        const data = await response.json();
+
+        if (data.forecasts) {
+          setForecastResults(data.forecasts); // Set the forecast results
+        } else {
+          console.error("Invalid forecast data:", data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch forecast data:", error);
+      }
+    }
+
+    if (productNames.length > 0) {
+      fetchData();
+    }
+  }, [productNames]); // Trigger fetchData when productNames change
 
   const fetchProducts = async () => {
     setMessage(""); // Clear any previous messages
@@ -195,12 +241,6 @@ const AddForm = (user: Users) => {
     }
   };
 
-  const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
-
-  const availableProducts = products?.filter(
-    (product) => !selectedProducts.includes(product.name) // Loại bỏ sản phẩm đã chọn
-  );
-
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedProduct = JSON.parse(event.target.value) as Product;
     console.log("Selected product:", selectedProduct);
@@ -224,66 +264,6 @@ const AddForm = (user: Users) => {
     }));
   };
   return (
-    // <div>
-    //   <h1>Add Product to DonDatHang</h1>
-    //   <button onClick={handleCancel}>Cancel</button>
-    //   <button onClick={handleadd}>add</button>
-    //   <form onSubmit={handleSubmit}>
-    //     <div>
-    //       <label>Company:</label>
-    //       <input
-    //         type="text"
-    //         name="company"
-    //         value={company}
-    //         onChange={handleCompanyChange}
-    //         required
-    //       />
-    //     </div>
-
-    //     <div>
-    //       <label>id:</label>
-    //       <input
-    //         type="text"
-    //         name="id"
-    //         value={product.id}
-    //         onChange={handleInputChange}
-    //         required
-    //       />
-    //     </div>
-    //     <div>
-    //       <label>Product Name:</label>
-    //       <input
-    //         type="text"
-    //         name="name"
-    //         value={product.name}
-    //         onChange={handleInputChange}
-    //         required
-    //       />
-    //     </div>
-    //     <div>
-    //       <label>Price:</label>
-    //       <input
-    //         type="number"
-    //         name="price"
-    //         value={product.price}
-    //         onChange={handleInputChange}
-    //         required
-    //       />
-    //     </div>
-    //     <div>
-    //       <label>Quantity:</label>
-    //       <input
-    //         type="number"
-    //         name="quantity"
-    //         value={product.quantity}
-    //         onChange={handleInputChange}
-    //         required
-    //       />
-    //     </div>
-    //     <button type="submit">Add Product</button>
-    //   </form>
-    //   {message && <p>{message}</p>}
-    // </div>
     <div className="register-container">
       <Link href={""}>
         <div style={{ display: "flex" }} onClick={handleGoBack}>
@@ -367,6 +347,13 @@ const AddForm = (user: Users) => {
             }}
           >
             <div>
+              <button
+                onClick={() => {
+                  console.log(forecastResults);
+                }}
+              >
+                a
+              </button>
               <label htmlFor="sell_price">Số điện thoại:</label>
               <Input
                 type="number"
@@ -386,6 +373,7 @@ const AddForm = (user: Users) => {
             </div>
             <div>
               <label htmlFor="company">Email:</label>
+
               <Input
                 type="text"
                 value={user.email}
@@ -469,13 +457,55 @@ const AddForm = (user: Users) => {
                         </option>
 
                         {availableProducts
-                          ?.sort((a, b) => a.tong_so_luong - b.tong_so_luong) // Sắp xếp tăng dần theo tong_so_luong
+                          ?.map((product) => {
+                            const forecastResult = forecastResults.find(
+                              (result) => result.product_name === product.name
+                            )?.forecast_result;
+
+                            // Tính toán số lượng cần đặt
+                            const productResult =
+                              forecastResult !== undefined
+                                ? Math.trunc(
+                                    forecastResult - product.tong_so_luong
+                                  )
+                                : null;
+
+                            return {
+                              ...product,
+                              productResult,
+                            };
+                          })
+                          // Sắp xếp theo yêu cầu
+                          .sort((a, b) => {
+                            // Ưu tiên theo số lượng cần đặt (giảm dần)
+                            if (a.productResult > 0 && b.productResult > 0) {
+                              return b.productResult - a.productResult;
+                            }
+                            // Nếu không cần đặt, sắp xếp theo số lượng còn lại (tăng dần)
+                            if (a.productResult <= 0 && b.productResult <= 0) {
+                              return a.tong_so_luong - b.tong_so_luong;
+                            }
+                            // Ưu tiên sản phẩm cần đặt
+                            return a.productResult > 0 ? -1 : 1;
+                          })
                           .map((product) => (
                             <option
                               key={product.id}
                               value={JSON.stringify(product)}
+                              style={{
+                                color:
+                                  product.productResult > 0
+                                    ? "green"
+                                    : "inherit", // Highlight "Cần đặt" bằng màu xanh lá
+                                fontWeight:
+                                  product.productResult > 0 ? "bold" : "normal", // Làm đậm text cho sản phẩm cần đặt
+                              }}
                             >
-                              {product.name} - Còn {product.tong_so_luong} bao
+                              {product.name} -{" "}
+                              {product.productResult !== null &&
+                              product.productResult > 0
+                                ? `Cần: ${product.productResult} bao`
+                                : `Còn ${product.tong_so_luong} bao`}
                             </option>
                           ))}
                       </select>
@@ -603,4 +633,3 @@ const AddForm = (user: Users) => {
 };
 
 export default AddForm;
-//thêm hàm khi add order product rồi sẽ xóa product đó trong select
