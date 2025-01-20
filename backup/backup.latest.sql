@@ -537,7 +537,7 @@ COPY public.doanhthu (month, year, revenue) FROM stdin;
 10	2024	45348
 11	2024	16183
 12	2024	184646
-1	2025	15000
+1	2025	40000
 \.
 
 
@@ -557,18 +557,18 @@ Nguyên 	nguyen@gmail.com	097866392	10, Thủ Đức, HCM	{"[{\\"stt\\": 1, \\"s
 --
 
 COPY public.dondathang (id, company, product, status, han_su_dung, ngay_dat, manv, total) FROM stdin;
+DH_000166	Công ty TNHH thức ăn ABC	{"{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG\\", \\"price\\": \\"5000\\", \\"quantity\\": 10}"}	pending	\N	2024-12-28 04:54:24.96693	35	50000
 DH_000154	Công ty TNHH XY	{"{\\"id\\": \\"TA000048\\", \\"name\\": \\"T504TĂ cá lóc UP số 2/10KG\\", \\"price\\": \\"400\\", \\"quantity\\": 200}","{\\"id\\": \\"TA000049\\", \\"name\\": \\"THỨC ĂN CÁ RÔ PHI S030.F02 25kg\\", \\"price\\": \\"200\\", \\"quantity\\": 100}"}	paid	2024-09-19 00:00:00	2024-12-27 14:17:02.141729	35	100000
-DH_000148	Công ty TNHH thức ăn ABC	{"{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG \\", \\"price\\": \\"5000\\", \\"quantity\\": 300}","{\\"id\\": \\"TA000040\\", \\"name\\": \\"T538 TĂ tôm sú UP số 2/20KG\\", \\"price\\": \\"500\\", \\"quantity\\": 200}"}	paid	2025-03-21 00:00:00	2024-12-27 14:08:18.822736	60	1600000
+DH_000168	Công ty TNHH thức ăn ABC	{"{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG\\", \\"price\\": \\"5000\\", \\"quantity\\": 10}"}	pending	\N	2025-01-16 13:59:02.653271	51	50000
+DH_000148	Công ty TNHH thức ăn ABC	{"{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG\\", \\"price\\": \\"5000\\", \\"quantity\\": 300}","{\\"id\\": \\"TA000040\\", \\"name\\": \\"T538 TĂ tôm sú UP số 2/20KG\\", \\"price\\": \\"500\\", \\"quantity\\": 200}"}	paid	2025-03-21 00:00:00	2024-12-27 14:08:18.822736	60	1600000
 DH_000150	Công ty TNHH XYZ	{"{\\"id\\": \\"TA000039\\", \\"name\\": \\"T510 TĂ cá chẽm UP số 2/50KG\\", \\"price\\": \\"80\\", \\"quantity\\": 500}"}	paid	2025-02-04 00:00:00	2024-12-27 14:08:24.98455	60	40000
 DH_000152	Công ty TNHH XY	{"{\\"id\\": \\"TA000049\\", \\"name\\": \\"THỨC ĂN CÁ RÔ PHI S030.F02 25kg\\", \\"price\\": \\"200\\", \\"quantity\\": 1000}"}	paid	2024-12-05 00:00:00	2024-12-27 14:08:30.739317	60	200000
-DH_000166	Công ty TNHH thức ăn ABC	{"{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG \\", \\"price\\": \\"5000\\", \\"quantity\\": 10}"}	pending	\N	2024-12-28 04:54:24.96693	35	50000
 DH_000164	Công ty TNHH XY	{"{\\"id\\": \\"TA000048\\", \\"name\\": \\"T504TĂ cá lóc UP số 2/10KG\\", \\"price\\": \\"400\\", \\"quantity\\": 300}"}	paid	2024-12-04 00:00:00	2024-12-28 04:53:52.539056	35	120000
 DH_000158	Công ty TNHH XYZ	{"{\\"id\\": \\"TA000039\\", \\"name\\": \\"T510 TĂ cá chẽm UP số 2/50KG\\", \\"price\\": \\"80\\", \\"quantity\\": 50}"}	pending	\N	2024-12-27 14:17:30.744618	35	4000
-DH_000168	Công ty TNHH thức ăn ABC	{"{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG \\", \\"price\\": \\"5000\\", \\"quantity\\": 10}"}	pending	\N	2025-01-16 13:59:02.653271	51	50000
 DH_000170	Công ty TNHH XYZ	{"{\\"id\\": \\"TA000039\\", \\"name\\": \\"T510 TĂ cá chẽm UP số 2/50KG\\", \\"price\\": \\"80\\", \\"quantity\\": 30}"}	pending	\N	2025-01-16 13:59:10.897369	51	2400
 DH_000160	Công ty TNHH XY	{"{\\"id\\": \\"TA000048\\", \\"name\\": \\"T504TĂ cá lóc UP số 2/10KG\\", \\"price\\": \\"400\\", \\"quantity\\": 200}","{\\"id\\": \\"TA000049\\", \\"name\\": \\"THỨC ĂN CÁ RÔ PHI S030.F02 25kg\\", \\"price\\": \\"200\\", \\"quantity\\": 100}"}	pending	\N	2024-12-27 14:33:43.532982	35	100000
-DH_000156	Công ty TNHH thức ăn ABC	{"{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG \\", \\"price\\": \\"5000\\", \\"quantity\\": 30}"}	paid	2025-02-07 00:00:00	2024-12-27 14:17:24.573285	35	150000
 DH_000172	Công ty TNHH XY	{"{\\"id\\": \\"TA000048\\", \\"name\\": \\"T504TĂ cá lóc UP số 2/10KG\\", \\"price\\": \\"400\\", \\"quantity\\": 3}"}	paid	2025-02-13 00:00:00	2025-01-19 13:18:59.871799	35	1200
+DH_000156	Công ty TNHH thức ăn ABC	{"{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG\\", \\"price\\": \\"5000\\", \\"quantity\\": 30}"}	paid	2025-02-07 00:00:00	2024-12-27 14:17:24.573285	35	150000
 \.
 
 
@@ -582,6 +582,7 @@ XH_000037	KH_000018	{"[{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra
 XH_000036	KH_000018	{"[{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG \\", \\"dongia\\": \\"5.000.000 ₫\\", \\"soluong\\": 100, \\"thanhtien\\": \\"500.000.000 ₫\\"}, {\\"id\\": \\"TA000039\\", \\"name\\": \\"T510 TĂ cá chẽm UP số 2/50KG\\", \\"dongia\\": \\"80.000 ₫\\", \\"soluong\\": 200, \\"thanhtien\\": \\"16.000.000 ₫\\"}]"}	Đã vận chuyển	516000	2024-12-27 14:12:10.07989	\N	\N
 XH_000038	KH_000018	{"[{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG \\", \\"dongia\\": \\"5.000.000 ₫\\", \\"soluong\\": 5, \\"thanhtien\\": \\"25.000.000 ₫\\"}, {\\"id\\": \\"TA000039\\", \\"name\\": \\"T510 TĂ cá chẽm UP số 2/50KG\\", \\"dongia\\": \\"80.000 ₫\\", \\"soluong\\": 10, \\"thanhtien\\": \\"800.000 ₫\\"}]"}	Đã vận chuyển	25800	2024-12-27 14:15:53.64157	\N	\N
 XH_000049	KH_000026	{"[{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG \\", \\"dongia\\": \\"5.000.000 ₫\\", \\"soluong\\": 3, \\"thanhtien\\": \\"15.000.000 ₫\\"}]"}	Đã vận chuyển	15000	2025-01-19 08:38:07.962779	\N	\N
+XH_000051	KH_000019	{"[{\\"id\\": \\"TA000038\\", \\"name\\": \\"T502TĂ cá tra UP số 2/10KG \\", \\"dongia\\": \\"5.000.000 ₫\\", \\"soluong\\": 3, \\"thanhtien\\": \\"15.000.000 ₫\\"}, {\\"id\\": \\"TA000040\\", \\"name\\": \\"T538 TĂ tôm sú UP số 2/20KG\\", \\"dongia\\": \\"500.000 ₫\\", \\"soluong\\": 20, \\"thanhtien\\": \\"10.000.000 ₫\\"}]"}	Đã vận chuyển	25000	2025-01-19 14:00:41.823532	\N	\N
 \.
 
 
@@ -692,12 +693,12 @@ COPY public.logging ("time", action, idforlink, user_id) FROM stdin;
 --
 
 COPY public.product (buy_price, sell_price, company, img_product, description, id, name) FROM stdin;
-5000	600	Công ty TNHH thức ăn ABC	https://zrhhzqtaizoqtwmnzzbi.supabase.co/storage/v1/object/public/avt/public/485657ce-ebae-4650-b464-7c8a83f1cda3.jpg	kkk	TA000038	T502TĂ cá tra UP số 2/10KG 
 500	600	Công ty TNHH thức ăn ABC	https://zrhhzqtaizoqtwmnzzbi.supabase.co/storage/v1/object/public/avt/public/66306a34-5c5a-4012-8fd0-fcf54fc01384.jpg		TA000040	T538 TĂ tôm sú UP số 2/20KG
 80	100	Công ty TNHH XYZ	https://zrhhzqtaizoqtwmnzzbi.supabase.co/storage/v1/object/public/avt/public/de7410ca-8787-47a3-9704-2a074738f80b.jpg		TA000039	T510 TĂ cá chẽm UP số 2/50KG
 200	300	Công ty TNHH XY	https://zrhhzqtaizoqtwmnzzbi.supabase.co/storage/v1/object/public/avt/public/cecd1443-1b14-488e-8713-300df4d19463.jpg	2	TA000049	THỨC ĂN CÁ RÔ PHI S030.F02 25kg
 400	600	Công ty TNHH XY	https://zrhhzqtaizoqtwmnzzbi.supabase.co/storage/v1/object/public/avt/public/e44bd49e-310d-4abd-9531-b2ca4fc5651d.jpg	1	TA000048	T504TĂ cá lóc UP số 2/10KG
 150	200	Công ty ABC	https://zrhhzqtaizoqtwmnzzbi.supabase.co/storage/v1/object/public/avt/public/517c1697-e02c-4ec9-b1ae-466bdb622c44.jpg	thành phần\n	TA000052	Thức ăn cá tra
+5000	600	Công ty TNHH thức ăn ABC	https://zrhhzqtaizoqtwmnzzbi.supabase.co/storage/v1/object/public/avt/public/485657ce-ebae-4650-b464-7c8a83f1cda3.jpg	kkk	TA000038	T502TĂ cá tra UP số 2/10KG
 \.
 
 
@@ -782,12 +783,12 @@ COPY public.test (donhangid, doitacname, doitacid, orderdate, total, status) FRO
 
 COPY public.tonkho (han_su_dung, ngay_nhap, so_luong, ma_don_hang, ma_hang) FROM stdin;
 2024-12-05 00:00:00	2024-12-28 14:33:56.010263	1000	DH_000152	TA000049
-2025-03-21 00:00:00	2024-12-27 14:11:18.578323	122	DH_000148	TA000038
-2025-03-21 00:00:00	2024-12-27 14:11:18.578323	22	DH_000148	TA000040
 2024-09-19 00:00:00	2025-01-19 09:00:01.053303	200	DH_000154	TA000048
 2024-09-19 00:00:00	2025-01-19 09:00:01.053303	100	DH_000154	TA000049
-2025-02-07 00:00:00	2025-01-19 13:19:50.434142	30	DH_000156	TA000038
 2025-02-13 00:00:00	2025-01-19 13:21:36.799044	3	DH_000172	TA000048
+2025-02-07 00:00:00	2025-01-19 13:19:50.434142	27	DH_000156	TA000038
+2025-03-21 00:00:00	2024-12-27 14:11:18.578323	102	DH_000148	TA000038
+2025-03-21 00:00:00	2024-12-27 14:11:18.578323	2	DH_000148	TA000040
 \.
 
 
@@ -823,6 +824,7 @@ a5e2a5d2-1f98-4374-883f-ca25d0aecd22	DH_000154	Đã vận chuyển	Nhập	2024-1
 c12c6103-1690-4f09-98a1-fbb747caefb7	XH_000049	Đã vận chuyển	Xuất	2025-01-19 08:38:08.042262	2025-01-19 09:00:06.504057	Nguyên 	10, Thủ Đức, HCM	50	KH_000026
 cb84004c-7ac6-4612-8409-75874d284ba2	DH_000156	Đã vận chuyển	Nhập	2025-01-19 13:19:23.958844	2025-01-19 13:19:50.386847	kho abc	103	50	\N
 98c753e9-d508-49ba-bda3-aba3635f60dc	DH_000172	Đã vận chuyển	Nhập	2025-01-19 13:21:25.603353	2025-01-19 13:21:36.747545	abc	HCM	50	\N
+7913012f-8096-4a88-bb23-b672241c3032	XH_000051	Đã vận chuyển	Xuất	2025-01-19 14:00:41.901919	2025-01-19 14:00:59.355549	Trần Thị B	Số 20, Cầu Giấy	50	KH_000019
 \.
 
 
@@ -858,7 +860,7 @@ SELECT pg_catalog.setval('public.dondathang_id_seqqq', 172, true);
 -- Name: donxuathang_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.donxuathang_id_seq', 50, true);
+SELECT pg_catalog.setval('public.donxuathang_id_seq', 51, true);
 
 
 --
