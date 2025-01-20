@@ -13,6 +13,9 @@ import Link from "next/link";
 import { Textarea } from "@/components/ui/textarea";
 import { redirect, useRouter } from "next/navigation";
 import { auth } from "@/auth";
+import dynamic from "next/dynamic";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 
 interface Props {
   uid: number;
@@ -313,12 +316,16 @@ export default function CreateProduct({ uid }: Props) {
           </div>
           <div style={{ marginTop: 25 }}>
             <label htmlFor="description">Mô tả sản phẩm:</label>
-            <Textarea
+            <ReactQuill
               id="description"
-              name="description"
-              value={product.description}
-              onChange={handleChange}
-              style={{ width: "100%", marginTop: 10, height: "20vh" }}
+              value={product.description || ""} // Gán giá trị từ state
+              onChange={(value) =>
+                setProduct((prevProduct) => ({
+                  ...prevProduct,
+                  description: value, // Cập nhật nội dung mô tả vào state
+                }))
+              }
+              style={{ width: "100%", marginTop: 10 }}
             />
           </div>
 
@@ -336,6 +343,7 @@ export default function CreateProduct({ uid }: Props) {
                 width: 140,
                 height: 40,
                 marginRight: 15,
+                marginBottom: 20,
               }}
               type="submit"
             >

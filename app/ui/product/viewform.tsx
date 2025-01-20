@@ -423,19 +423,28 @@ export default function EditForm({ product1, uid }: Props) {
           </div>
           <div style={{ marginTop: 25 }}>
             <label htmlFor="description">Mô tả sản phẩm:</label>
-            <Textarea
+            <div
               id="description"
-              name="description"
-              value={product.description}
-              onChange={handleChange}
-              disabled
               style={{
                 width: "100%",
                 marginTop: 10,
-                height: "20vh",
-                backgroundColor: "#dddddd",
+                height: "auto",
+
+                backgroundColor: "#f5f5f5", // Màu nền giống textarea disabled
+                padding: "10px",
+                borderRadius: "5px",
+                border: "1px solid #ccc", // Viền giống textarea
+                fontFamily: "Arial, sans-serif", // Font chữ mặc định
+                fontSize: "14px", // Kích thước chữ giống textarea
+                color: "#6c757d", // Màu chữ giống disabled
+                whiteSpace: "pre-wrap", // Giữ định dạng xuống dòng
+                overflowY: "auto", // Cuộn dọc khi nội dung dài
+                pointerEvents: "none", // Không cho phép thao tác
               }}
-            />
+              dangerouslySetInnerHTML={{
+                __html: product.description || "<p>Không có nội dung</p>",
+              }}
+            ></div>
           </div>
         </form>
       </div>
