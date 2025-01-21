@@ -14,8 +14,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { redirect, useRouter } from "next/navigation";
 import { auth } from "@/auth";
 import dynamic from "next/dynamic";
-import ReactQuill from "react-quill-new";
+import ReactQuill, { Quill } from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
+
+// Import Quill Image Resize module
+import QuillResizeImage from "quill-resize-image";
+import clipboard from "quill/modules/clipboard";
+
+// Đăng ký module ImageResize với Quill
+Quill.register("modules/imageResize", QuillResizeImage);
 
 interface Props {
   uid: number;
@@ -74,6 +81,38 @@ export default function CreateProduct({ uid }: Props) {
       [name]: value,
     }));
   };
+
+  const modules = {
+    toolbar: [
+      [{ font: [] }], // Cho phép chọn font chữ
+      [{ size: ["small", "", "large", "huge"] }], // Chọn kích thước font
+      ["bold", "italic", "underline", "strike"], // Định dạng text
+      [{ color: [] }, { background: [] }], // Màu sắc
+      [{ list: "ordered" }, { list: "bullet" }], // Danh sách
+      ["link", "image", "video"], // Thêm link, ảnh, video
+      ["clean"], // Xóa định dạng
+      [{ script: "sub" }, { script: "super" }], // Chỉ số trên, chỉ số dưới
+      [{ align: [] }], // Căn trái, giữa, phải, đều
+    ],
+    imageResize: true, // Kích hoạt tính năng resize ảnh
+  };
+
+  const formats = [
+    "font",
+    "size",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "color",
+    "background",
+    "list",
+    "script",
+    "align",
+    "link",
+    "image",
+    "video",
+  ];
 
   const handleUpload = async () => {
     if (!image) return;
@@ -325,6 +364,8 @@ export default function CreateProduct({ uid }: Props) {
                   description: value, // Cập nhật nội dung mô tả vào state
                 }))
               }
+              modules={modules} // Đính kèm modules
+              formats={formats} // Đính kèm formats
               style={{ width: "100%", marginTop: 10 }}
             />
           </div>
