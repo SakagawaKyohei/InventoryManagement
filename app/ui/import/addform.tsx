@@ -264,371 +264,384 @@ const AddForm = (user: Users) => {
     }));
   };
   return (
-    <div className="register-container">
-      <Link href={""}>
-        <div style={{ display: "flex" }} onClick={handleGoBack}>
-          <Image
-            src="/return.png"
-            width={45}
-            height={45}
-            className="hidden md:block"
-            alt="return"
-            style={{ marginRight: 15, marginLeft: 20, marginTop: 20 }}
-          />
+    <>
+      {forecastResults.length != 0 ? (
+        <>
+          {" "}
+          <div className="register-container">
+            <Link href={""}>
+              <div style={{ display: "flex" }} onClick={handleGoBack}>
+                <Image
+                  src="/return.png"
+                  width={45}
+                  height={45}
+                  className="hidden md:block"
+                  alt="return"
+                  style={{ marginRight: 15, marginLeft: 20, marginTop: 20 }}
+                />
 
-          <p style={{ marginTop: 25, fontSize: 20 }}>Quay lại</p>
-        </div>{" "}
-      </Link>
-      <div style={{ marginLeft: 50, marginRight: 50 }}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            marginTop: 10,
-          }}
-        ></div>
-
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            marginTop: 30,
-            justifyContent: "space-between",
-          }}
-        >
-          <div style={{ display: "flex", flexDirection: "row" }}>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                marginRight: 15,
-              }}
-            >
-              <label htmlFor="name">Mã nhân viên</label>
-              <Input
-                type="text"
-                id="name"
-                name="name"
-                value={user.manv}
-                disabled
+                <p style={{ marginTop: 25, fontSize: 20 }}>Quay lại</p>
+              </div>{" "}
+            </Link>
+            <div style={{ marginLeft: 50, marginRight: 50 }}>
+              <div
                 style={{
-                  width: 150,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
                   marginTop: 10,
-                  backgroundColor: "#dddddd",
                 }}
-              />
-            </div>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <label htmlFor="name">Tên nhân viên</label>
-              <Input
-                type="text"
-                id="name"
-                name="name"
-                value={user.name}
-                disabled
-                style={{
-                  width: 285,
-                  marginTop: 10,
-                  backgroundColor: "#dddddd",
-                }}
-              />
-              {/* {errors.name && <div style={{ color: "red" }}>{errors.name}</div>} */}
-            </div>
-          </div>
+              ></div>
 
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              width: 475,
-              justifyContent: "space-between",
-            }}
-          >
-            <div>
-              <button
-                onClick={() => {
-                  console.log(forecastResults);
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  marginTop: 30,
+                  justifyContent: "space-between",
                 }}
               >
-                a
-              </button>
-              <label htmlFor="sell_price">Số điện thoại:</label>
-              <Input
-                type="number"
-                id="sell_price"
-                name="sell_price"
-                value={user.sdt}
-                disabled
-                style={{
-                  width: 150,
-                  marginTop: 10,
-                  backgroundColor: "#dddddd",
-                }}
-              />
-              {/* {errors.sell_price && (
+                <div style={{ display: "flex", flexDirection: "row" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      marginRight: 15,
+                    }}
+                  >
+                    <label htmlFor="name">Mã nhân viên</label>
+                    <Input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={user.manv}
+                      disabled
+                      style={{
+                        width: 150,
+                        marginTop: 10,
+                        backgroundColor: "#dddddd",
+                      }}
+                    />
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <label htmlFor="name">Tên nhân viên</label>
+                    <Input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={user.name}
+                      disabled
+                      style={{
+                        width: 285,
+                        marginTop: 10,
+                        backgroundColor: "#dddddd",
+                      }}
+                    />
+                    {/* {errors.name && <div style={{ color: "red" }}>{errors.name}</div>} */}
+                  </div>
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    width: 475,
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div>
+                    <label htmlFor="sell_price">Số điện thoại:</label>
+                    <Input
+                      type="number"
+                      id="sell_price"
+                      name="sell_price"
+                      value={user.sdt}
+                      disabled
+                      style={{
+                        width: 150,
+                        marginTop: 10,
+                        backgroundColor: "#dddddd",
+                      }}
+                    />
+                    {/* {errors.sell_price && (
               <div style={{ color: "red" }}>{errors.sell_price}</div>
             )} */}
-            </div>
-            <div>
-              <label htmlFor="company">Email:</label>
+                  </div>
+                  <div>
+                    <label htmlFor="company">Email:</label>
 
-              <Input
-                type="text"
-                value={user.email}
-                id="company"
-                name="company"
-                disabled
-                style={{
-                  width: 305,
-                  marginTop: 10,
-                  backgroundColor: "#dddddd",
-                }}
-              />
-              {/* {errors.company && (
+                    <Input
+                      type="text"
+                      value={user.email}
+                      id="company"
+                      name="company"
+                      disabled
+                      style={{
+                        width: 305,
+                        marginTop: 10,
+                        backgroundColor: "#dddddd",
+                      }}
+                    />
+                    {/* {errors.company && (
               <div style={{ color: "red" }}>{errors.company}</div>
             )} */}
-            </div>
-          </div>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            marginTop: 25,
-            justifyContent: "space-between",
-          }}
-        >
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <label htmlFor="buy_price">Địa chỉ:</label>
-            <Input
-              type="text"
-              id="buy_price"
-              name="buy_price"
-              disabled
-              value={user.dia_chi}
-              style={{
-                width: 1075,
-                marginTop: 5,
-                backgroundColor: "#dddddd",
-              }}
-            />
-            {/* {errors.buy_price && (
+                  </div>
+                </div>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  marginTop: 25,
+                  justifyContent: "space-between",
+                }}
+              >
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <label htmlFor="buy_price">Địa chỉ:</label>
+                  <Input
+                    type="text"
+                    id="buy_price"
+                    name="buy_price"
+                    disabled
+                    value={user.dia_chi}
+                    style={{
+                      width: 1075,
+                      marginTop: 5,
+                      backgroundColor: "#dddddd",
+                    }}
+                  />
+                  {/* {errors.buy_price && (
               <div style={{ color: "red" }}>{errors.buy_price}</div>
             )} */}
-          </div>
-        </div>
-        <div style={{ marginTop: 25 }}>
-          <label htmlFor="description">Sản phẩm:</label>
-          <Table>
-            <TableHeader>
-              <TableRow style={{ height: 65 }}>
-                <TableHead className="w-[350]">Tên sản phẩm</TableHead>
+                </div>
+              </div>
+              <div style={{ marginTop: 25 }}>
+                <label htmlFor="description">Sản phẩm:</label>
+                <Table>
+                  <TableHeader>
+                    <TableRow style={{ height: 65 }}>
+                      <TableHead className="w-[350]">Tên sản phẩm</TableHead>
 
-                <TableHead className="w-[175]">Số lượng</TableHead>
-                <TableHead className="w-[220]">Đơn giá</TableHead>
-                <TableHead className="w-[220]">Thành tiền </TableHead>
-                <TableHead>Action </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {clientproducts?.map((item) => (
-                <TableRow style={{ height: 65 }} key={item.name}>
-                  <TableCell>{item.name}</TableCell>
+                      <TableHead className="w-[175]">Số lượng</TableHead>
+                      <TableHead className="w-[220]">Đơn giá</TableHead>
+                      <TableHead className="w-[220]">Thành tiền </TableHead>
+                      <TableHead>Action </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {clientproducts?.map((item) => (
+                      <TableRow style={{ height: 65 }} key={item.name}>
+                        <TableCell>{item.name}</TableCell>
 
-                  <TableCell>{item.soluong}</TableCell>
-                  <TableCell>{item.dongia}</TableCell>
-                  <TableCell>{item.thanhtien}</TableCell>
-                </TableRow>
-              ))}
+                        <TableCell>{item.soluong}</TableCell>
+                        <TableCell>{item.dongia}</TableCell>
+                        <TableCell>{item.thanhtien}</TableCell>
+                      </TableRow>
+                    ))}
 
-              {isadding ? (
-                <>
-                  <TableRow key="1" style={{ height: 65 }}>
-                    <TableCell>
-                      <select
-                        onChange={handleSelectChange}
-                        className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                        defaultValue={""}
-                      >
-                        <option value="" disabled>
-                          Chọn thức ăn
-                        </option>
-
-                        {availableProducts
-                          ?.map((product) => {
-                            const forecastResult = forecastResults.find(
-                              (result) => result.product_name === product.name
-                            )?.forecast_result;
-
-                            // Tính toán số lượng cần đặt
-                            const productResult =
-                              forecastResult !== undefined
-                                ? Math.trunc(
-                                    forecastResult - product.tong_so_luong
-                                  )
-                                : null;
-
-                            return {
-                              ...product,
-                              productResult,
-                            };
-                          })
-                          // Sắp xếp theo yêu cầu
-                          .sort((a, b) => {
-                            // Ưu tiên theo số lượng cần đặt (giảm dần)
-                            if (a.productResult > 0 && b.productResult > 0) {
-                              return b.productResult - a.productResult;
-                            }
-                            // Nếu không cần đặt, sắp xếp theo số lượng còn lại (tăng dần)
-                            if (a.productResult <= 0 && b.productResult <= 0) {
-                              return a.tong_so_luong - b.tong_so_luong;
-                            }
-                            // Ưu tiên sản phẩm cần đặt
-                            return a.productResult > 0 ? -1 : 1;
-                          })
-                          .map((product) => (
-                            <option
-                              key={product.id}
-                              value={JSON.stringify(product)}
-                              style={{
-                                color:
-                                  product.productResult > 0
-                                    ? "green"
-                                    : "inherit", // Highlight "Cần đặt" bằng màu xanh lá
-                                fontWeight:
-                                  product.productResult > 0 ? "bold" : "normal", // Làm đậm text cho sản phẩm cần đặt
-                              }}
+                    {isadding ? (
+                      <>
+                        <TableRow key="1" style={{ height: 65 }}>
+                          <TableCell>
+                            <select
+                              onChange={handleSelectChange}
+                              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                              defaultValue={""}
                             >
-                              {product.name} -{" "}
-                              {product.productResult !== null &&
-                              product.productResult > 0
-                                ? `Cần: ${product.productResult} bao`
-                                : `Còn ${product.tong_so_luong} bao`}
-                            </option>
-                          ))}
-                      </select>
-                    </TableCell>
-                    <TableCell>
-                      <Input
-                        type="text"
-                        onChange={(e) => {
-                          setSoluong(parseInt(e.target.value));
-                          setProduct((prevProduct) => ({
-                            ...prevProduct,
-                            quantity: parseInt(e.target.value),
-                          }));
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell>{formatCurrency(dongia * 1000)}</TableCell>
-                    <TableCell>
-                      {formatCurrency(dongia * 1000 * (soluong ? soluong : 0))}
-                    </TableCell>
-                    <TableCell
-                      style={{
-                        marginTop: 10,
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Image
-                        src="/done.jpg"
-                        style={{ marginRight: 15 }}
-                        width={25}
-                        height={25}
-                        className="hidden md:block"
-                        onClick={() => {
-                          HandleAddDraft();
-                        }}
-                        alt="Screenshots of the dashboard project showing desktop version"
-                      />
-                      <Image
-                        src="/delete.png"
-                        style={{ marginRight: 15 }}
-                        width={25}
-                        height={25}
-                        className="hidden md:block"
-                        alt="Screenshots of the dashboard project showing desktop version"
-                        onClick={() => {
-                          // Reset lại các giá trị khi đóng form
-                          setSoluong(0);
-                          setProduct((prevProduct) => ({
-                            ...prevProduct,
-                            quantity: 0,
-                          }));
-                          setDonGia(0); // Reset giá trị dongia (nếu có state này)
-                          setProduct((prevProduct) => ({
-                            ...prevProduct,
-                            price: 0,
-                          }));
-                          setIsAdding(false); // Đóng form thêm mới
-                        }}
-                      />
-                    </TableCell>
-                  </TableRow>
-                </>
-              ) : (
-                // Reset các giá trị nếu cần thiết khi không thêm mới
-                <>{/* Nội dung khác khi không thêm mới */}</>
-              )}
-            </TableBody>
-          </Table>
-          {!isadding ? (
-            <button
-              style={{
-                width: "100%",
-                fontWeight: "bold",
-                fontSize: 30,
-                border: "1px solid black", // Thêm border màu đen và độ dày 2px
-              }}
-              onClick={addProductRow}
-            >
-              +
-            </button>
-          ) : (
-            <></>
-          )}
-        </div>
+                              <option value="" disabled>
+                                Chọn thức ăn
+                              </option>
 
-        <div
-          style={{
-            marginTop: 25,
-            display: "flex",
-            justifyContent: "end",
-          }}
-        >
-          <Button
-            style={{
-              fontSize: 18,
-              backgroundColor: "#007ACC",
-              width: 140,
-              height: 40,
-              marginRight: 15,
-            }}
-            // type="submit"
-            onClick={handleadd}
-          >
-            Thêm mới
-          </Button>
-          <Link href={"/dashboard/products"}>
-            <Button
-              style={{
-                fontSize: 18,
-                backgroundColor: "#A30D11",
-                width: 140,
-                height: 40,
-              }}
-              onClick={handleCancel}
-            >
-              Hủy bỏ
-            </Button>
-          </Link>
-        </div>
-      </div>
-    </div>
+                              {availableProducts
+                                ?.map((product) => {
+                                  const forecastResult = forecastResults.find(
+                                    (result) =>
+                                      result.product_name === product.name
+                                  )?.forecast_result;
+
+                                  // Tính toán số lượng cần đặt
+                                  const productResult =
+                                    forecastResult !== undefined
+                                      ? Math.trunc(
+                                          forecastResult - product.tong_so_luong
+                                        )
+                                      : null;
+
+                                  return {
+                                    ...product,
+                                    productResult,
+                                  };
+                                })
+                                // Sắp xếp theo yêu cầu
+                                .sort((a, b) => {
+                                  // Ưu tiên theo số lượng cần đặt (giảm dần)
+                                  if (
+                                    a.productResult > 0 &&
+                                    b.productResult > 0
+                                  ) {
+                                    return b.productResult - a.productResult;
+                                  }
+                                  // Nếu không cần đặt, sắp xếp theo số lượng còn lại (tăng dần)
+                                  if (
+                                    a.productResult <= 0 &&
+                                    b.productResult <= 0
+                                  ) {
+                                    return a.tong_so_luong - b.tong_so_luong;
+                                  }
+                                  // Ưu tiên sản phẩm cần đặt
+                                  return a.productResult > 0 ? -1 : 1;
+                                })
+                                .map((product) => (
+                                  <option
+                                    key={product.id}
+                                    value={JSON.stringify(product)}
+                                    style={{
+                                      color:
+                                        product.productResult > 0
+                                          ? "green"
+                                          : "inherit", // Highlight "Cần đặt" bằng màu xanh lá
+                                      fontWeight:
+                                        product.productResult > 0
+                                          ? "bold"
+                                          : "normal", // Làm đậm text cho sản phẩm cần đặt
+                                    }}
+                                  >
+                                    {product.name} -{" "}
+                                    {product.productResult !== null &&
+                                    product.productResult > 0
+                                      ? `Cần: ${product.productResult} bao`
+                                      : `Còn ${product.tong_so_luong} bao`}
+                                  </option>
+                                ))}
+                            </select>
+                          </TableCell>
+                          <TableCell>
+                            <Input
+                              type="text"
+                              onChange={(e) => {
+                                setSoluong(parseInt(e.target.value));
+                                setProduct((prevProduct) => ({
+                                  ...prevProduct,
+                                  quantity: parseInt(e.target.value),
+                                }));
+                              }}
+                            />
+                          </TableCell>
+                          <TableCell>{formatCurrency(dongia * 1000)}</TableCell>
+                          <TableCell>
+                            {formatCurrency(
+                              dongia * 1000 * (soluong ? soluong : 0)
+                            )}
+                          </TableCell>
+                          <TableCell
+                            style={{
+                              marginTop: 10,
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            <Image
+                              src="/done.jpg"
+                              style={{ marginRight: 15 }}
+                              width={25}
+                              height={25}
+                              className="hidden md:block"
+                              onClick={() => {
+                                HandleAddDraft();
+                              }}
+                              alt="Screenshots of the dashboard project showing desktop version"
+                            />
+                            <Image
+                              src="/delete.png"
+                              style={{ marginRight: 15 }}
+                              width={25}
+                              height={25}
+                              className="hidden md:block"
+                              alt="Screenshots of the dashboard project showing desktop version"
+                              onClick={() => {
+                                // Reset lại các giá trị khi đóng form
+                                setSoluong(0);
+                                setProduct((prevProduct) => ({
+                                  ...prevProduct,
+                                  quantity: 0,
+                                }));
+                                setDonGia(0); // Reset giá trị dongia (nếu có state này)
+                                setProduct((prevProduct) => ({
+                                  ...prevProduct,
+                                  price: 0,
+                                }));
+                                setIsAdding(false); // Đóng form thêm mới
+                              }}
+                            />
+                          </TableCell>
+                        </TableRow>
+                      </>
+                    ) : (
+                      // Reset các giá trị nếu cần thiết khi không thêm mới
+                      <>{/* Nội dung khác khi không thêm mới */}</>
+                    )}
+                  </TableBody>
+                </Table>
+                {!isadding ? (
+                  <button
+                    style={{
+                      width: "100%",
+                      fontWeight: "bold",
+                      fontSize: 30,
+                      border: "1px solid black", // Thêm border màu đen và độ dày 2px
+                    }}
+                    onClick={addProductRow}
+                  >
+                    +
+                  </button>
+                ) : (
+                  <></>
+                )}
+              </div>
+
+              <div
+                style={{
+                  marginTop: 25,
+                  display: "flex",
+                  justifyContent: "end",
+                }}
+              >
+                <Button
+                  style={{
+                    fontSize: 18,
+                    backgroundColor: "#007ACC",
+                    width: 140,
+                    height: 40,
+                    marginRight: 15,
+                  }}
+                  // type="submit"
+                  onClick={handleadd}
+                >
+                  Thêm mới
+                </Button>
+                <Link href={"/dashboard/products"}>
+                  <Button
+                    style={{
+                      fontSize: 18,
+                      backgroundColor: "#A30D11",
+                      width: 140,
+                      height: 40,
+                    }}
+                    onClick={handleCancel}
+                  >
+                    Hủy bỏ
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </>
+      ) : (
+        <>Loading</>
+      )}
+    </>
   );
 };
 
