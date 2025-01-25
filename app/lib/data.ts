@@ -979,7 +979,7 @@ export async function fetchFilteredDonDatHang(
       product::text ILIKE ${`%${query}%`} 
 ORDER BY
     status DESC, 
-    id ASC
+    id DESC
       LIMIT ${item_per_page} OFFSET ${offset}
     `;
 
@@ -1131,7 +1131,7 @@ export async function fetchFilteredLogging(
       action ILIKE ${`%${query}%`} OR
       idforlink ILIKE ${`%${query}%`} OR
       user_id::text ILIKE ${`%${query}%`} 
-      ORDER BY time ASC
+      ORDER BY time DESC
       LIMIT ${item_per_page} OFFSET ${offset}
     `;
 
