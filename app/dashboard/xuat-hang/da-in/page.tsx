@@ -1,7 +1,5 @@
 import {
   fetchFilteredXuatHangDaIn,
-  fetchNguoiVanChuyen,
-  fetchPartner,
   fetchXuatHangDaInPages,
 } from "@/app/lib/data";
 import { DoiTac, DonXuatHang } from "@/app/lib/definitions";

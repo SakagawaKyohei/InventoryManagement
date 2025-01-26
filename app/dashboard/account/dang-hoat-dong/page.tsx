@@ -2,10 +2,8 @@ import Table from "@/app/ui/account/table";
 import {
   fetchAccountActivePages,
   fetchFilteredActiveAccount,
-  getUserByEmail,
 } from "@/app/lib/data";
 import { Users } from "@/app/lib/definitions";
-import { auth } from "@/auth";
 const FetchProductButton = async (props: {
   searchParams?: Promise<{
     query?: string;
@@ -23,14 +21,10 @@ const FetchProductButton = async (props: {
     currentPage,
     item_per_page
   );
-  const session = await auth();
-  const user = await getUserByEmail(
-    session?.user?.email ? session?.user?.email : ""
-  );
 
   return (
     <div>
-      <Table product={product} totalPages={totalPages} uid={user.manv} />
+      <Table product={product} totalPages={totalPages} />
     </div>
   );
 };

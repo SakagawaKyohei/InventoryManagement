@@ -3,7 +3,6 @@ import {
   fetchDonXuatHangByIdDoiTac,
   fetchDonXuatHangByIdDoiTacPages,
 } from "@/app/lib/data";
-import { auth } from "@/auth";
 const FetchProductButton = async (props: {
   searchParams?: Promise<{
     query?: string;

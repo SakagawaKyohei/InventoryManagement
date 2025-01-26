@@ -28,10 +28,9 @@ import { useDebouncedCallback } from "use-debounce";
 interface Props {
   product: Users[];
   totalPages: number;
-  uid: number;
 }
 
-const FetchProductButton = ({ product, totalPages, uid }: Props) => {
+const FetchProductButton = ({ product, totalPages }: Props) => {
   const pathname = usePathname();
   const { replace } = useRouter();
   const searchParams = useSearchParams();
