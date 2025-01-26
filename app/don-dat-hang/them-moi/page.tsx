@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 
 const AddProductToOrder = () => {
   const [product, setProduct] = useState({
@@ -12,7 +12,7 @@ const AddProductToOrder = () => {
   const [message, setMessage] = useState("");
 
   // Hàm xử lý khi người dùng thay đổi giá trị trong form
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setProduct((prevProduct) => ({
       ...prevProduct,
@@ -20,13 +20,13 @@ const AddProductToOrder = () => {
     }));
   };
 
-  const handleCompanyChange = (e: any) => {
+  const handleCompanyChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCompany(e.target.value);
   };
   const manv = 35;
 
   // Hàm xử lý submit form
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const res = await fetch("/api/don-dat-hang/add", {
@@ -46,8 +46,7 @@ const AddProductToOrder = () => {
     }
   };
 
-  const handleCancel = async (e: any) => {
-    e.preventDefault();
+  const handleCancel = async () => {
     try {
       const res = await fetch("/api/don-dat-hang/cancel", {
         method: "POST",
@@ -65,8 +64,7 @@ const AddProductToOrder = () => {
     }
   };
 
-  const handleadd = async (e: any) => {
-    e.preventDefault();
+  const handleadd = async () => {
     try {
       const res = await fetch("/api/don-dat-hang/add1", {
         method: "POST",
@@ -86,7 +84,7 @@ const AddProductToOrder = () => {
 
   return (
     <div>
-      <h1>Add Product to DonDatHang</h1>
+      <h1>Add Product to DonDatHag</h1>
       <button onClick={handleCancel}>Cancel</button>
       <button onClick={handleadd}>add</button>
       <form onSubmit={handleSubmit}>

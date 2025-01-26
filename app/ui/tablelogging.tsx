@@ -29,7 +29,7 @@ import { toZonedTime } from "date-fns-tz";
 const vietnamTimeZone = "Asia/Ho_Chi_Minh";
 
 // Thời gian của item
-const formattedDate = (time: any) => {
+const formattedDate = (time: string) => {
   const utcTime = new Date(time); // Thời gian gốc UTC
   const zonedTime = toZonedTime(utcTime, vietnamTimeZone); // Chuyển sang giờ Việt Nam
   return format(zonedTime, "dd/MM/yyyy HH:mm:ss"); // Hiển thị dd/MM/yyyy HH:mm:ss
@@ -37,11 +37,10 @@ const formattedDate = (time: any) => {
 interface Props {
   logging: Logging[];
   totalPages: number;
-  uid: number;
   users: Users[];
 }
 
-const FetchProductButton = ({ logging, totalPages, uid, users }: Props) => {
+const FetchProductButton = ({ logging, totalPages, users }: Props) => {
   const pathname = usePathname();
   const { replace } = useRouter();
   const searchParams = useSearchParams();

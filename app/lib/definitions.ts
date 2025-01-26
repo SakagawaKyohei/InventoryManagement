@@ -87,14 +87,14 @@ export type DoiTac = {
   ao_nuoi:any
 };
 
-export type AoNuoi= {
-  // id: string;
-  // name: string;
-  // email: string;
-  // sdt: string;
-  // dia_chi:string
-  // ao_nuoi:
-};
+// export type AoNuoi= {
+//   // id: string;
+//   // name: string;
+//   // email: string;
+//   // sdt: string;
+//   // dia_chi:string
+//   // ao_nuoi:
+// };
 
 export type TonKho = {
   ma_don_hang:string;

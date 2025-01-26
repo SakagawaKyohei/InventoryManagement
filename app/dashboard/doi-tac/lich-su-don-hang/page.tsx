@@ -3,6 +3,7 @@ import {
   fetchDonXuatHangByIdDoiTac,
   fetchDonXuatHangByIdDoiTacPages,
 } from "@/app/lib/data";
+import { DonXuatHang, VanChuyen } from "@/app/lib/definitions";
 const FetchProductButton = async (props: {
   searchParams?: Promise<{
     query?: string;
@@ -21,7 +22,7 @@ const FetchProductButton = async (props: {
     item_per_page,
     id
   );
-  const product: any[] = await fetchDonXuatHangByIdDoiTac(
+  const product: (DonXuatHang & VanChuyen)[] = await fetchDonXuatHangByIdDoiTac(
     id,
     query,
     currentPage,

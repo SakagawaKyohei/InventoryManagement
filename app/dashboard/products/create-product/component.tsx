@@ -17,6 +17,7 @@ import "react-quill-new/dist/quill.snow.css";
 
 // Import Quill Image Resize module
 import QuillResizeImage from "quill-resize-image";
+import { UploadChangeParam } from "antd/es/upload";
 
 // Đăng ký module ImageResize với Quill
 Quill.register("modules/imageResize", QuillResizeImage);
@@ -204,9 +205,9 @@ export default function CreateProduct({ uid }: Props) {
     }
   };
 
-  const handleImageChange = (e: any) => {
+  const handleImageChange = (e: UploadChangeParam) => {
     const file = e.file;
-    setImage(file.originFileObj); // Cập nhật trạng thái ảnh
+    setImage(file.originFileObj || null); // Cập nhật trạng thái ảnh
   };
 
   const uploadButton = (

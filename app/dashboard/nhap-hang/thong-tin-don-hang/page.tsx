@@ -19,11 +19,7 @@ const FetchProductButton = async (props: {
 
   return (
     <div>
-      <View
-        dondathang={dondathang}
-        ketoan={ketoan}
-        nguoivanchuyen={nguoivanchuyen}
-      />
+      <View dondathang={dondathang} ketoan={ketoan} />
     </div>
   );
 };

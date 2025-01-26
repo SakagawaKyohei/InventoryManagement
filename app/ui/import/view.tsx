@@ -17,10 +17,9 @@ import { Input } from "@/components/ui/input";
 interface Props {
   dondathang: DonDatHang;
   ketoan: Users;
-  nguoivanchuyen: Users[];
 }
 
-const FetchProductButton = ({ dondathang, ketoan, nguoivanchuyen }: Props) => {
+const FetchProductButton = ({ dondathang, ketoan }: Props) => {
   const router = useRouter();
 
   const handleGoBack = () => {

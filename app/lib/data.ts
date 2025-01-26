@@ -638,7 +638,7 @@ export async function getOrderPrice(id:string) {
 // Lấy người dùng theo email
 export async function getUserByEmail(email: string) {
   try {
-    const data = await sql`
+    const data = await sql<Users>`
       SELECT *
       FROM users
       WHERE email = ${email}

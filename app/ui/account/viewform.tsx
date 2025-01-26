@@ -52,8 +52,6 @@ export default function EditForm({ product1, uid }: Props) {
     }));
   };
 
-  const [error, setError] = useState<string>("");
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -72,12 +70,10 @@ export default function EditForm({ product1, uid }: Props) {
         redirect("/dashboard");
       } else {
         const data = await res.json();
-        setError(data.message || "Error updating product");
       }
     } catch (error) {
       // Catch any unexpected errors
       console.error("An error occurred:", error);
-      setError("Something went wrong. Please try again.");
     }
   };
 

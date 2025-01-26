@@ -11,6 +11,7 @@ import Link from "next/link";
 import { redirect, useRouter } from "next/navigation";
 import { Product } from "@/app/lib/definitions";
 import { formatCurrency } from "@/app/lib/utils";
+import { UploadChangeParam } from "antd/es/upload";
 
 interface Props {
   product1: Product;
@@ -33,9 +34,9 @@ export default function EditForm({ product1, uid }: Props) {
 
   const [id_anhbia] = useState(uuidv4());
 
-  const handleImageChange = (e: any) => {
+  const handleImageChange = (e: UploadChangeParam) => {
     const file = e.file;
-    setImage(file.originFileObj); // Cập nhật trạng thái ảnh
+    setImage(file.originFileObj || null); // Cập nhật trạng thái ảnh
   };
 
   const [errors, setErrors] = useState({

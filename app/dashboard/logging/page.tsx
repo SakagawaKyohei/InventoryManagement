@@ -2,11 +2,9 @@ import {
   fetchFilteredLogging,
   fetchLoggingPages,
   getUser,
-  getUserByEmail,
 } from "@/app/lib/data";
 import { Logging, Users } from "@/app/lib/definitions";
 import PartnerList from "@/app/ui/tablelogging";
-import { auth } from "@/auth";
 const FetchProductButton = async (props: {
   searchParams?: Promise<{
     query?: string;
@@ -19,10 +17,6 @@ const FetchProductButton = async (props: {
   const currentPage = Number(searchParams?.page) || 1;
   const item_per_page = Number(searchParams?.itemsPerPage) || 5;
   const totalPages = await fetchLoggingPages(query, item_per_page);
-  const session = await auth();
-  const user = await getUserByEmail(
-    session?.user?.email ? session?.user?.email : ""
-  );
 
   const users: Users[] = await getUser();
   const logging: Logging[] = await fetchFilteredLogging(
@@ -33,12 +27,7 @@ const FetchProductButton = async (props: {
 
   return (
     <div>
-      <PartnerList
-        logging={logging}
-        totalPages={totalPages}
-        uid={user.manv}
-        users={users}
-      />
+      <PartnerList logging={logging} totalPages={totalPages} users={users} />
     </div>
   );
 };

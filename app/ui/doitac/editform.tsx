@@ -93,8 +93,6 @@ export default function EditForm({ doitac1, uid }: Props) {
     }
   };
 
-  const [error, setError] = useState<string>("");
-
   const handleSubmit = async () => {
     try {
       // Proceed with the API call to edit the product
@@ -112,12 +110,10 @@ export default function EditForm({ doitac1, uid }: Props) {
         router.push("/dashboard/doi-tac");
       } else {
         const data = await res.json();
-        setError(data.message || "Error updating product");
       }
     } catch (error) {
       // Catch any unexpected errors
       console.error("An error occurred:", error);
-      setError("Something went wrong. Please try again.");
     }
   };
   return (

@@ -47,7 +47,7 @@ export default function AddForm({ doitac, nguoivanchuyen }: Props) {
     quantity: 0,
   });
 
-  const [company, setCompany] = useState("");
+  // const [company, setCompany] = useState("");
   const [dongia, setDonGia] = useState(0);
   const [toida, setToiDa] = useState(0);
   const [thanhtien, setThanhTien] = useState(0);
@@ -118,8 +118,7 @@ export default function AddForm({ doitac, nguoivanchuyen }: Props) {
     setIsAdding(true);
   };
 
-  const handleCancel = async (e: any) => {
-    e.preventDefault();
+  const handleCancel = async () => {
     try {
       const res = await fetch("/api/don-dat-hang/cancel", {
         method: "POST",
@@ -137,8 +136,7 @@ export default function AddForm({ doitac, nguoivanchuyen }: Props) {
     }
   };
 
-  const handleadd = async (e: any) => {
-    e.preventDefault();
+  const handleadd = async () => {
     try {
       const res = await fetch("/api/xuat-hang/delete-from-stock", {
         method: "POST",
@@ -179,7 +177,7 @@ export default function AddForm({ doitac, nguoivanchuyen }: Props) {
       ...prevProduct,
       price: selectedProduct.buy_price ? selectedProduct.buy_price : 0,
     }));
-    setCompany(selectedProduct.company);
+    // setCompany(selectedProduct.company);
     setProductname(selectedProduct.name);
     setProduct((prevProduct) => ({
       ...prevProduct,

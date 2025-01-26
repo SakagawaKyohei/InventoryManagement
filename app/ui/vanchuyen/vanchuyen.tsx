@@ -23,12 +23,12 @@ import { FaSearch } from "react-icons/fa";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
-import { VanChuyen } from "@/app/lib/definitions";
+import { Users, VanChuyen } from "@/app/lib/definitions";
 
 interface Props {
   vanchuyen: VanChuyen[];
   totalPages: number;
-  user: any;
+  user: Users;
 }
 
 const FetchProductButton = ({ vanchuyen, totalPages, user }: Props) => {

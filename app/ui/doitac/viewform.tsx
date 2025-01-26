@@ -93,8 +93,6 @@ export default function EditForm({ doitac1 }: Props) {
   //   return valid;
   // };
 
-  const [error, setError] = useState<string>("");
-
   // const handleSubmit = async () => {
   //   try {
   //     // Proceed with the API call to edit the product

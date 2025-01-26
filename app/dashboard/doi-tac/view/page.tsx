@@ -1,4 +1,4 @@
-import { fetchPartnerById, getUserByEmail } from "@/app/lib/data";
+import { fetchPartnerById } from "@/app/lib/data";
 import { DoiTac } from "@/app/lib/definitions";
 import EditForm from "@/app/ui/doitac/viewform";
 

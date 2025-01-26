@@ -192,8 +192,7 @@ const AddForm = (user: Users) => {
     setIsAdding(true);
   };
 
-  const handleCancel = async (e: any) => {
-    e.preventDefault();
+  const handleCancel = async () => {
     try {
       const res = await fetch("/api/don-dat-hang/cancel", {
         method: "POST",
@@ -211,8 +210,7 @@ const AddForm = (user: Users) => {
     }
   };
 
-  const handleadd = async (e: any) => {
-    e.preventDefault();
+  const handleadd = async () => {
     try {
       const res = await fetch("/api/don-dat-hang/add1", {
         method: "POST",
