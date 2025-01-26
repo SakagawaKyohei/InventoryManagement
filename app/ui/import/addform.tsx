@@ -43,19 +43,19 @@ const AddForm = (user: Users) => {
   const [company, setCompany] = useState("");
   const [dongia, setDonGia] = useState(0);
   const [soluong, setSoluong] = useState(0);
-  const [message, setMessage] = useState("");
+  // const [message, setMessage] = useState("");
   const [isadding, setIsAdding] = useState(false);
   const [productname, setProductname] = useState("");
   const [productid, setProductid] = useState("");
 
   // Hàm xử lý khi người dùng thay đổi giá trị trong form
-  const handleInputChange = (e: any) => {
-    const { name, value } = e.target;
-    setProduct((prevProduct) => ({
-      ...prevProduct,
-      [name]: value,
-    }));
-  };
+  // const handleInputChange = (e: any) => {
+  //   const { name, value } = e.target;
+  //   setProduct((prevProduct) => ({
+  //     ...prevProduct,
+  //     [name]: value,
+  //   }));
+  // };
 
   const handleGoBack = () => {
     if (window.history.length > 2) {
@@ -107,7 +107,7 @@ const AddForm = (user: Users) => {
   }, [productNames]); // Trigger fetchData when productNames change
 
   const fetchProducts = async () => {
-    setMessage(""); // Clear any previous messages
+    // setMessage(""); // Clear any previous messages
 
     try {
       const response = await fetch("/api/product/product-list", {
@@ -118,13 +118,13 @@ const AddForm = (user: Users) => {
 
       if (response.ok) {
         setProducts(data.products); // Corrected to reflect API response
-        setMessage("product list fetched successfully");
+        // setMessage("product list fetched successfully");
       } else {
-        setMessage("Failed to fetch product list");
+        // setMessage("Failed to fetch product list");
       }
     } catch (error) {
       console.error("Error fetching product list:", error);
-      setMessage("Error fetching product list. Please try again.");
+      // setMessage("Error fetching product list. Please try again.");
     } finally {
     }
   };
@@ -154,11 +154,11 @@ const AddForm = (user: Users) => {
       if (res.ok) {
         // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
       } else {
-        setMessage("Không thể xóa sản phẩm");
+        // setMessage("Không thể xóa sản phẩm");
       }
     } catch (error) {
       console.error("Lỗi khi xóa sản phẩm:", error);
-      setMessage("Lỗi khi xóa sản phẩm. Vui lòng thử lại.");
+      // setMessage("Lỗi khi xóa sản phẩm. Vui lòng thử lại.");
     }
   };
 
@@ -188,10 +188,6 @@ const AddForm = (user: Users) => {
     handleSubmit();
   };
 
-  const [productList, setProductList] = useState([
-    { id: "", name: "", quantity: "", price: "" },
-  ]);
-
   const addProductRow = () => {
     setIsAdding(true);
   };
@@ -207,11 +203,11 @@ const AddForm = (user: Users) => {
       if (res.ok) {
         // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
       } else {
-        setMessage("Không thể xóa sản phẩm");
+        // setMessage("Không thể xóa sản phẩm");
       }
     } catch (error) {
       console.error("Lỗi khi xóa sản phẩm:", error);
-      setMessage("Lỗi khi xóa sản phẩm. Vui lòng thử lại.");
+      // setMessage("Lỗi khi xóa sản phẩm. Vui lòng thử lại.");
     }
   };
 
@@ -229,11 +225,11 @@ const AddForm = (user: Users) => {
 
         router.push("/dashboard/nhap-hang"); // Use router.push for client-side navigation
       } else {
-        setMessage("Không thể xóa sản phẩm");
+        // setMessage("Không thể xóa sản phẩm");
       }
     } catch (error) {
       console.error("Lỗi khi xóa sản phẩm:", error);
-      setMessage("Lỗi khi xóa sản phẩm. Vui lòng thử lại.");
+      // setMessage("Lỗi khi xóa sản phẩm. Vui lòng thử lại.");
     }
   };
 

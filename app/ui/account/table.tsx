@@ -41,7 +41,7 @@ const FetchProductButton = ({ product, totalPages, uid }: Props) => {
     Number(searchParams?.get("itemsPerPage")) || 5
   );
 
-  const handleDelete = async (id: string, uid: number) => {
+  const handleDelete = async (id: string) => {
     const params = new URLSearchParams(
       searchParams ? searchParams.toString() : ""
     );
@@ -253,7 +253,7 @@ const FetchProductButton = ({ product, totalPages, uid }: Props) => {
                       className="hidden md:block"
                       alt="Screenshots of the dashboard project showing desktop version"
                       onClick={() => {
-                        handleDelete(item.id, uid);
+                        handleDelete(item.id);
                       }}
                     />
                   </TableCell>

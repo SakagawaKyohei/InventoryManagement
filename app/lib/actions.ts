@@ -174,21 +174,21 @@ export async function createAccount(email:string,name:string, password:string,st
 
 export async function AddUser(user:Users) {
   try {
-    let permissionss: number[] = [];
+    // let permissionss: number[] = [];
 
-    switch (user.role) {
-      case 'admin':
-        permissionss = [1, 2, 3, 5, 7, 8, 9, 10, 11, 12, 12];
-        break;
-      case 'ketoan':
-        permissionss = [4, 6, 9, 13];
-        break;
-      case 'nguoivanchuyen':
-        permissionss = [8, 13];
-        break;
-      default:
-        throw new Error(user.role);
-    }
+    // switch (user.role) {
+    //   case 'admin':
+    //     permissionss = [1, 2, 3, 5, 7, 8, 9, 10, 11, 12, 12];
+    //     break;
+    //   case 'ketoan':
+    //     permissionss = [4, 6, 9, 13];
+    //     break;
+    //   case 'nguoivanchuyen':
+    //     permissionss = [8, 13];
+    //     break;
+    //   default:
+    //     throw new Error(user.role);
+    // }
     await sql`
       INSERT INTO users (name,email,password,status, role, bank, stk, ngay_sinh,sdt, cccd,dia_chi)
       VALUES (${user.name},${user.email}, ${user.password},${user.status}, ${user.role},${user.bank}, ${user.stk}, ${user.ngay_sinh},${user.sdt},${user.cccd},${user.dia_chi})

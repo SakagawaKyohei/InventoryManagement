@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { DonDatHang, Product, TonKho } from "../../lib/definitions";
+import { Product, TonKho } from "../../lib/definitions";
 
 import Image from "next/image";
 import { format } from "date-fns";

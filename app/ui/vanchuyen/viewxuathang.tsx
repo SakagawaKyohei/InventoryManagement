@@ -36,7 +36,7 @@ const FetchProductButton = ({ dondathang, vanchuyen, doitac }: Props) => {
     }
   };
 
-  const [phuongthuc, setPhuongthuc] = useState("");
+  // const [phuongthuc, setPhuongthuc] = useState("");
   // const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
   //   setPhuongthuc(event.target.value);
   //   console.log(phuongthuc);
@@ -194,7 +194,7 @@ const FetchProductButton = ({ dondathang, vanchuyen, doitac }: Props) => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {dondathang.product?.map((productItem, index) => {
+                {dondathang.product?.map((productItem) => {
                   console.log(productItem); // Debugging to see the structure of productItem
 
                   // If productItem is an array (assuming it's an array of product details):

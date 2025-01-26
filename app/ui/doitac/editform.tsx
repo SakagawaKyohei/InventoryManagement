@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { DoiTac, Product } from "@/app/lib/definitions";
+import { DoiTac } from "@/app/lib/definitions";
 import {
   Table,
   TableBody,

@@ -53,25 +53,24 @@ const FetchProductButton = ({ logging, totalPages, uid, users }: Props) => {
   const now = new Date(); // Server-side time
   console.log("Server giờ UTC:", now.toISOString());
 
-  const handleDelete = async (id: string) => {
-    const params = new URLSearchParams(
-      searchParams ? searchParams.toString() : ""
-    );
-    try {
-      const res = await fetch("/api/doi-tac/delete", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, uid }),
-      });
-      if (res.ok) {
-        // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
-        replace(`${pathname}?${params.toString()}`);
-      } else {
-      }
-    } catch (error) {
-      console.error("Lỗi khi xóa sản phẩm:", error);
-    }
-  };
+  //   const params = new URLSearchParams(
+  //     searchParams ? searchParams.toString() : ""
+  //   );
+  //   try {
+  //     const res = await fetch("/api/doi-tac/delete", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ id, uid }),
+  //     });
+  //     if (res.ok) {
+  //       // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
+  //       replace(`${pathname}?${params.toString()}`);
+  //     } else {
+  //     }
+  //   } catch (error) {
+  //     console.error("Lỗi khi xóa sản phẩm:", error);
+  //   }
+  // };
 
   const handleSearch = useDebouncedCallback((term) => {
     const params = new URLSearchParams(

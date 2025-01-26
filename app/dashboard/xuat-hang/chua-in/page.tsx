@@ -1,12 +1,9 @@
 import {
   fetchFilteredXuatHangChuaIn,
-  fetchNguoiVanChuyen,
-  fetchPartner,
   fetchXuatHangChuaInPages,
 } from "@/app/lib/data";
 import { DoiTac, DonXuatHang } from "@/app/lib/definitions";
 import Table from "@/app/ui/xuathang/chuain";
-import PayTable from "@/app/ui/import/paytable";
 const FetchProductButton = async (props: {
   searchParams?: Promise<{
     query?: string;
@@ -25,8 +22,6 @@ const FetchProductButton = async (props: {
     currentPage,
     item_per_page
   );
-  const doitac = await fetchPartner();
-  const nguoivanchuyen = await fetchNguoiVanChuyen();
 
   return (
     <div>

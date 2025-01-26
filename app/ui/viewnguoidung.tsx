@@ -9,9 +9,8 @@ import { format } from "date-fns";
 
 interface Props {
   product: Users;
-  uid: number;
 }
-export default function EditForm({ product, uid }: Props) {
+export default function EditForm({ product }: Props) {
   const capitalizeFirstLetter = (str: string) => {
     if (!str) return str; // Kiểm tra nếu chuỗi rỗng hoặc null
     return str.charAt(0).toUpperCase() + str.slice(1);

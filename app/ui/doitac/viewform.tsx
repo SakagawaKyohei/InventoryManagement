@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
@@ -61,66 +61,66 @@ export default function EditForm({ doitac1, uid }: Props) {
     }));
   };
 
-  const validateForm = () => {
-    let valid = true;
-    let newErrors = {
-      name: "",
-      email: "",
-      sdt: "",
-      dia_chi: "",
-    };
+  // const validateForm = () => {
+  //   let valid = true;
+  //   let newErrors = {
+  //     name: "",
+  //     email: "",
+  //     sdt: "",
+  //     dia_chi: "",
+  //   };
 
-    if (!doitac.name) {
-      newErrors.name = "Tên sản phẩm không được để trống.";
-      valid = false;
-    }
+  //   if (!doitac.name) {
+  //     newErrors.name = "Tên sản phẩm không được để trống.";
+  //     valid = false;
+  //   }
 
-    if (!doitac.email) {
-      newErrors.email = "Công ty sản xuất không được để trống.";
-      valid = false;
-    }
+  //   if (!doitac.email) {
+  //     newErrors.email = "Công ty sản xuất không được để trống.";
+  //     valid = false;
+  //   }
 
-    if (!doitac.sdt) {
-      newErrors.email = "Công ty sản xuất không được để trống.";
-      valid = false;
-    }
+  //   if (!doitac.sdt) {
+  //     newErrors.email = "Công ty sản xuất không được để trống.";
+  //     valid = false;
+  //   }
 
-    if (!doitac.dia_chi) {
-      newErrors.email = "Công ty sản xuất không được để trống.";
-      valid = false;
-    }
+  //   if (!doitac.dia_chi) {
+  //     newErrors.email = "Công ty sản xuất không được để trống.";
+  //     valid = false;
+  //   }
 
-    // setErrors(newErrors);
-    return valid;
-  };
+  //   // setErrors(newErrors);
+  //   return valid;
+  // };
 
   const [error, setError] = useState<string>("");
 
-  const handleSubmit = async () => {
-    try {
-      // Proceed with the API call to edit the product
-      const res = await fetch("/api/doi-tac/edit-partner", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: doitac.id, doitac, uid }),
-      });
-      console.log(doitac);
+  // const handleSubmit = async () => {
+  //   try {
+  //     // Proceed with the API call to edit the product
+  //     const res = await fetch("/api/doi-tac/edit-partner", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ id: doitac.id, doitac, uid }),
+  //     });
+  //     console.log(doitac);
 
-      // Check if the API call was successful
-      if (res.ok) {
-        alert("Product updated successfully");
-        // Use a proper redirection method based on your framework (e.g., React Router)
-        router.push("/dashboard/doi-tac");
-      } else {
-        const data = await res.json();
-        setError(data.message || "Error updating product");
-      }
-    } catch (error) {
-      // Catch any unexpected errors
-      console.error("An error occurred:", error);
-      setError("Something went wrong. Please try again.");
-    }
-  };
+  //     // Check if the API call was successful
+  //     if (res.ok) {
+  //       alert("Product updated successfully");
+  //       // Use a proper redirection method based on your framework (e.g., React Router)
+  //       router.push("/dashboard/doi-tac");
+  //     } else {
+  //       const data = await res.json();
+  //       setError(data.message || "Error updating product");
+  //     }
+  //   } catch (error) {
+  //     // Catch any unexpected errors
+  //     console.error("An error occurred:", error);
+  //     setError("Something went wrong. Please try again.");
+  //   }
+  // };
   return (
     <div className="register-container">
       <Link href={""}>

@@ -1,9 +1,4 @@
-import {
-  fetchProductById,
-  fetchUserByID,
-  getUserByEmail,
-} from "@/app/lib/data";
-import { Product, Users } from "@/app/lib/definitions";
+import { getUserByEmail } from "@/app/lib/data";
 import EditForm from "@/app/ui/account/ediform";
 import { auth } from "@/auth";
 

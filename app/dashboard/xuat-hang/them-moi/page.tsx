@@ -1,9 +1,4 @@
-import { auth } from "@/auth";
-import {
-  fetchPartnerById,
-  fetchUserByID,
-  getUserByEmail,
-} from "@/app/lib/data";
+import { fetchPartnerById, fetchUserByID } from "@/app/lib/data";
 import AddForm from "@/app/ui/xuathang/addform";
 import { DoiTac, Users } from "@/app/lib/definitions";
 

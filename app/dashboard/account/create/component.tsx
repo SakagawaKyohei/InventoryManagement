@@ -42,13 +42,13 @@ export default function CreateProduct({ hashedPassword, newPassword }: Props) {
     manv: 0,
   });
 
-  const [errors, setErrors] = useState({
+  const errors = {
     name: "",
     company: "",
     buy_price: "",
     sell_price: "",
     image: "",
-  });
+  };
 
   const handleChange = (
     e:
@@ -62,16 +62,16 @@ export default function CreateProduct({ hashedPassword, newPassword }: Props) {
     }));
   };
 
-  const generatePassword = (length: number): string => {
-    const charset =
-      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-+=<>?";
-    let password = "";
-    for (let i = 0; i < length; i++) {
-      const randomIndex = Math.floor(Math.random() * charset.length);
-      password += charset[randomIndex];
-    }
-    return password;
-  };
+  // const generatePassword = (length: number): string => {
+  //   const charset =
+  //     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-+=<>?";
+  //   let password = "";
+  //   for (let i = 0; i < length; i++) {
+  //     const randomIndex = Math.floor(Math.random() * charset.length);
+  //     password += charset[randomIndex];
+  //   }
+  //   return password;
+  // };
 
   const userWithHashedPassword = {
     ...product,

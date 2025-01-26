@@ -56,32 +56,32 @@ const AddForm = (pros: Pros) => {
   const [soluong, setsoluong] = useState(0);
   const [ngaytuoi, setNgaytuoi] = useState(0);
 
-  const fetchProducts = async () => {
-    // setMessage(""); // Clear any previous messages
+  // const fetchProducts = async () => {
+  //   // setMessage(""); // Clear any previous messages
 
-    try {
-      const response = await fetch("/api/product/product-list", {
-        method: "GET", // Or POST depending on your API
-      });
+  //   try {
+  //     const response = await fetch("/api/product/product-list", {
+  //       method: "GET", // Or POST depending on your API
+  //     });
 
-      const data = await response.json();
+  //     const data = await response.json();
 
-      if (response.ok) {
-        // setMessage("product list fetched successfully");
-      } else {
-        // setMessage("Failed to fetch product list");
-      }
-    } catch (error) {
-      console.error("Error fetching product list:", error);
-      // setMessage("Error fetching product list. Please try again.");
-    } finally {
-    }
-  };
+  //     if (response.ok) {
+  //       // setMessage("product list fetched successfully");
+  //     } else {
+  //       // setMessage("Failed to fetch product list");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching product list:", error);
+  //     // setMessage("Error fetching product list. Please try again.");
+  //   } finally {
+  //   }
+  // };
 
-  // Fetch doitac when the component mounts
-  useEffect(() => {
-    fetchProducts(); // Trigger the fetch when the component mounts
-  }, []); // Empty dependency array means this effect runs once when the component mounts
+  // // Fetch doitac when the component mounts
+  // useEffect(() => {
+  //   fetchProducts(); // Trigger the fetch when the component mounts
+  // }, []); // Empty dependency array means this effect runs once when the component mounts
 
   // Hàm xử lý submit form
   const handleSubmit = async () => {
@@ -154,27 +154,27 @@ const AddForm = (pros: Pros) => {
     }
   };
 
-  const handleadd = async (e: any) => {
-    e.preventDefault();
-    // try {
-    //   const res = await fetch("/api/don-dat-hang/add1", {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //   });
+  // const handleadd = async (e: any) => {
+  //   e.preventDefault();
+  //   // try {
+  //   //   const res = await fetch("/api/don-dat-hang/add1", {
+  //   //     method: "POST",
+  //   //     headers: { "Content-Type": "application/json" },
+  //   //   });
 
-    //   if (res.ok) {
-    //     // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
+  //   //   if (res.ok) {
+  //   //     // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
 
-    //     router.push("/dashboard/nhap-hang"); // Use router.push for client-side navigation
-    //   } else {
-    //     setMessage("Không thể xóa sản phẩm");
-    //   }
-    // } catch (error) {
-    //   console.error("Lỗi khi xóa sản phẩm:", error);
-    //   setMessage("Lỗi khi xóa sản phẩm. Vui lòng thử lại.");
-    // }
-    console.log(doitac);
-  };
+  //   //     router.push("/dashboard/nhap-hang"); // Use router.push for client-side navigation
+  //   //   } else {
+  //   //     setMessage("Không thể xóa sản phẩm");
+  //   //   }
+  //   // } catch (error) {
+  //   //   console.error("Lỗi khi xóa sản phẩm:", error);
+  //   //   setMessage("Lỗi khi xóa sản phẩm. Vui lòng thử lại.");
+  //   // }
+  //   console.log(doitac);
+  // };
 
   return (
     <div className="register-container">

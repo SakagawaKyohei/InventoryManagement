@@ -1,5 +1,5 @@
 import { fetchPartnerById, getUserByEmail } from "@/app/lib/data";
-import { DoiTac, Product } from "@/app/lib/definitions";
+import { DoiTac } from "@/app/lib/definitions";
 import EditForm from "@/app/ui/doitac/viewform";
 import { auth } from "@/auth";
 

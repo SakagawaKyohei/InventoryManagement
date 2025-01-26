@@ -2,7 +2,6 @@ import Table from "@/app/ui/customers/history";
 import {
   fetchDonXuatHangByIdDoiTac,
   fetchDonXuatHangByIdDoiTacPages,
-  getUserByEmail,
 } from "@/app/lib/data";
 import { auth } from "@/auth";
 const FetchProductButton = async (props: {
@@ -28,11 +27,6 @@ const FetchProductButton = async (props: {
     query,
     currentPage,
     item_per_page
-  );
-
-  const session = await auth();
-  const user = await getUserByEmail(
-    session?.user?.email ? session?.user?.email : ""
   );
 
   return (

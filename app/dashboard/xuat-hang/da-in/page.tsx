@@ -24,8 +24,6 @@ const FetchProductButton = async (props: {
     currentPage,
     item_per_page
   );
-  const doitac = await fetchPartner();
-  const nguoivanchuyen = await fetchNguoiVanChuyen();
 
   return (
     <div>

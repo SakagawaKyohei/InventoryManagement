@@ -172,6 +172,7 @@ export default function EditForm({ product1 }: Props) {
       } else {
         const data = await res.json();
         // setError(data.message || "Error updating product");
+        console.log(data);
       }
     } catch (error) {
       // Catch any unexpected errors

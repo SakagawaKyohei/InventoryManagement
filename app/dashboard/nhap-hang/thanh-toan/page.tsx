@@ -4,7 +4,7 @@ import {
   fetchUserByID,
   getUserByEmail,
 } from "@/app/lib/data";
-import { DonDatHang, Product, Users } from "@/app/lib/definitions";
+import { DonDatHang, Users } from "@/app/lib/definitions";
 
 import Thanhtoan from "@/app/ui/import/thanhtoan";
 import { auth } from "@/auth";

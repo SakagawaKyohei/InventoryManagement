@@ -3,7 +3,7 @@ import {
   fetchVanChuyenDonePage,
   getUserByEmail,
 } from "@/app/lib/data";
-import { DonDatHang, VanChuyen } from "@/app/lib/definitions";
+import { VanChuyen } from "@/app/lib/definitions";
 import VanChuyenComponent from "@/app/ui/vanchuyen/davanchuyen";
 import { auth } from "@/auth";
 const FetchProductButton = async (props: {
