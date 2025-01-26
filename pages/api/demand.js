@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   
     try {
       // Gửi yêu cầu đến Flask API với product_names
-      const response = await fetch('http://127.0.0.1:5002/demand', {
+      const response = await fetch('https://backend-nh65.onrender.com/demand', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

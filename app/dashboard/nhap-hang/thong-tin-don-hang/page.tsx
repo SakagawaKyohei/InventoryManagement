@@ -14,7 +14,6 @@ const FetchProductButton = async (props: {
   const searchParams = await props.searchParams;
   const id = searchParams?.id || "";
   const dondathang: DonDatHang = await fetchDonDatHangById(id);
-  const nguoivanchuyen: Users[] = await fetchNguoiVanChuyen();
   const ketoan: Users = await fetchUserByID(dondathang.manv);
 
   return (
