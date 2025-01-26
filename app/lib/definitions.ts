@@ -16,6 +16,7 @@ export type Users = {
   cccd:string;
   dia_chi:string;
   manv:number;
+  ngaysinh:string
 };
 
 export type Product = {
