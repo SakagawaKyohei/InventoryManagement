@@ -30,25 +30,25 @@ export default function EditProduct() {
     setBackup(mockBackup);
   }, []);
 
-  const handleCreateBackup = async () => {
-    setIsCreating(true);
-    // Simulate backup creation
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    const newBackup = {
-      createdAt: new Date(),
-      size: "1.6 GB",
-    };
-    setBackup(newBackup);
-    setIsCreating(false);
-  };
+  // const handleCreateBackup = async () => {
+  //   setIsCreating(true);
+  //   // Simulate backup creation
+  //   await new Promise((resolve) => setTimeout(resolve, 2000));
+  //   const newBackup = {
+  //     createdAt: new Date(),
+  //     size: "1.6 GB",
+  //   };
+  //   setBackup(newBackup);
+  //   setIsCreating(false);
+  // };
 
-  const handleRestore = async () => {
-    setIsRestoring(true);
-    // Simulate restore process
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-    setIsRestoring(false);
-    alert("Restore completed successfully!");
-  };
+  // const handleRestore = async () => {
+  //   setIsRestoring(true);
+  //   // Simulate restore process
+  //   await new Promise((resolve) => setTimeout(resolve, 3000));
+  //   setIsRestoring(false);
+  //   alert("Restore completed successfully!");
+  // };
   const handleSubmit = async () => {
     setIsCreating(true);
     try {
@@ -69,6 +69,7 @@ export default function EditProduct() {
       }
     } catch (error) {
       // Xử lý lỗi khi gửi yêu cầu (kết nối mạng, lỗi server, ...)
+      console.log(error);
     }
 
     const newBackup = {
@@ -98,6 +99,7 @@ export default function EditProduct() {
       }
     } catch (error) {
       // Xử lý lỗi khi gửi yêu cầu (kết nối mạng, lỗi server, ...)
+      console.log(error);
     }
   };
 

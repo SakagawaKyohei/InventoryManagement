@@ -1,12 +1,9 @@
 import Table from "@/app/ui/customers/history";
 import {
-  fetchAccountActivePages,
-  fetchAccountUnactivePages,
   fetchDonXuatHangByIdDoiTac,
   fetchDonXuatHangByIdDoiTacPages,
   getUserByEmail,
 } from "@/app/lib/data";
-import { DonXuatHang, Product, Users } from "@/app/lib/definitions";
 import { auth } from "@/auth";
 const FetchProductButton = async (props: {
   searchParams?: Promise<{
@@ -40,12 +37,7 @@ const FetchProductButton = async (props: {
 
   return (
     <div>
-      <Table
-        product={product}
-        totalPages={totalPages}
-        uid={user.manv}
-        cusid={id}
-      />
+      <Table product={product} totalPages={totalPages} cusid={id} />
     </div>
   );
 };

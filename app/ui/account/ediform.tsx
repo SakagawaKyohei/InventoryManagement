@@ -1,18 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { v4 as uuidv4 } from "uuid";
-import { Upload } from "antd";
-import { PlusOutlined, LoadingOutlined } from "@ant-design/icons";
-import { uploadImage } from "@/app/lib/actions";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Textarea } from "@/components/ui/textarea";
 import { redirect, useRouter } from "next/navigation";
-import { Product, Users } from "@/app/lib/definitions";
+import { Users } from "@/app/lib/definitions";
 import { format } from "date-fns";
 
 interface Props {

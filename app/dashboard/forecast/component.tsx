@@ -100,23 +100,6 @@ export default function Home(props: Props) {
     ],
   };
 
-  const options = {
-    responsive: true,
-    plugins: {
-      title: {
-        display: true,
-        text: "Biểu đồ doanh thu và dự báo",
-      },
-      legend: {
-        position: "top",
-      },
-    },
-    scales: {
-      x: { display: true },
-      y: { display: true },
-    },
-  };
-
   const handleGoBack = () => {
     if (window.history.length > 2) {
       window.history.back(); // Quay lại trang trước trong lịch sử trình duyệt

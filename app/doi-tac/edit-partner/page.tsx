@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { DoiTac, Product } from "../../lib/definitions";
+import { DoiTac } from "../../lib/definitions";
 import { redirect } from "next/navigation";
 
 export default function EditProduct() {

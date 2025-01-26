@@ -2,17 +2,12 @@
 
 import { useEffect, useState } from "react";
 
-import { v4 as uuidv4 } from "uuid";
-import { Upload } from "antd";
-import { PlusOutlined, LoadingOutlined } from "@ant-design/icons";
-import { uploadImage } from "@/app/lib/actions";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+
 import Link from "next/link";
-import { Textarea } from "@/components/ui/textarea";
-import { redirect } from "next/navigation";
-import { DoiTac, Product } from "@/app/lib/definitions";
+
+import { DoiTac } from "@/app/lib/definitions";
 import {
   Table,
   TableBody,
@@ -47,12 +42,12 @@ export default function EditForm({ doitac1, uid }: Props) {
     }
   };
 
-  const [errors, setErrors] = useState({
-    name: "",
-    email: "",
-    sdt: "",
-    dia_chi: "",
-  });
+  // const [errors, setErrors] = useState({
+  //   name: "",
+  //   email: "",
+  //   sdt: "",
+  //   dia_chi: "",
+  // });
 
   const handleChange = (
     e:
@@ -95,7 +90,7 @@ export default function EditForm({ doitac1, uid }: Props) {
       valid = false;
     }
 
-    setErrors(newErrors);
+    // setErrors(newErrors);
     return valid;
   };
 

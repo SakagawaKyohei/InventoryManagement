@@ -1,15 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Product, Users } from "../../../lib/definitions";
+import { useState } from "react";
+import { Users } from "../../../lib/definitions";
 
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Textarea } from "@/components/ui/textarea";
-import { redirect, useRouter } from "next/navigation";
-import { auth } from "@/auth";
+import { useRouter } from "next/navigation";
 
 interface Props {
   uid: number;
@@ -94,14 +93,16 @@ export default function CreateProduct({ hashedPassword, newPassword }: Props) {
 
     if (res.ok) {
       alert("Thêm sản phẩm thành công!");
-      redirect("/dashboard/products");
+      // redirect("/dashboard/products");
     } else {
       const data = await res.json();
       alert(data.message || "Lỗi tạo sản phẩm");
     }
   };
 
-  const handleItemsPerPageChange = (e: any) => {
+  const handleItemsPerPageChange = (
+    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+  ) => {
     const { name, value } = e.target;
     setProduct((prevProduct) => ({
       ...prevProduct,

@@ -1,24 +1,10 @@
 import {
-  fetchDonDatHangPages,
-  fetchFilteredDoiTac,
-  fetchFilteredDonDatHang,
-  fetchFilteredProducts,
-  fetchFilteredXuatHang,
   fetchFilteredXuatHangChuaIn,
   fetchNguoiVanChuyen,
   fetchPartner,
-  fetchProductsPages,
   fetchXuatHangChuaInPages,
-  fetchXuatHangDaInPages,
-  fetchXuatHangPages,
 } from "@/app/lib/data";
-import {
-  DoiTac,
-  DonDatHang,
-  DonXuatHang,
-  Product,
-  VanChuyen,
-} from "@/app/lib/definitions";
+import { DoiTac, DonXuatHang } from "@/app/lib/definitions";
 import Table from "@/app/ui/xuathang/chuain";
 import PayTable from "@/app/ui/import/paytable";
 const FetchProductButton = async (props: {
@@ -44,12 +30,7 @@ const FetchProductButton = async (props: {
 
   return (
     <div>
-      <Table
-        dondathang={dondathang}
-        totalPages={totalPages}
-        doitac={doitac}
-        nguoivanchuyen={nguoivanchuyen}
-      />
+      <Table dondathang={dondathang} totalPages={totalPages} />
     </div>
   );
 };

@@ -1,4 +1,3 @@
-import { NextApiRequest, NextApiResponse } from 'next';
 import { uploadImage } from '@/app/lib/actions'; // Đảm bảo đường dẫn đúng
 
 export default async function handler(req, res) {

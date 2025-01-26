@@ -16,7 +16,8 @@ export default function CreateProduct() {
   });
 
   const [error, setError] = useState<string>("");
-  const [success, setSuccess] = useState<string>("");
+  // const [success, setSuccess] = useState<string>("");
+  const success = "";
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

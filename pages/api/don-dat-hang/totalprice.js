@@ -1,4 +1,3 @@
-import { fetchProductById } from "@/app/lib/data";
 
 export default async function handler(req, res) {
   const { id } = req.query; // Get the product ID from the query string

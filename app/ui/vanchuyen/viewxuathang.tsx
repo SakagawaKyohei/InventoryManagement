@@ -1,12 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import {
-  DoiTac,
-  DonDatHang,
-  DonXuatHang,
-  VanChuyen,
-} from "../../lib/definitions";
-import { Button } from "@/components/ui/button";
+import { DoiTac, DonXuatHang, VanChuyen } from "../../lib/definitions";
 import Image from "next/image";
 import {
   Table,
@@ -19,17 +13,7 @@ import {
 import Link from "next/link";
 import { formatCurrency } from "@/app/lib/utils";
 import { Input } from "@/components/ui/input";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
-import { Label } from "@/components/ui/label";
 
 interface Props {
   dondathang: DonXuatHang;
@@ -38,10 +22,10 @@ interface Props {
 }
 
 const FetchProductButton = ({ dondathang, vanchuyen, doitac }: Props) => {
-  const total = dondathang.product?.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  );
+  // const total = dondathang.product?.reduce(
+  //   (acc, item) => acc + item.price * item.quantity,
+  //   0
+  // );
   const router = useRouter();
 
   const handleGoBack = () => {
@@ -53,10 +37,10 @@ const FetchProductButton = ({ dondathang, vanchuyen, doitac }: Props) => {
   };
 
   const [phuongthuc, setPhuongthuc] = useState("");
-  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setPhuongthuc(event.target.value);
-    console.log(phuongthuc);
-  };
+  // const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  //   setPhuongthuc(event.target.value);
+  //   console.log(phuongthuc);
+  // };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

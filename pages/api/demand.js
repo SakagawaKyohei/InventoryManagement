@@ -29,6 +29,7 @@ export default async function handler(req, res) {
       res.status(200).json(forecastData);
     } catch (error) {
       res.status(500).json({ error: 'Failed to fetch forecast data from Flask API' });
+      // console.log(error); 
     }
   }
   

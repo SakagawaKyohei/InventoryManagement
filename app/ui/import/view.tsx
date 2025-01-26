@@ -1,7 +1,5 @@
 "use client";
-import React, { useState } from "react";
-import { DonDatHang, Product, Users } from "../../lib/definitions";
-import { Button } from "@/components/ui/button";
+import { DonDatHang, Users } from "../../lib/definitions";
 import Image from "next/image";
 import {
   Table,
@@ -12,26 +10,9 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import Link from "next/link";
-import {
-  redirect,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
-import { useDebouncedCallback } from "use-debounce";
+import { useRouter } from "next/navigation";
 import { formatCurrency } from "@/app/lib/utils";
 import { Input } from "@/components/ui/input";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-
-import { Label } from "@/components/ui/label";
 
 interface Props {
   dondathang: DonDatHang;
@@ -50,21 +31,11 @@ const FetchProductButton = ({ dondathang, ketoan, nguoivanchuyen }: Props) => {
     }
   };
 
-  const [hanSuDung, setHanSuDung] = useState("");
-  const [diaChi, setDiaChi] = useState("");
-  const [khoXuatHang, setKhoXuathang] = useState("");
-  const [id_nguoi_van_chuyen, setId] = useState("");
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("abc");
   };
 
-  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedNguoiVanChuyen = JSON.parse(event.target.value) as Users;
-    console.log("Selected product:", selectedNguoiVanChuyen);
-    setId(selectedNguoiVanChuyen.id);
-    console.log("abc");
-  };
   const total = dondathang.product?.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0

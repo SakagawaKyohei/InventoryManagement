@@ -1,9 +1,5 @@
-import {
-  fetchCongNoPage,
-  fetchFilteredCongNo,
-  fetchVanChuyenPage,
-} from "@/app/lib/data";
-import { CongNo, DonDatHang, VanChuyen } from "@/app/lib/definitions";
+import { fetchCongNoPage, fetchFilteredCongNo } from "@/app/lib/data";
+import { CongNo } from "@/app/lib/definitions";
 import VanChuyenComponent from "@/app/ui/congno";
 const FetchProductButton = async (props: {
   searchParams?: Promise<{

@@ -6,7 +6,6 @@ import { Label } from "@/components/ui/label";
 
 import { useActionState } from "react";
 import { authenticate } from "@/app/lib/actions";
-import Link from "next/link";
 import { Loader2 } from "lucide-react";
 import ExclamationCircleIcon from "@heroicons/react/24/outline/ExclamationCircleIcon";
 

@@ -1,4 +1,3 @@
-import SideNav from "@/app/ui/dashboard/sidenav";
 import Sidebar from "@/components/Sidebar";
 export const experimental_ppr = true;
 

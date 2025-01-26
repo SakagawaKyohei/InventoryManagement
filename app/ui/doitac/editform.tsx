@@ -1,17 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { v4 as uuidv4 } from "uuid";
-import { Upload } from "antd";
-import { PlusOutlined, LoadingOutlined } from "@ant-design/icons";
-import { uploadImage } from "@/app/lib/actions";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Textarea } from "@/components/ui/textarea";
-import { redirect } from "next/navigation";
 import { DoiTac, Product } from "@/app/lib/definitions";
 import {
   Table,
@@ -39,12 +33,12 @@ export default function EditForm({ doitac1, uid }: Props) {
 
   const router = useRouter();
 
-  const [errors, setErrors] = useState({
-    name: "",
-    email: "",
-    sdt: "",
-    dia_chi: "",
-  });
+  // const [errors, setErrors] = useState({
+  //   name: "",
+  //   email: "",
+  //   sdt: "",
+  //   dia_chi: "",
+  // });
 
   const handleChange = (
     e:
@@ -58,38 +52,38 @@ export default function EditForm({ doitac1, uid }: Props) {
     }));
   };
 
-  const validateForm = () => {
-    let valid = true;
-    let newErrors = {
-      name: "",
-      email: "",
-      sdt: "",
-      dia_chi: "",
-    };
+  // const validateForm = () => {
+  //   let valid = true;
+  //   let newErrors = {
+  //     name: "",
+  //     email: "",
+  //     sdt: "",
+  //     dia_chi: "",
+  //   };
 
-    if (!doitac.name) {
-      newErrors.name = "Tên sản phẩm không được để trống.";
-      valid = false;
-    }
+  //   if (!doitac.name) {
+  //     newErrors.name = "Tên sản phẩm không được để trống.";
+  //     valid = false;
+  //   }
 
-    if (!doitac.email) {
-      newErrors.email = "Công ty sản xuất không được để trống.";
-      valid = false;
-    }
+  //   if (!doitac.email) {
+  //     newErrors.email = "Công ty sản xuất không được để trống.";
+  //     valid = false;
+  //   }
 
-    if (!doitac.sdt) {
-      newErrors.email = "Công ty sản xuất không được để trống.";
-      valid = false;
-    }
+  //   if (!doitac.sdt) {
+  //     newErrors.email = "Công ty sản xuất không được để trống.";
+  //     valid = false;
+  //   }
 
-    if (!doitac.dia_chi) {
-      newErrors.email = "Công ty sản xuất không được để trống.";
-      valid = false;
-    }
+  //   if (!doitac.dia_chi) {
+  //     newErrors.email = "Công ty sản xuất không được để trống.";
+  //     valid = false;
+  //   }
 
-    setErrors(newErrors);
-    return valid;
-  };
+  //   // setErrors(newErrors);
+  //   return valid;
+  // };
 
   const handleGoBack = () => {
     if (window.history.length > 2) {

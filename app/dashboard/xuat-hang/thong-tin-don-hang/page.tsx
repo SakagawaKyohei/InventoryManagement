@@ -1,25 +1,9 @@
 import {
-  fetchDonDatHangById,
-  fetchDonDatHangPages,
   fetchDonXuatHangById,
-  fetchFilteredDonDatHang,
-  fetchFilteredProducts,
-  fetchNguoiVanChuyen,
-  fetchPartner,
   fetchPartnerById,
-  fetchProductsPages,
-  fetchUserByID,
   fetchVanChuyenById,
 } from "@/app/lib/data";
-import {
-  DoiTac,
-  DonDatHang,
-  DonXuatHang,
-  Product,
-  Users,
-  VanChuyen,
-} from "@/app/lib/definitions";
-import Table from "@/app/ui/import/table";
+import { DoiTac, DonXuatHang, VanChuyen } from "@/app/lib/definitions";
 import Xacnhan from "@/app/ui/vanchuyen/viewxuathang";
 const FetchProductButton = async (props: {
   searchParams?: Promise<{

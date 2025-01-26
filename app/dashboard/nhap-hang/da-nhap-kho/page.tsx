@@ -1,11 +1,5 @@
-import {
-  fetchDaNhapHang,
-  fetchDaNhapPage,
-  fetchFilteredPendingDonDatHang,
-  fetchPendingDonDatHangPages,
-  fetchProductsPages,
-} from "@/app/lib/data";
-import { DonDatHang, Product, TonKho, VanChuyen } from "@/app/lib/definitions";
+import { fetchDaNhapHang, fetchDaNhapPage } from "@/app/lib/data";
+import { DonDatHang, VanChuyen } from "@/app/lib/definitions";
 import Paytable from "@/app/ui/import/danhap";
 const FetchProductButton = async (props: {
   searchParams?: Promise<{

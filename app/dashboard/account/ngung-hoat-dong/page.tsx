@@ -1,14 +1,10 @@
 import Table from "@/app/ui/account/unactivetable";
 import {
-  fetchAccountActivePages,
   fetchAccountUnactivePages,
-  fetchFilteredActiveAccount,
-  fetchFilteredProducts,
   fetchFilteredUnactiveAccount,
-  fetchProductsPages,
   getUserByEmail,
 } from "@/app/lib/data";
-import { Product, Users } from "@/app/lib/definitions";
+import { Users } from "@/app/lib/definitions";
 import { auth } from "@/auth";
 const FetchProductButton = async (props: {
   searchParams?: Promise<{

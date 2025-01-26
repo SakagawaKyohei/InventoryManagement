@@ -36,7 +36,7 @@ const FetchProductButton = ({ product, totalPages, uid }: Props) => {
   const pathname = usePathname();
   const { replace } = useRouter();
   const searchParams = useSearchParams();
-  const [message, setMessage] = useState("");
+  // const [message, setMessage] = useState("");
   const currentPage = (searchParams && Number(searchParams.get("page"))) || 1;
   const [item_per_page, setItemPerPage] = useState(
     Number(searchParams?.get("itemsPerPage")) || 5
@@ -56,11 +56,11 @@ const FetchProductButton = ({ product, totalPages, uid }: Props) => {
         // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
         replace(`${pathname}?${params.toString()}`);
       } else {
-        setMessage("Không thể xóa sản phẩm");
+        // setMessage("Không thể xóa sản phẩm");
       }
     } catch (error) {
       console.error("Lỗi khi xóa sản phẩm:", error);
-      setMessage("Lỗi khi xóa sản phẩm. Vui lòng thử lại.");
+      // setMessage("Lỗi khi xóa sản phẩm. Vui lòng thử lại.");
     }
   };
 

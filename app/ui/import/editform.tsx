@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 
 import { v4 as uuidv4 } from "uuid";
 import { Upload } from "antd";
-import { PlusOutlined, LoadingOutlined } from "@ant-design/icons";
 import { uploadImage } from "@/app/lib/actions";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
@@ -28,7 +27,7 @@ export default function EditForm({ product1 }: Props) {
     description: product1.description,
   });
 
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [image, setImage] = useState<Blob | null>(null);
   const [imageURL, setImageURL] = useState<string>("");
 
@@ -82,18 +81,18 @@ export default function EditForm({ product1 }: Props) {
   const handleUpload = async (): Promise<boolean> => {
     if (!image) return false; // Return false if there's no image
 
-    setLoading(true);
+    // setLoading(true);
     try {
       const res = await uploadImage(image, id_anhbia); // Use unique `id_anhbia` for each product
       const imageURL = res?.path || ""; // Get the image URL after upload
       setImageURL(imageURL);
-      setLoading(false);
+      // setLoading(false);
 
       alert(id_anhbia);
       alert(product.img_product);
       return true; // Return true on successful upload
     } catch (error) {
-      setLoading(false);
+      // setLoading(false);
       console.error(error);
       return false; // Return false if there was an error
     }
@@ -101,7 +100,7 @@ export default function EditForm({ product1 }: Props) {
 
   const validateForm = () => {
     let valid = true;
-    let newErrors = {
+    const newErrors = {
       name: "",
       company: "",
       buy_price: "",
@@ -142,7 +141,7 @@ export default function EditForm({ product1 }: Props) {
     return valid;
   };
 
-  const [error, setError] = useState<string>("");
+  // const [error, setError] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -172,12 +171,12 @@ export default function EditForm({ product1 }: Props) {
         redirect("/dashboard");
       } else {
         const data = await res.json();
-        setError(data.message || "Error updating product");
+        // setError(data.message || "Error updating product");
       }
     } catch (error) {
       // Catch any unexpected errors
       console.error("An error occurred:", error);
-      setError("Something went wrong. Please try again.");
+      // setError("Something went wrong. Please try again.");
     }
   };
 

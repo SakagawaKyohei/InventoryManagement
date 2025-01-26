@@ -1,8 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { DonXuatHang, Product, Users } from "../../lib/definitions";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import {
   Pagination,
   PaginationContent,
@@ -30,41 +28,40 @@ import Link from "next/link";
 interface Props {
   product: any[];
   totalPages: number;
-  uid: number;
   cusid: string;
 }
 
-const FetchProductButton = ({ product, totalPages, uid, cusid }: Props) => {
+const FetchProductButton = ({ product, totalPages, cusid }: Props) => {
   const pathname = usePathname();
   const { replace } = useRouter();
   const searchParams = useSearchParams();
-  const [message, setMessage] = useState("");
+  // const [message, setMessage] = useState("");
   const currentPage = (searchParams && Number(searchParams.get("page"))) || 1;
   const [item_per_page, setItemPerPage] = useState(
     Number(searchParams?.get("itemsPerPage")) || 5
   );
 
-  const handleDelete = async (id: string, uid: number) => {
-    const params = new URLSearchParams(
-      searchParams ? searchParams.toString() : ""
-    );
-    try {
-      const res = await fetch("/api/auth/restore", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id }),
-      });
-      if (res.ok) {
-        // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
-        replace(`${pathname}?${params.toString()}`);
-      } else {
-        setMessage("Không thể xóa sản phẩm");
-      }
-    } catch (error) {
-      console.error("Lỗi khi xóa sản phẩm:", error);
-      setMessage("Lỗi khi xóa sản phẩm. Vui lòng thử lại.");
-    }
-  };
+  // const handleDelete = async (id: string, uid: number) => {
+  //   const params = new URLSearchParams(
+  //     searchParams ? searchParams.toString() : ""
+  //   );
+  //   try {
+  //     const res = await fetch("/api/auth/restore", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ id }),
+  //     });
+  //     if (res.ok) {
+  //       // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
+  //       replace(`${pathname}?${params.toString()}`);
+  //     } else {
+  //       setMessage("Không thể xóa sản phẩm");
+  //     }
+  //   } catch (error) {
+  //     console.error("Lỗi khi xóa sản phẩm:", error);
+  //     setMessage("Lỗi khi xóa sản phẩm. Vui lòng thử lại.");
+  //   }
+  // };
 
   const handleSearch = useDebouncedCallback((term) => {
     const params = new URLSearchParams(

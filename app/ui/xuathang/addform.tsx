@@ -1,6 +1,5 @@
 "use client";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -14,11 +13,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useRouter } from "next/navigation";
-import { auth } from "@/auth";
-import { getUserByEmail } from "@/app/lib/data";
-import { DoiTac, Product, Users } from "@/app/lib/definitions";
+import { DoiTac, Users } from "@/app/lib/definitions";
 import { formatCurrency } from "@/app/lib/utils";
-import { redirect } from "next/navigation";
 
 interface OrderProduct {
   id: string;
@@ -56,7 +52,7 @@ export default function AddForm({ doitac, nguoivanchuyen }: Props) {
   const [toida, setToiDa] = useState(0);
   const [thanhtien, setThanhTien] = useState(0);
   const [soluong, setSoluong] = useState(0);
-  const [message, setMessage] = useState("");
+  // const [message, setMessage] = useState("");
   const [isadding, setIsAdding] = useState(false);
   const [productname, setProductname] = useState("");
   const [productid, setProductid] = useState("");
@@ -71,7 +67,7 @@ export default function AddForm({ doitac, nguoivanchuyen }: Props) {
   };
 
   const fetchProducts = async () => {
-    setMessage(""); // Clear any previous messages
+    // setMessage(""); // Clear any previous messages
 
     try {
       const response = await fetch("/api/product/stock-product", {
@@ -82,13 +78,13 @@ export default function AddForm({ doitac, nguoivanchuyen }: Props) {
 
       if (response.ok) {
         setProducts(data.products); // Corrected to reflect API response
-        setMessage("product list fetched successfully");
+        // setMessage("product list fetched successfully");
       } else {
-        setMessage("Failed to fetch product list");
+        // setMessage("Failed to fetch product list");
       }
     } catch (error) {
       console.error("Error fetching product list:", error);
-      setMessage("Error fetching product list. Please try again.");
+      // setMessage("Error fetching product list. Please try again.");
     } finally {
     }
   };
@@ -149,11 +145,11 @@ export default function AddForm({ doitac, nguoivanchuyen }: Props) {
       if (res.ok) {
         // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
       } else {
-        setMessage("Không thể xóa sản phẩm");
+        // setMessage("Không thể xóa sản phẩm");
       }
     } catch (error) {
       console.error("Lỗi khi xóa sản phẩm:", error);
-      setMessage("Lỗi khi xóa sản phẩm. Vui lòng thử lại.");
+      // setMessage("Lỗi khi xóa sản phẩm. Vui lòng thử lại.");
     }
   };
 
@@ -175,11 +171,11 @@ export default function AddForm({ doitac, nguoivanchuyen }: Props) {
         // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
         router.push("/dashboard/xuat-hang");
       } else {
-        setMessage("Không thể xóa sản phẩm");
+        // setMessage("Không thể xóa sản phẩm");
       }
     } catch (error) {
       console.error("Lỗi khi xóa sản phẩm:", error);
-      setMessage("Lỗi khi xóa sản phẩm. Vui lòng thử lại.");
+      // setMessage("Lỗi khi xóa sản phẩm. Vui lòng thử lại.");
     }
   };
 

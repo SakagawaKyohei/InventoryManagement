@@ -1,11 +1,5 @@
-import {
-  fetchConHan,
-  fetchConHanPages,
-  fetchFilteredPendingDonDatHang,
-  fetchPendingDonDatHangPages,
-  fetchProductsPages,
-} from "@/app/lib/data";
-import { DonDatHang, Product, TonKho } from "@/app/lib/definitions";
+import { fetchConHan, fetchConHanPages } from "@/app/lib/data";
+import { Product, TonKho } from "@/app/lib/definitions";
 import ConHang from "@/app/ui/hangton/conhan";
 type TonKhoWithProduct = TonKho & Product;
 const FetchProductButton = async (props: {

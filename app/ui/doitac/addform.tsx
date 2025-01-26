@@ -1,6 +1,5 @@
 "use client";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -14,11 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useRouter } from "next/navigation";
-import { auth } from "@/auth";
-import { getUserByEmail } from "@/app/lib/data";
-import { DoiTac, Product, Users } from "@/app/lib/definitions";
-import { formatCurrency } from "@/app/lib/utils";
-import { redirect } from "next/navigation";
+import { DoiTac } from "@/app/lib/definitions";
 
 interface OrderProduct {
   stt: number;
@@ -54,7 +49,7 @@ const AddForm = (pros: Pros) => {
     ao_nuoi: "",
   });
 
-  const [message, setMessage] = useState("");
+  // const [message, setMessage] = useState("");
   const [isadding, setIsAdding] = useState(false);
   const [dientich, setDientich] = useState(0);
   const [thuysan, setThuysan] = useState("");
@@ -62,7 +57,7 @@ const AddForm = (pros: Pros) => {
   const [ngaytuoi, setNgaytuoi] = useState(0);
 
   const fetchProducts = async () => {
-    setMessage(""); // Clear any previous messages
+    // setMessage(""); // Clear any previous messages
 
     try {
       const response = await fetch("/api/product/product-list", {
@@ -72,13 +67,13 @@ const AddForm = (pros: Pros) => {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage("product list fetched successfully");
+        // setMessage("product list fetched successfully");
       } else {
-        setMessage("Failed to fetch product list");
+        // setMessage("Failed to fetch product list");
       }
     } catch (error) {
       console.error("Error fetching product list:", error);
-      setMessage("Error fetching product list. Please try again.");
+      // setMessage("Error fetching product list. Please try again.");
     } finally {
     }
   };
@@ -101,11 +96,11 @@ const AddForm = (pros: Pros) => {
         alert("Thêm thông tin đối tác thành công");
         router.push("/dashboard/doi-tac");
       } else {
-        setMessage("Không thể xóa sản phẩm");
+        // setMessage("Không thể xóa sản phẩm");
       }
     } catch (error) {
       console.error("Lỗi khi xóa sản phẩm:", error);
-      setMessage("Lỗi khi xóa sản phẩm. Vui lòng thử lại.");
+      // setMessage("Lỗi khi xóa sản phẩm. Vui lòng thử lại.");
     }
   };
 
@@ -151,11 +146,11 @@ const AddForm = (pros: Pros) => {
       if (res.ok) {
         // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
       } else {
-        setMessage("Không thể xóa sản phẩm");
+        // setMessage("Không thể xóa sản phẩm");
       }
     } catch (error) {
       console.error("Lỗi khi xóa sản phẩm:", error);
-      setMessage("Lỗi khi xóa sản phẩm. Vui lòng thử lại.");
+      // setMessage("Lỗi khi xóa sản phẩm. Vui lòng thử lại.");
     }
   };
 

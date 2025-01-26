@@ -1,22 +1,10 @@
 import {
-  fetchDoiTacPages,
-  fetchDonDatHangPages,
-  fetchFilteredDoiTac,
-  fetchFilteredDonDatHang,
   fetchFilteredLogging,
-  fetchFilteredProducts,
   fetchLoggingPages,
-  fetchProductsPages,
   getUser,
   getUserByEmail,
 } from "@/app/lib/data";
-import {
-  DoiTac,
-  DonDatHang,
-  Logging,
-  Product,
-  Users,
-} from "@/app/lib/definitions";
+import { Logging, Users } from "@/app/lib/definitions";
 import PartnerList from "@/app/ui/tablelogging";
 import { auth } from "@/auth";
 const FetchProductButton = async (props: {

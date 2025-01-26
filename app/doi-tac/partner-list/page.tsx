@@ -64,7 +64,7 @@ const FetchdoitacButton = () => {
         <div>
           <h3>doitac Details:</h3>
           <ul>
-            {doitac.map((item, index) => (
+            {doitac.map((item) => (
               <li key={item.id}>
                 {" "}
                 {/* Use `item.id` instead of `index` as the key */}

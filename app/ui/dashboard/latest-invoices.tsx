@@ -1,8 +1,7 @@
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
-import Image from "next/image";
 import { lusitana } from "@/app/ui/fonts";
-import { fetchTop5, fetchLatestInvoices } from "@/app/lib/data";
+import { fetchTop5 } from "@/app/lib/data";
 import { formatCurrency } from "@/app/lib/utils";
 
 export default async function LatestInvoices() {

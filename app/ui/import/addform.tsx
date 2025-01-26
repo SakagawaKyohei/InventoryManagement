@@ -1,6 +1,5 @@
 "use client";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -14,11 +13,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useRouter } from "next/navigation";
-import { auth } from "@/auth";
-import { getUserByEmail } from "@/app/lib/data";
 import { Product, Users } from "@/app/lib/definitions";
 import { formatCurrency } from "@/app/lib/utils";
-import { redirect } from "next/navigation";
 
 interface OrderProduct {
   id: string;

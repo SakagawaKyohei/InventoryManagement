@@ -4,12 +4,11 @@ import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
-import { AuthError, User } from 'next-auth';
+import { AuthError } from 'next-auth';
 import bcrypt from 'bcrypt';
 import { UUID } from 'crypto';
-import { DoiTac, DonDatHang, DonXuatHang, Product, TonKho, Users } from './definitions';
+import { DoiTac,DonXuatHang, Product, TonKho, Users } from './definitions';
 import supabase from "../../app/supabase";
-import { v4 as uuidv4 } from "uuid";
 import { getOrderPrice } from './data';
 
 export type State = {
@@ -175,6 +174,21 @@ export async function createAccount(email:string,name:string, password:string,st
 
 export async function AddUser(user:Users) {
   try {
+    let permissionss: number[] = [];
+
+    switch (user.role) {
+      case 'admin':
+        permissionss = [1, 2, 3, 5, 7, 8, 9, 10, 11, 12, 12];
+        break;
+      case 'ketoan':
+        permissionss = [4, 6, 9, 13];
+        break;
+      case 'nguoivanchuyen':
+        permissionss = [8, 13];
+        break;
+      default:
+        throw new Error(user.role);
+    }
     await sql`
       INSERT INTO users (name,email,password,status, role, bank, stk, ngay_sinh,sdt, cccd,dia_chi)
       VALUES (${user.name},${user.email}, ${user.password},${user.status}, ${user.role},${user.bank}, ${user.stk}, ${user.ngay_sinh},${user.sdt},${user.cccd},${user.dia_chi})

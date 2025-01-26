@@ -1,12 +1,7 @@
-import {
-  fetchPartnerById,
-  fetchProductById,
-  getUserByEmail,
-} from "@/app/lib/data";
-import { DoiTac, Product } from "@/app/lib/definitions";
+import { fetchPartnerById, getUserByEmail } from "@/app/lib/data";
+import { DoiTac } from "@/app/lib/definitions";
 import EditForm from "@/app/ui/doitac/editform";
 import { auth } from "@/auth";
-import { use } from "react";
 
 export default async function EditProduct(props: {
   searchParams?: Promise<{

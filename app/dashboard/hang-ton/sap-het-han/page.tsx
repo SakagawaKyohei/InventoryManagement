@@ -1,15 +1,5 @@
-import {
-  fetchConHan,
-  fetchFilteredPendingDonDatHang,
-  fetchHetHan,
-  fetchHetHanPages,
-  fetchPendingDonDatHangPages,
-  fetchProductsPages,
-  fetchSapHetHan,
-  fetchSapHetHanPages,
-} from "@/app/lib/data";
-import { DonDatHang, Product, TonKho } from "@/app/lib/definitions";
-import Paytable from "@/app/ui/import/paytable";
+import { fetchSapHetHan, fetchSapHetHanPages } from "@/app/lib/data";
+import { Product, TonKho } from "@/app/lib/definitions";
 import HetHang from "@/app/ui/hangton/saphethan";
 type TonKhoWithProduct = TonKho & Product;
 const FetchProductButton = async (props: {

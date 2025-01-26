@@ -13,10 +13,6 @@ export default async function EditProduct(props: {
     id1?: number;
   }>;
 }) {
-  const session = await auth();
-  const user = await getUserByEmail(
-    session?.user?.email ? session?.user?.email : ""
-  );
   const searchParams = await props.searchParams;
   const id = searchParams?.id || "";
   const id1 = searchParams?.id1 || 0;

@@ -3,8 +3,6 @@ import React, { useState } from "react";
 import { AiFillDollarCircle } from "react-icons/ai";
 
 import { Button } from "@/components/ui/button";
-import { RiMoneyDollarCircleFill } from "react-icons/ri";
-import Image from "next/image";
 import { format } from "date-fns";
 import {
   Pagination,
@@ -27,7 +25,7 @@ import { FaSearch } from "react-icons/fa";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
-import { CongNo, VanChuyen } from "@/app/lib/definitions";
+import { CongNo } from "@/app/lib/definitions";
 import {
   Dialog,
   DialogContent,
@@ -37,7 +35,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { CircleDollarSign, DollarSignIcon } from "lucide-react";
 import { formatCurrency } from "../lib/utils";
 
 interface Props {

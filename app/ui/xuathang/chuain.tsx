@@ -1,14 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import {
-  DoiTac,
-  DonDatHang,
-  DonXuatHang,
-  Product,
-  TonKho,
-  Users,
-} from "../../lib/definitions";
-import { Button } from "@/components/ui/button";
+import { DoiTac, Users } from "../../lib/definitions";
 import Image from "next/image";
 import { format } from "date-fns";
 import {
@@ -33,48 +25,27 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import { formatCurrency } from "@/app/lib/utils";
-import { Underline } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-
-type XuatHangWithDoiTac = DonXuatHang & DoiTac;
 
 interface Props {
   dondathang: any[];
   totalPages: number;
-  doitac: DoiTac[];
-  nguoivanchuyen: Users[];
 }
 
-const FetchProductButton = ({
-  dondathang,
-  totalPages,
-  doitac,
-  nguoivanchuyen,
-}: Props) => {
-  const [id, setId] = useState("");
-  const [id1, setId1] = useState("");
-  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedDoiTac = JSON.parse(event.target.value) as DoiTac;
-    console.log("Selected product:", selectedDoiTac);
-    setId(selectedDoiTac.id);
-    console.log("abc");
-  };
-  const handleSelectChange1 = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedNguoiVanChuyen = JSON.parse(event.target.value) as Users;
-    console.log("Selected product:", selectedNguoiVanChuyen);
-    setId1(selectedNguoiVanChuyen.manv.toString());
-    console.log("abc");
-  };
+const FetchProductButton = ({ dondathang, totalPages }: Props) => {
+  // const [id, setId] = useState("");
+  // const [id1, setId1] = useState("");
+  // const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  //   const selectedDoiTac = JSON.parse(event.target.value) as DoiTac;
+  //   console.log("Selected product:", selectedDoiTac);
+  //   setId(selectedDoiTac.id);
+  //   console.log("abc");
+  // };
+  // const handleSelectChange1 = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  //   const selectedNguoiVanChuyen = JSON.parse(event.target.value) as Users;
+  //   console.log("Selected product:", selectedNguoiVanChuyen);
+  //   setId1(selectedNguoiVanChuyen.manv.toString());
+  //   console.log("abc");
+  // };
   const currentDate = new Date();
   const day = currentDate.getDate();
   const month = currentDate.getMonth() + 1; // Tháng trong JS bắt đầu từ 0

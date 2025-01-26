@@ -1,15 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import {
-  DoiTac,
-  DonDatHang,
-  DonXuatHang,
-  Product,
-  TonKho,
-  Users,
-} from "../../lib/definitions";
+import { DoiTac, DonXuatHang, Users } from "../../lib/definitions";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import { format } from "date-fns";
 import {
   Pagination,
@@ -44,9 +36,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-
-type XuatHangWithDoiTac = DonXuatHang & DoiTac;
 
 interface Props {
   dondathang: any[];

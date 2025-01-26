@@ -1,9 +1,5 @@
-import {
-  fetchProductById,
-  fetchUserByID,
-  getUserByEmail,
-} from "@/app/lib/data";
-import { Product, Users } from "@/app/lib/definitions";
+import { fetchUserByID, getUserByEmail } from "@/app/lib/data";
+import { Users } from "@/app/lib/definitions";
 import EditForm from "@/app/ui/viewnguoidung";
 import { auth } from "@/auth";
 

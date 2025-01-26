@@ -10,16 +10,13 @@ import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Textarea } from "@/components/ui/textarea";
 import { redirect, useRouter } from "next/navigation";
-import { auth } from "@/auth";
-import dynamic from "next/dynamic";
+
 import ReactQuill, { Quill } from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 
 // Import Quill Image Resize module
 import QuillResizeImage from "quill-resize-image";
-import clipboard from "quill/modules/clipboard";
 
 // Đăng ký module ImageResize với Quill
 Quill.register("modules/imageResize", QuillResizeImage);
@@ -136,7 +133,7 @@ export default function CreateProduct({ uid }: Props) {
 
   const validateForm = () => {
     let valid = true;
-    let newErrors = {
+    const newErrors = {
       name: "",
       company: "",
       buy_price: "",
