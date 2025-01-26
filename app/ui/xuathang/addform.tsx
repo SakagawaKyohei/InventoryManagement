@@ -57,15 +57,6 @@ export default function AddForm({ doitac, nguoivanchuyen }: Props) {
   const [productname, setProductname] = useState("");
   const [productid, setProductid] = useState("");
 
-  // Hàm xử lý khi người dùng thay đổi giá trị trong form
-  const handleInputChange = (e: any) => {
-    const { name, value } = e.target;
-    setProduct((prevProduct) => ({
-      ...prevProduct,
-      [name]: value,
-    }));
-  };
-
   const fetchProducts = async () => {
     // setMessage(""); // Clear any previous messages
 
@@ -93,9 +84,6 @@ export default function AddForm({ doitac, nguoivanchuyen }: Props) {
   useEffect(() => {
     fetchProducts(); // Trigger the fetch when the component mounts
   }, []); // Empty dependency array means this effect runs once when the component mounts
-
-  // Hàm xử lý submit form
-  const handleSubmit = async () => {};
 
   const HandleAddDraft = async () => {
     if (soluong > toida) {
@@ -125,10 +113,6 @@ export default function AddForm({ doitac, nguoivanchuyen }: Props) {
     setSelectedProducts((prev) => [...prev, product.name]);
     // handleSubmit();
   };
-
-  const [productList, setProductList] = useState([
-    { id: "", name: "", quantity: "", price: "" },
-  ]);
 
   const addProductRow = () => {
     setIsAdding(true);

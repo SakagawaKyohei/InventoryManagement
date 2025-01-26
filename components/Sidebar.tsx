@@ -128,126 +128,126 @@ const permission = [
   },
 ];
 
-const sidebarItemsForRole = {
-  admin: [
-    { label: "Trang chủ", href: "/dashboard", icon: <FaHome /> },
-    { label: "Sản phẩm", href: "/dashboard/products", icon: <FaBox /> },
-    {
-      label: "Nhập hàng",
-      icon: <Image src="/import.png" width={20} height={20} alt="return" />,
-      dropdownItems: [
-        {
-          label: "Chờ thanh toán",
-          href: "/dashboard/nhap-hang/cho-thanh-toan",
-        },
-        { label: "Đang nhập kho", href: "/dashboard/nhap-hang/dang-nhap-kho" },
-        { label: "Đã nhập kho", href: "/dashboard/nhap-hang/da-nhap-kho" },
-      ],
-    },
-    {
-      label: "Xuất hàng",
-      href: "/dashboard/xuat-hang",
-      icon: <Image src="/export.png" width={20} height={20} alt="return" />,
-    },
-    {
-      label: "Công nợ",
-      href: "/dashboard/cong-no",
-      icon: <RiMoneyDollarCircleFill />,
-    },
-    {
-      label: "Vận chuyển",
-      icon: <FaTruckMoving />,
-      dropdownItems: [
-        {
-          label: "Đang vận chuyển",
-          href: "/dashboard/van-chuyen/dang-van-chuyen",
-        },
-        { label: "Đã vận chuyển", href: "/dashboard/van-chuyen/da-van-chuyen" },
-      ],
-    },
-    {
-      label: "Hàng tồn",
-      icon: <FaBox />,
-      dropdownItems: [
-        { label: "Còn hạn", href: "/dashboard/hang-ton/con-han" },
-        { label: "Sắp hết hạn", href: "/dashboard/hang-ton/sap-het-han" },
-        { label: "Hết hạn", href: "/dashboard/hang-ton/het-han" },
-      ],
-    },
+// const sidebarItemsForRole = {
+//   admin: [
+//     { label: "Trang chủ", href: "/dashboard", icon: <FaHome /> },
+//     { label: "Sản phẩm", href: "/dashboard/products", icon: <FaBox /> },
+//     {
+//       label: "Nhập hàng",
+//       icon: <Image src="/import.png" width={20} height={20} alt="return" />,
+//       dropdownItems: [
+//         {
+//           label: "Chờ thanh toán",
+//           href: "/dashboard/nhap-hang/cho-thanh-toan",
+//         },
+//         { label: "Đang nhập kho", href: "/dashboard/nhap-hang/dang-nhap-kho" },
+//         { label: "Đã nhập kho", href: "/dashboard/nhap-hang/da-nhap-kho" },
+//       ],
+//     },
+//     {
+//       label: "Xuất hàng",
+//       href: "/dashboard/xuat-hang",
+//       icon: <Image src="/export.png" width={20} height={20} alt="return" />,
+//     },
+//     {
+//       label: "Công nợ",
+//       href: "/dashboard/cong-no",
+//       icon: <RiMoneyDollarCircleFill />,
+//     },
+//     {
+//       label: "Vận chuyển",
+//       icon: <FaTruckMoving />,
+//       dropdownItems: [
+//         {
+//           label: "Đang vận chuyển",
+//           href: "/dashboard/van-chuyen/dang-van-chuyen",
+//         },
+//         { label: "Đã vận chuyển", href: "/dashboard/van-chuyen/da-van-chuyen" },
+//       ],
+//     },
+//     {
+//       label: "Hàng tồn",
+//       icon: <FaBox />,
+//       dropdownItems: [
+//         { label: "Còn hạn", href: "/dashboard/hang-ton/con-han" },
+//         { label: "Sắp hết hạn", href: "/dashboard/hang-ton/sap-het-han" },
+//         { label: "Hết hạn", href: "/dashboard/hang-ton/het-han" },
+//       ],
+//     },
 
-    { label: "Đối tác", href: "/dashboard/doi-tac", icon: <FaUser /> },
-    {
-      label: "Hệ thống",
-      icon: <FaCog />,
-      dropdownItems: [
-        { label: "Logging", href: "/dashboard/logging" },
-        { label: "Back-up", href: "/dashboard/back-up" },
-      ],
-    },
+//     { label: "Đối tác", href: "/dashboard/doi-tac", icon: <FaUser /> },
+//     {
+//       label: "Hệ thống",
+//       icon: <FaCog />,
+//       dropdownItems: [
+//         { label: "Logging", href: "/dashboard/logging" },
+//         { label: "Back-up", href: "/dashboard/back-up" },
+//       ],
+//     },
 
-    {
-      label: "Người dùng",
-      icon: <FaUser />,
-      dropdownItems: [
-        { label: "Đang hoạt động", href: "/dashboard/account/dang-hoat-dong" },
-        {
-          label: "Ngừng hoạt động",
-          href: "/dashboard/account/ngung-hoat-dong",
-        },
-      ],
-    },
-    {
-      label: "Tài khoản",
-      href: "/dashboard/account/edit",
-      icon: <FaLock />,
-    },
-  ],
+//     {
+//       label: "Người dùng",
+//       icon: <FaUser />,
+//       dropdownItems: [
+//         { label: "Đang hoạt động", href: "/dashboard/account/dang-hoat-dong" },
+//         {
+//           label: "Ngừng hoạt động",
+//           href: "/dashboard/account/ngung-hoat-dong",
+//         },
+//       ],
+//     },
+//     {
+//       label: "Tài khoản",
+//       href: "/dashboard/account/edit",
+//       icon: <FaLock />,
+//     },
+//   ],
 
-  ketoan: [
-    {
-      label: "Nhập hàng",
-      href: "/dashboard/nhap-hang",
-      icon: <Image src="/export.png" width={20} height={20} alt="return" />,
-    },
-    {
-      label: "Xuất hàng",
-      icon: <Image src="/import.png" width={20} height={20} alt="return" />,
-      dropdownItems: [
-        { label: "Chưa in", href: "/dashboard/xuat-hang/chua-in" },
-        { label: "Đã in", href: "/dashboard/xuat-hang/da-in" },
-      ],
-    },
+//   ketoan: [
+//     {
+//       label: "Nhập hàng",
+//       href: "/dashboard/nhap-hang",
+//       icon: <Image src="/export.png" width={20} height={20} alt="return" />,
+//     },
+//     {
+//       label: "Xuất hàng",
+//       icon: <Image src="/import.png" width={20} height={20} alt="return" />,
+//       dropdownItems: [
+//         { label: "Chưa in", href: "/dashboard/xuat-hang/chua-in" },
+//         { label: "Đã in", href: "/dashboard/xuat-hang/da-in" },
+//       ],
+//     },
 
-    {
-      label: "Hàng tồn",
-      icon: <Image src="/import.png" width={20} height={20} alt="return" />,
-      dropdownItems: [
-        {
-          label: "Còn hạn",
-          href: "/dashboard/hang-ton/con-han",
-        },
-        { label: "Hết hạn", href: "/dashboard/hang-ton/het-han" },
-      ],
-    },
-    { label: "Tài khoản", href: "/dashboard/account/edit", icon: <FaBox /> },
-  ],
+//     {
+//       label: "Hàng tồn",
+//       icon: <Image src="/import.png" width={20} height={20} alt="return" />,
+//       dropdownItems: [
+//         {
+//           label: "Còn hạn",
+//           href: "/dashboard/hang-ton/con-han",
+//         },
+//         { label: "Hết hạn", href: "/dashboard/hang-ton/het-han" },
+//       ],
+//     },
+//     { label: "Tài khoản", href: "/dashboard/account/edit", icon: <FaBox /> },
+//   ],
 
-  nguoivanchuyen: [
-    {
-      label: "Vận chuyển",
-      icon: <FaTruckMoving />,
-      dropdownItems: [
-        {
-          label: "Đang vận chuyển",
-          href: "/dashboard/van-chuyen/dang-van-chuyen",
-        },
-        { label: "Đã vận chuyển", href: "/dashboard/van-chuyen/da-van-chuyen" },
-      ],
-    },
+//   nguoivanchuyen: [
+//     {
+//       label: "Vận chuyển",
+//       icon: <FaTruckMoving />,
+//       dropdownItems: [
+//         {
+//           label: "Đang vận chuyển",
+//           href: "/dashboard/van-chuyen/dang-van-chuyen",
+//         },
+//         { label: "Đã vận chuyển", href: "/dashboard/van-chuyen/da-van-chuyen" },
+//       ],
+//     },
 
-    { label: "Tài khoản", href: "/dashboard/account/edit", icon: <FaUser /> },
-  ],
-};
+//     { label: "Tài khoản", href: "/dashboard/account/edit", icon: <FaUser /> },
+//   ],
+// };
 
 const sidebarItems: SidebarItem[] = [
   { label: "Trang chủ", href: "/dashboard", icon: <FaHome /> },

@@ -20,9 +20,8 @@ import { useRouter } from "next/navigation";
 
 interface Props {
   doitac1: DoiTac;
-  uid: number;
 }
-export default function EditForm({ doitac1, uid }: Props) {
+export default function EditForm({ doitac1 }: Props) {
   const [doitac, setdoitac] = useState<DoiTac>({
     id: doitac1.id,
     name: doitac1.name,
