@@ -38,6 +38,7 @@ export default function EditForm({ product1, uid }: Props) {
     cccd: product1.cccd,
     dia_chi: product1.dia_chi,
     manv: product1.manv,
+    permission: product1.permission,
   });
 
   const handleChange = (
