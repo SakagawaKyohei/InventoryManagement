@@ -310,14 +310,7 @@ const Sidebar: React.FC = async () => {
   );
 
   // Example permissions based on roles
-  const userPermissions =
-    user.role === "admin"
-      ? [1, 2, 3, 5, 7, 8, 9, 10, 11, 12, 13]
-      : user.role === "kế toán"
-      ? [4, 6, 9, 13]
-      : user.role === "người vận chuyển"
-      ? [8, 13]
-      : [];
+  const userPermissions = user.permission;
 
   return (
     <div style={{ position: "fixed" }}>

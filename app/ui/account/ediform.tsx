@@ -8,14 +8,38 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Textarea } from "@/components/ui/textarea";
 import { redirect, useRouter } from "next/navigation";
+import MultipleSelector, { Option } from "@/components/ui/multiple-selector";
 import { Users } from "@/app/lib/definitions";
 import { format } from "date-fns";
+import React from "react";
 
 interface Props {
   product1: any;
   uid: number;
 }
 export default function EditForm({ product1, uid }: Props) {
+  const [value, setValue] = React.useState<Option[]>([]);
+
+  const OPTIONS: Option[] = [
+    { label: "Trang chủ", value: "1" },
+    { label: "Sản phẩm", value: "2" },
+    { label: "Công nợ", value: "7" },
+    { label: "Hệ thống", value: "11" },
+  ];
+  const OPTIONSC: Option[] = [
+    { label: "Trang chủ", value: "1" },
+    { label: "Sản phẩm", value: "2" },
+    { label: "Nhập hàng", value: "3" },
+    { label: "Y/C nhập hàng", value: "4" },
+    { label: "Xuất hàng", value: "5" },
+    { label: "In phiếu xuất", value: "6" },
+    { label: "Công nợ", value: "7" },
+    { label: "Vận chuyển", value: "8" },
+    { label: "Hàng tồn", value: "9" },
+    { label: "Đối tác", value: "10" },
+    { label: "Hệ thống", value: "11" },
+    { label: "Người dùng", value: "12" },
+  ];
   const [product, setProduct] = useState<Users>({
     id: product1.id,
     name: product1.name,
@@ -30,6 +54,7 @@ export default function EditForm({ product1, uid }: Props) {
     cccd: product1.cccd,
     dia_chi: product1.dia_chi,
     manv: product1.manv,
+    permission: product1.permission,
   });
 
   const handleChange = (
@@ -58,19 +83,25 @@ export default function EditForm({ product1, uid }: Props) {
 
     try {
       // Proceed with the API call to edit the product
+
       const res = await fetch("/api/auth/edit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: product.manv, product, uid }),
+        body: JSON.stringify({
+          id: product.manv,
+          product,
+          uid,
+        }),
       });
 
       // Check if the API call was successful
       if (res.ok) {
-        alert("Product updated successfully");
+        alert(product.permission);
         // Use a proper redirection method based on your framework (e.g., React Router)
         redirect("/dashboard");
       } else {
         const data = await res.json();
+        console.log(data);
       }
     } catch (error) {
       // Catch any unexpected errors
@@ -306,6 +337,46 @@ export default function EditForm({ product1, uid }: Props) {
                 />
               </div>
             </div>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              marginTop: 30,
+              justifyContent: "space-between",
+            }}
+          >
+            <label htmlFor="name">Ủy quyền:</label>
+            <MultipleSelector
+              value={value}
+              onChange={(selected) => {
+                setValue(selected);
+
+                // Lấy giá trị là number từ selected options
+                const selectedPermissions = selected.map((option) =>
+                  parseInt(option.value as string)
+                );
+
+                // Loại bỏ phần tử trùng lặp
+                const updatedPermissions = [
+                  ...new Set([...product.permission, ...selectedPermissions]),
+                ];
+
+                setProduct((prevProduct) => ({
+                  ...prevProduct,
+                  permission: updatedPermissions,
+                }));
+                console.log(product);
+              }}
+              defaultOptions={OPTIONS}
+              placeholder="Chọn quyền muốn thêm"
+              emptyIndicator={
+                <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+                  no results found.
+                </p>
+              }
+            />
           </div>
 
           <div style={{ marginTop: 25 }}>
