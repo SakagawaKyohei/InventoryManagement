@@ -174,7 +174,7 @@ export async function createAccount(email:string,name:string, password:string,st
 
 export async function AddUser(user:Users) {
   try {
-    let permissionss: number[] = [];
+    let permissionss: any = [];
 
     switch (user.role) {
       case 'admin':
