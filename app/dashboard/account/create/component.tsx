@@ -40,6 +40,7 @@ export default function CreateProduct({ hashedPassword, newPassword }: Props) {
     cccd: "",
     dia_chi: "",
     manv: 0,
+    permission: [0],
   });
 
   const errors = {
