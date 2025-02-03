@@ -25,6 +25,7 @@ const AddProductToOrder = async () => {
         sdt={user.sdt}
         cccd={user.cccd}
         dia_chi={user.dia_chi}
+        permission={[]}
       />
     </div>
   );
