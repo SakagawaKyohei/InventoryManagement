@@ -96,7 +96,7 @@ export default function EditForm({ product1, uid }: Props) {
 
       // Check if the API call was successful
       if (res.ok) {
-        alert(product.permission);
+        alert("Chỉnh sửa nhân viên thành công");
         // Use a proper redirection method based on your framework (e.g., React Router)
         redirect("/dashboard");
       } else {
