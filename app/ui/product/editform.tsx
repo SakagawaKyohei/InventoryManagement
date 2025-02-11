@@ -13,6 +13,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { redirect, useRouter } from "next/navigation";
 import { Product } from "@/app/lib/definitions";
 import { UploadChangeParam } from "antd/es/upload";
+import ReactQuill, { Quill } from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
+
+// Import Quill Image Resize module
+import QuillResizeImage from "quill-resize-image";
+
+// Đăng ký module ImageResize với Quill
+Quill.register("modules/imageResize", QuillResizeImage);
 
 interface Props {
   product1: Product;
@@ -47,6 +55,38 @@ export default function EditForm({ product1, uid }: Props) {
     sell_price: "",
     image: "",
   });
+
+  const modules = {
+    toolbar: [
+      [{ font: [] }], // Cho phép chọn font chữ
+      [{ size: ["small", "", "large", "huge"] }], // Chọn kích thước font
+      ["bold", "italic", "underline", "strike"], // Định dạng text
+      [{ color: [] }, { background: [] }], // Màu sắc
+      [{ list: "ordered" }, { list: "bullet" }], // Danh sách
+      ["link", "image", "video"], // Thêm link, ảnh, video
+      ["clean"], // Xóa định dạng
+      [{ script: "sub" }, { script: "super" }], // Chỉ số trên, chỉ số dưới
+      [{ align: [] }], // Căn trái, giữa, phải, đều
+    ],
+    imageResize: true, // Kích hoạt tính năng resize ảnh
+  };
+
+  const formats = [
+    "font",
+    "size",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "color",
+    "background",
+    "list",
+    "script",
+    "align",
+    "link",
+    "image",
+    "video",
+  ];
 
   useEffect(() => {
     if (id_anhbia) {
@@ -395,12 +435,19 @@ export default function EditForm({ product1, uid }: Props) {
           </div>
           <div style={{ marginTop: 25 }}>
             <label htmlFor="description">Mô tả sản phẩm:</label>
-            <Textarea
+
+            <ReactQuill
               id="description"
-              name="description"
-              value={product.description}
-              onChange={handleChange}
-              style={{ width: "100%", marginTop: 10, height: "20vh" }}
+              value={product.description || ""} // Gán giá trị từ state
+              onChange={(value) =>
+                setProduct((prevProduct) => ({
+                  ...prevProduct,
+                  description: value, // Cập nhật nội dung mô tả vào state
+                }))
+              }
+              modules={modules} // Đính kèm modules
+              formats={formats} // Đính kèm formats
+              style={{ width: "100%", marginTop: 10 }}
             />
           </div>
 
