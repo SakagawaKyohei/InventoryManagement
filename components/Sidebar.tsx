@@ -122,7 +122,7 @@ const permission = [
   },
   {
     label: "Tài khoản",
-    href: "/dashboard/account/edit",
+    href: "/dashboard/account1",
     icon: <FaLock />,
     id: "13",
   },
