@@ -220,7 +220,7 @@ const AddForm = (user: Users) => {
 
       if (res.ok) {
         // Sau khi xóa sản phẩm thành công, gọi lại hàm fetch để lấy lại dữ liệu
-
+        alert("Tạo yêu cầu nhập hàng thành công");
         router.push("/dashboard/nhap-hang"); // Use router.push for client-side navigation
       } else {
         // setMessage("Không thể xóa sản phẩm");

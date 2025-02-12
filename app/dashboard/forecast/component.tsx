@@ -51,7 +51,18 @@ export default function Home(props: Props) {
 
   // Kiểm tra dữ liệu trước khi xử lý
 
-  const doanhThuLabels = doanhthu.map((item) => `${item.month}/${item.year}`);
+  const doanhThuLabels = doanhthu.map((item) => {
+    let newMonth = item.month + 2;
+    let newYear = item.year + 1;
+
+    if (newMonth > 12) {
+      newMonth -= 12;
+      newYear += 1;
+    }
+
+    return `${newMonth}/${newYear}`;
+  });
+
   const doanhThuData = doanhthu.map((item) => parseInt(item.revenue, 10));
 
   const forecastLabels: string[] = [];
@@ -67,7 +78,7 @@ export default function Home(props: Props) {
         lastMonth = 1;
         lastYear++;
       }
-      forecastLabels.push(`${lastMonth}/${lastYear}`);
+      forecastLabels.push(`${lastMonth + 2}/${lastYear + 1}`);
       forecastData.push(value);
     });
   }
