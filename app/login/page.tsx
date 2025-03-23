@@ -19,8 +19,7 @@ export default function Component() {
             <Apple className="h-12 w-12 text-blue-600" />
           </div>
           <CardTitle className="text-2xl font-bold text-center">
-            {/* Food Supply Inventory */}
-            https://drive.google.com/file/d/1BOvTOjRSL4xAC9vEK_UXcT8k67vYDaTt/view?usp=sharing
+            Food Supply Inventory
           </CardTitle>
           <CardDescription className="text-center">
             Enter your credentials to access your inventory
